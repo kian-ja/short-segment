@@ -32,11 +32,11 @@ end
 %clc
 warning off
 order = 2;
-
-
-monteCarloIteration = 2;
+h = waitbar(0,'Running Monte-Carlo Experiment');
+monteCarloIteration = 100;
 SDSS_System = cell(3,6,monteCarloIteration,3);
 SS_SDSS_System = cell(3,6,monteCarloIteration,3);
+step = 0;
 for contractionConditionIndex = 1 : 3
     disp(['Testing Contraction Condition = ', num2str(contractionConditionIndex),' out of 3'])
     segmentOnsetEnd = jumpIndex{contractionConditionIndex};
@@ -53,6 +53,8 @@ for contractionConditionIndex = 1 : 3
         disp(['Testing segment Length = ', num2str(segmentLengthMC)])
         segmentNumMC = floor(60/segmentLengthMC*1000);
         for mcIndex = 1 : monteCarloIteration
+            step = step + 1;
+            waitbar(step / monteCarloIteration / 6 / 3);
             disp(['Iteration = ', num2str(mcIndex),' out of ',num2str(monteCarloIteration)])
             selectedSegment = randi([1 size(segmentOnsetEnd,1)],segmentNumMC,1);
             selectedSegmentOnset = randi([1 segmentLength-segmentLengthMC],segmentNumMC,1);
@@ -83,3 +85,6 @@ for contractionConditionIndex = 1 : 3
         end
     end
 end
+close(h) 
+
+save quasiStationaryExperimentResults SDSS_System SS_SDSS_System
