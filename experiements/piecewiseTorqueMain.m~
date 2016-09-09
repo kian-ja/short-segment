@@ -33,7 +33,11 @@ end
 order = 2;
 segmentOnsetEnd = jumpIndex{3};
 segmentLength = 5000;
-segmentOnsetEnd(:,1) = segmentOnsetEnd(:,2) - 5000;
+position = segdat(position,'onsetPointer',segmentOnsetEnd(:,2)-segmentLength,'segLength',ones(size(segmentOnsetEnd,1),1)*segmentLength,'domainIncr',samplingTime...
+,'comment','Position','chanNames','Joint angular position (rad)');
+torque = segdat(torque,'onsetPointer',segmentOnsetEnd(:,2)-segmentLength,'segLength',ones(size(segmentOnsetEnd,1),1)*segmentLength,'domainIncr',samplingTime...
+,'comment','Torque','chanNames','Joint torque (Nm)');
+
 
 monteCarloIteration = 100;
 segmentLengthMC = 500;
@@ -41,19 +45,11 @@ segmentNunMC = 100;
 for i = 1 : monteCarloIteration
     selectedSegment = randi([1 size(segmentOnsetEnd,1)],segmentNunMC,1);
     selectedSegmentOnset = randi([1 segmentLength-segmentLengthMC],segmentNunMC,1);
-    onsetPointer = segmentOnsetEnd(selectedSegment,1) + selectedSegmentOnset;
-    position = segdat(position,'onsetPointer',onsetPointer,...
-    'segLength',ones(length(onsetPointer),1)*segmentLengthMC,'domainIncr',samplingTime...
-    ,'comment','Position','chanNames','Joint angular position (rad)');
-    torque = segdat(torque,'onsetPointer',onsetPointer,...
-    'segLength',ones(length(onsetPointer),1)*segmentLengthMC,'domainIncr',samplingTime...
-    ,'comment','Torque','chanNames','Joint torque (Nm)');
-    z = cat(2,position,torque);
     sysID = pcas_short_segment_exp_new_intrinsic_irf1 (z,'maxordernle',8,'hanklesize',20,'delayinput',0.03,'orderselectmethod',order);
     
 end
 
-
+z = cat(2,position,torque);
 %[intrinsic, reflex, tqI, tqR, tqT, vafs] = SS_SDSS_stiffnessID (z);
 
 disp(['Stiffness (K) is : ',num2str(-sum(sysID{1}.dataSet)/100)])
