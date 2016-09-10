@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.1"
+    ComputedModelVersion    "1.5"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -52,11 +52,11 @@ Model {
 	$ObjectID		5
 	$ClassName		"Simulink.EditorInfo"
 	IsActive		[1]
-	ViewObjType		"SimulinkSubsys"
-	LoadSaveID		"29"
+	ViewObjType		"SimulinkTopLevel"
+	LoadSaveID		"0"
 	Extents			[1452.0, 818.0]
-	ZoomFactor		[1.0]
-	Offset			[0.0, 0.0]
+	ZoomFactor		[1.25]
+	Offset			[-7.4533360083897833, 66.333333226045056]
       }
     }
   }
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Kian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Sep 09 17:12:29 2016"
-  RTWModifiedTimeStamp	  395347918
-  ModelVersionFormat	  "1.%<AutoIncrement:1>"
+  LastModifiedDate	  "Sat Sep 10 10:32:28 2016"
+  RTWModifiedTimeStamp	  395404558
+  ModelVersionFormat	  "1.%<AutoIncrement:5>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -195,8 +195,8 @@ Model {
 	  SolverMode		  "Auto"
 	  EnableConcurrentExecution off
 	  ConcurrentTasks	  off
-	  Solver		  "ode3"
-	  SolverName		  "ode3"
+	  Solver		  "FixedStepDiscrete"
+	  SolverName		  "FixedStepDiscrete"
 	  SolverJacobianMethodControl "auto"
 	  ShapePreserveControl	  "DisableAll"
 	  ZeroCrossControl	  "UseLocalSettings"
@@ -704,7 +704,7 @@ Model {
       }
       Name		      "Configuration"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition     [ 291, 167, 1389, 854 ] 
+      ConfigPrmDlgPosition     [ 282, 129, 1398, 863 ] 
     }
     PropName		    "ConfigurationSets"
   }
@@ -858,10 +858,6 @@ Model {
       InitialOutput	      "[]"
     }
     Block {
-      BlockType		      Polyval
-      Coefs		      "[1,2]"
-    }
-    Block {
       BlockType		      Product
       Inputs		      "2"
       Multiplication	      "Element-wise(.*)"
@@ -933,7 +929,7 @@ Model {
   System {
     Name		    "intrinsicStiffnessLPVModel"
     Location		    [-9, 0, 1689, 1020]
-    Open		    off
+    Open		    on
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -946,20 +942,12 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "125"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "37"
-    Block {
-      BlockType		      Constant
-      Name		      "Constant"
-      SID		      "11"
-      Position		      [40, 205, 70, 235]
-      ZOrder		      58
-      Value		      "h"
-    }
+    SIDHighWatermark	    "46"
     Block {
       BlockType		      FromWorkspace
       Name		      "From\nWorkspace"
       SID		      "1"
-      Position		      [80, 143, 215, 177]
+      Position		      [210, 143, 345, 177]
       ZOrder		      1
       VariableName	      "[time inputSignal]"
       SampleTime	      ".001"
@@ -967,32 +955,63 @@ Model {
     }
     Block {
       BlockType		      FromWorkspace
-      Name		      "From\nWorkspace1"
-      SID		      "10"
-      Position		      [120, 265, 250, 295]
-      ZOrder		      57
+      Name		      "From\nWorkspace2"
+      SID		      "43"
+      Position		      [20, 255, 150, 285]
+      ZOrder		      85
       VariableName	      "[time schedulingVariable]"
       SampleTime	      "0.001"
       ZeroCross		      on
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "Polynomial\nEvaluation"
+      SID		      "44"
+      Ports		      [2, 1]
+      Position		      [200, 261, 305, 299]
+      ZOrder		      86
+      LibraryVersion	      "1.25"
+      SourceBlock	      "dsppolyfun/Polynomial\nEvaluation"
+      SourceType	      "Polynomial Evaluation"
+      useConstCoeffs	      off
+      constCoeffs	      "[5 4 3 2 1]"
     }
     Block {
       BlockType		      ToWorkspace
       Name		      "To Workspace"
       SID		      "28"
       Ports		      [1]
-      Position		      [555, 200, 660, 240]
+      Position		      [685, 200, 790, 240]
       ZOrder		      75
       VariableName	      "intrinsicTorque"
       MaxDataPoints	      "inf"
       SampleTime	      "-1"
-      SaveFormat	      "Timeseries"
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "elasticPolynomialCoeff"
+      SID		      "46"
+      Position		      [120, 320, 150, 350]
+      ZOrder		      88
+      Value		      "[85.2066      46.2746     -10.9566     -5.30716      1.75446      0.63177]"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "elasticSubjectNormalizeGain"
+      SID		      "39"
+      Position		      [330, 262, 400, 298]
+      ZOrder		      84
+      Gain		      "316"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
     }
     Block {
       BlockType		      SubSystem
-      Name		      "intrinsic pathway\n"
+      Name		      "intrinsicPathway\n"
       SID		      "29"
       Ports		      [3, 1]
-      Position		      [310, 129, 500, 311]
+      Position		      [440, 129, 630, 311]
       ZOrder		      76
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -1002,9 +1021,9 @@ Model {
       RequestExecContextInheritance off
       MaskHideContents	      off
       System {
-	Name			"intrinsic pathway\n"
+	Name			"intrinsicPathway\n"
 	Location		[-9, 0, 1689, 1020]
-	Open			on
+	Open			off
 	ModelBrowserVisibility	on
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -1035,7 +1054,7 @@ Model {
 	}
 	Block {
 	  BlockType		  Inport
-	  Name			  "scheduling variable"
+	  Name			  "Elastic stiffness"
 	  SID			  "32"
 	  Position		  [55, 258, 85, 272]
 	  ZOrder		  75
@@ -1060,25 +1079,6 @@ Model {
 	  ParamDataTypeStr	  "Inherit: Inherit via internal rule"
 	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
 	  SaturateOnIntegerOverflow off
-	}
-	Block {
-	  BlockType		  Gain
-	  Name			  "Gain1"
-	  SID			  "37"
-	  Position		  [245, 247, 315, 283]
-	  ZOrder		  80
-	  Gain			  "100"
-	  ParamDataTypeStr	  "Inherit: Inherit via internal rule"
-	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
-	  SaturateOnIntegerOverflow off
-	}
-	Block {
-	  BlockType		  Polyval
-	  Name			  "Polynomial"
-	  SID			  "7"
-	  Position		  [150, 250, 210, 280]
-	  ZOrder		  51
-	  Coefs			  "[85.2 46.27 -10.96 -5.307 1.755 0.6318]"
 	}
 	Block {
 	  BlockType		  Product
@@ -1123,68 +1123,6 @@ Model {
 	  SampleTime		  "0"
 	}
 	Block {
-	  BlockType		  Scope
-	  Name			  "Scope1"
-	  SID			  "35"
-	  Ports			  [1]
-	  Position		  [415, 314, 445, 346]
-	  ZOrder		  78
-	  Floating		  off
-	  Location		  [1, 55, 1681, 1001]
-	  Open			  off
-	  NumInputPorts		  "1"
-	  List {
-	    ListType		    AxesTitles
-	    axes1		    "%<SignalLabel>"
-	  }
-	  List {
-	    ListType		    ScopeGraphics
-	    FigureColor		    "[0.5 0.5 0.5]"
-	    AxesColor		    "[0 0 0]"
-	    AxesTickColor	    "[1 1 1]"
-	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
-	    LineStyles		    "-|-|-|-|-|-"
-	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
-	    MarkerStyles	    "none|none|none|none|none|none"
-	  }
-	  ShowLegends		  off
-	  SaveName		  "ScopeData1"
-	  DataFormat		  "StructureWithTime"
-	  LimitDataPoints	  off
-	  SampleTime		  "0"
-	}
-	Block {
-	  BlockType		  Scope
-	  Name			  "Scope2"
-	  SID			  "36"
-	  Ports			  [1]
-	  Position		  [220, 324, 250, 356]
-	  ZOrder		  79
-	  Floating		  off
-	  Location		  [1, 55, 1681, 1001]
-	  Open			  off
-	  NumInputPorts		  "1"
-	  List {
-	    ListType		    AxesTitles
-	    axes1		    "%<SignalLabel>"
-	  }
-	  List {
-	    ListType		    ScopeGraphics
-	    FigureColor		    "[0.5 0.5 0.5]"
-	    AxesColor		    "[0 0 0]"
-	    AxesTickColor	    "[1 1 1]"
-	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
-	    LineStyles		    "-|-|-|-|-|-"
-	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
-	    MarkerStyles	    "none|none|none|none|none|none"
-	  }
-	  ShowLegends		  off
-	  SaveName		  "ScopeData2"
-	  DataFormat		  "StructureWithTime"
-	  LimitDataPoints	  off
-	  SampleTime		  "0"
-	}
-	Block {
 	  BlockType		  Outport
 	  Name			  "intrinsic torque"
 	  SID			  "33"
@@ -1198,23 +1136,6 @@ Model {
 	  SrcPort		  1
 	  DstBlock		  "Dot Product"
 	  DstPort		  1
-	}
-	Line {
-	  ZOrder		  40
-	  SrcBlock		  "scheduling variable"
-	  SrcPort		  1
-	  Points		  [31, 0]
-	  Branch {
-	    ZOrder		    54
-	    DstBlock		    "Polynomial"
-	    DstPort		    1
-	  }
-	  Branch {
-	    ZOrder		    53
-	    Points		    [0, 75]
-	    DstBlock		    "Scope2"
-	    DstPort		    1
-	  }
 	}
 	Line {
 	  ZOrder		  35
@@ -1250,13 +1171,6 @@ Model {
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  31
-	  SrcBlock		  "Polynomial"
-	  SrcPort		  1
-	  DstBlock		  "Gain1"
-	  DstPort		  1
-	}
-	Line {
 	  ZOrder		  47
 	  SrcBlock		  "Gain"
 	  SrcPort		  1
@@ -1264,52 +1178,72 @@ Model {
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  55
-	  SrcBlock		  "Gain1"
+	  ZOrder		  60
+	  SrcBlock		  "Elastic stiffness"
 	  SrcPort		  1
-	  Points		  [25, 0]
-	  Branch {
-	    ZOrder		    57
-	    Points		    [0, 65]
-	    DstBlock		    "Scope1"
-	    DstPort		    1
-	  }
-	  Branch {
-	    ZOrder		    56
-	    Points		    [0, -15]
-	    DstBlock		    "Product1"
-	    DstPort		    2
-	  }
+	  Points		  [135, 0; 0, -15]
+	  DstBlock		  "Product1"
+	  DstPort		  2
 	}
       }
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "irfCoeff"
+      SID		      "11"
+      Position		      [115, 205, 200, 235]
+      ZOrder		      58
+      Value		      "randn(101,1)"
     }
     Line {
       ZOrder		      38
       SrcBlock		      "From\nWorkspace"
       SrcPort		      1
-      DstBlock		      "intrinsic pathway\n"
+      DstBlock		      "intrinsicPathway\n"
       DstPort		      1
     }
     Line {
       ZOrder		      39
-      SrcBlock		      "Constant"
+      SrcBlock		      "irfCoeff"
       SrcPort		      1
-      DstBlock		      "intrinsic pathway\n"
+      DstBlock		      "intrinsicPathway\n"
       DstPort		      2
     }
     Line {
-      ZOrder		      40
-      SrcBlock		      "From\nWorkspace1"
+      ZOrder		      46
+      SrcBlock		      "elasticSubjectNormalizeGain"
       SrcPort		      1
-      DstBlock		      "intrinsic pathway\n"
+      DstBlock		      "intrinsicPathway\n"
       DstPort		      3
     }
     Line {
       ZOrder		      41
-      SrcBlock		      "intrinsic pathway\n"
+      SrcBlock		      "intrinsicPathway\n"
       SrcPort		      1
       DstBlock		      "To Workspace"
       DstPort		      1
+    }
+    Line {
+      ZOrder		      47
+      SrcBlock		      "Polynomial\nEvaluation"
+      SrcPort		      1
+      DstBlock		      "elasticSubjectNormalizeGain"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      48
+      SrcBlock		      "From\nWorkspace2"
+      SrcPort		      1
+      DstBlock		      "Polynomial\nEvaluation"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      49
+      SrcBlock		      "elasticPolynomialCoeff"
+      SrcPort		      1
+      Points		      [20, 0; 0, -45]
+      DstBlock		      "Polynomial\nEvaluation"
+      DstPort		      2
     }
   }
 }
