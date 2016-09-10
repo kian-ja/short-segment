@@ -1,5 +1,5 @@
 Model {
-  Name			  "intrinsicStiffnessLPVModel"
+  Name			  "reflexStiffnessLPVModel"
   Version		  8.2
   MdlSubVersion		  0
   SavedCharacterEncoding  "windows-1252"
@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.5"
+    ComputedModelVersion    "1.6"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -52,23 +52,23 @@ Model {
 	$ObjectID		5
 	$ClassName		"Simulink.EditorInfo"
 	IsActive		[1]
-	ViewObjType		"SimulinkTopLevel"
-	LoadSaveID		"0"
+	ViewObjType		"SimulinkSubsys"
+	LoadSaveID		"55"
 	Extents			[1452.0, 818.0]
-	ZoomFactor		[1.25]
-	Offset			[27.546663991610217, 66.333333226045056]
+	ZoomFactor		[1.0]
+	Offset			[-9.5499992370605469, 0.0]
       }
     }
   }
-  Created		  "Fri Sep 09 16:51:26 2016"
+  Created		  "Fri Sep 09 16:14:32 2016"
   Creator		  "Kian"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Kian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Sep 10 10:32:28 2016"
-  RTWModifiedTimeStamp	  395405764
-  ModelVersionFormat	  "1.%<AutoIncrement:5>"
+  LastModifiedDate	  "Sat Sep 10 10:56:34 2016"
+  RTWModifiedTimeStamp	  395405910
+  ModelVersionFormat	  "1.%<AutoIncrement:6>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -110,12 +110,12 @@ Model {
     $PropName		    "DataLoggingOverride"
     $ObjectID		    6
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
-    model_		    "intrinsicStiffnessLPVModel"
+    model_		    "stiffnessLPVModel"
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
       Dimension		      1
-      Cell		      "intrinsicStiffnessLPVModel"
+      Cell		      "stiffnessLPVModel"
       PropName		      "logAsSpecifiedByModels_"
     }
     Array {
@@ -177,7 +177,7 @@ Model {
 	  $ObjectID		  8
 	  Version		  "1.13.1"
 	  StartTime		  "0.0"
-	  StopTime		  "59.999"
+	  StopTime		  "60.0"
 	  AbsTol		  "auto"
 	  FixedStep		  "0.001"
 	  InitialStep		  "auto"
@@ -195,8 +195,8 @@ Model {
 	  SolverMode		  "Auto"
 	  EnableConcurrentExecution off
 	  ConcurrentTasks	  off
-	  Solver		  "FixedStepDiscrete"
-	  SolverName		  "FixedStepDiscrete"
+	  Solver		  "ode3"
+	  SolverName		  "ode3"
 	  SolverJacobianMethodControl "auto"
 	  ShapePreserveControl	  "DisableAll"
 	  ZeroCrossControl	  "UseLocalSettings"
@@ -704,7 +704,7 @@ Model {
       }
       Name		      "Configuration"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition     [ 282, 129, 1398, 863 ] 
+      ConfigPrmDlgPosition     [ 291, 167, 1389, 854 ] 
     }
     PropName		    "ConfigurationSets"
   }
@@ -788,15 +788,10 @@ Model {
       PreserveConstantTs      off
     }
     Block {
-      BlockType		      DotProduct
-      SampleTime	      "-1"
-      InputSameDT	      on
-      OutMin		      "[]"
-      OutMax		      "[]"
-      OutDataTypeStr	      "Inherit: Same as first input"
-      LockScale		      off
-      RndMeth		      "Floor"
-      SaturateOnIntegerOverflow	off
+      BlockType		      From
+      GotoTag		      "A"
+      IconDisplay	      "Tag"
+      TagVisibility	      "local"
     }
     Block {
       BlockType		      FromWorkspace
@@ -823,6 +818,12 @@ Model {
       SampleTime	      "-1"
     }
     Block {
+      BlockType		      Goto
+      GotoTag		      "A"
+      IconDisplay	      "Tag"
+      TagVisibility	      "local"
+    }
+    Block {
       BlockType		      Inport
       Port		      "1"
       OutputFunctionCall      off
@@ -839,6 +840,21 @@ Model {
       LatchByDelayingOutsideSignal off
       LatchInputForFeedbackSignals off
       Interpolate	      on
+    }
+    Block {
+      BlockType		      Integrator
+      ExternalReset	      "none"
+      InitialConditionSource  "internal"
+      InitialCondition	      "0"
+      LimitOutput	      off
+      UpperSaturationLimit    "inf"
+      LowerSaturationLimit    "-inf"
+      ShowSaturationPort      off
+      ShowStatePort	      off
+      AbsoluteTolerance	      "auto"
+      IgnoreLimit	      off
+      ZeroCross		      on
+      ContinuousStateAttributes	"''"
     }
     Block {
       BlockType		      Outport
@@ -871,6 +887,21 @@ Model {
       RndMeth		      "Zero"
       SaturateOnIntegerOverflow	on
       SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      Saturate
+      UpperLimitSource	      "Dialog"
+      UpperLimit	      "0.5"
+      LowerLimitSource	      "Dialog"
+      LowerLimit	      "-0.5"
+      LinearizeAsGain	      on
+      ZeroCross		      on
+      SampleTime	      "-1"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeStr	      "Inherit: Same as input"
+      LockScale		      off
+      RndMeth		      "Floor"
     }
     Block {
       BlockType		      Scope
@@ -916,6 +947,22 @@ Model {
       ContentPreviewEnabled   off
     }
     Block {
+      BlockType		      Sum
+      IconShape		      "rectangular"
+      Inputs		      "++"
+      CollapseMode	      "All dimensions"
+      CollapseDim	      "1"
+      InputSameDT	      on
+      AccumDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeStr	      "Inherit: Same as first input"
+      LockScale		      off
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	on
+      SampleTime	      "-1"
+    }
+    Block {
       BlockType		      ToWorkspace
       VariableName	      "simulink_output"
       MaxDataPoints	      "1000"
@@ -925,11 +972,20 @@ Model {
       FixptAsFi		      off
       NumInputs		      "1"
     }
+    Block {
+      BlockType		      TransportDelay
+      DelayTime		      "1"
+      InitialOutput	      "0"
+      BufferSize	      "1024"
+      FixedBuffer	      off
+      TransDelayFeedthrough   off
+      PadeOrder		      "0"
+    }
   }
   System {
-    Name		    "intrinsicStiffnessLPVModel"
+    Name		    "reflexStiffnessLPVModel"
     Location		    [-9, 0, 1689, 1020]
-    Open		    on
+    Open		    off
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -940,36 +996,62 @@ Model {
     TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
     TiledPageScale	    1
     ShowPageBoundaries	    off
-    ZoomFactor		    "125"
+    ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "46"
+    SIDHighWatermark	    "78"
     Block {
       BlockType		      FromWorkspace
       Name		      "From\nWorkspace"
-      SID		      "1"
-      Position		      [245, 143, 380, 177]
-      ZOrder		      1
-      VariableName	      "[time inputSignal]"
-      SampleTime	      ".001"
+      SID		      "46"
+      Position		      [500, 213, 565, 237]
+      ZOrder		      41
+      VariableName	      "[time velocity]"
+      SampleTime	      "0.001"
       ZeroCross		      on
     }
     Block {
       BlockType		      FromWorkspace
-      Name		      "From\nWorkspace2"
-      SID		      "43"
-      Position		      [20, 255, 150, 285]
-      ZOrder		      85
+      Name		      "From\nWorkspace1"
+      SID		      "47"
+      Position		      [20, 315, 150, 345]
+      ZOrder		      42
       VariableName	      "[time schedulingVariable]"
       SampleTime	      "0.001"
       ZeroCross		      on
     }
     Block {
       BlockType		      Reference
-      Name		      "Polynomial\nEvaluation"
-      SID		      "44"
+      Name		      "Polynomial\nEvaluation1"
+      SID		      "66"
       Ports		      [2, 1]
-      Position		      [235, 261, 340, 299]
-      ZOrder		      86
+      Position		      [335, 261, 440, 299]
+      ZOrder		      93
+      LibraryVersion	      "1.25"
+      SourceBlock	      "dsppolyfun/Polynomial\nEvaluation"
+      SourceType	      "Polynomial Evaluation"
+      useConstCoeffs	      off
+      constCoeffs	      "[5 4 3 2 1]"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "Polynomial\nEvaluation2"
+      SID		      "67"
+      Ports		      [2, 1]
+      Position		      [335, 331, 440, 369]
+      ZOrder		      94
+      LibraryVersion	      "1.25"
+      SourceBlock	      "dsppolyfun/Polynomial\nEvaluation"
+      SourceType	      "Polynomial Evaluation"
+      useConstCoeffs	      off
+      constCoeffs	      "[5 4 3 2 1]"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "Polynomial\nEvaluation3"
+      SID		      "68"
+      Ports		      [2, 1]
+      Position		      [335, 411, 440, 449]
+      ZOrder		      95
       LibraryVersion	      "1.25"
       SourceBlock	      "dsppolyfun/Polynomial\nEvaluation"
       SourceType	      "Polynomial Evaluation"
@@ -979,40 +1061,21 @@ Model {
     Block {
       BlockType		      ToWorkspace
       Name		      "To Workspace"
-      SID		      "28"
+      SID		      "54"
       Ports		      [1]
-      Position		      [720, 200, 825, 240]
-      ZOrder		      75
-      VariableName	      "intrinsicTorque"
+      Position		      [845, 295, 905, 325]
+      ZOrder		      49
+      VariableName	      "reflexTorque"
       MaxDataPoints	      "inf"
       SampleTime	      "-1"
     }
     Block {
-      BlockType		      Constant
-      Name		      "elasticPolynomialCoeff"
-      SID		      "46"
-      Position		      [155, 320, 185, 350]
-      ZOrder		      88
-      Value		      "[-25.8226     -5.60556      7.57348      2.62729      0.73595     0.603385]"
-    }
-    Block {
-      BlockType		      Gain
-      Name		      "elasticSubjectNormalizeGain"
-      SID		      "39"
-      Position		      [365, 262, 435, 298]
-      ZOrder		      84
-      Gain		      "316"
-      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
-      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-      SaturateOnIntegerOverflow	off
-    }
-    Block {
       BlockType		      SubSystem
-      Name		      "intrinsicPathway\n"
-      SID		      "29"
-      Ports		      [3, 1]
-      Position		      [475, 129, 665, 311]
-      ZOrder		      76
+      Name		      "reflex pathway"
+      SID		      "55"
+      Ports		      [4, 1]
+      Position		      [625, 193, 765, 422]
+      ZOrder		      50
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -1021,9 +1084,9 @@ Model {
       RequestExecContextInheritance off
       MaskHideContents	      off
       System {
-	Name			"intrinsicPathway\n"
+	Name			"reflex pathway"
 	Location		[-9, 0, 1689, 1020]
-	Open			off
+	Open			on
 	ModelBrowserVisibility	on
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -1037,68 +1100,57 @@ Model {
 	ZoomFactor		"100"
 	Block {
 	  BlockType		  Inport
-	  Name			  "delayed position"
-	  SID			  "30"
-	  Position		  [55, 103, 85, 117]
-	  ZOrder		  73
+	  Name			  "velocity"
+	  SID			  "56"
+	  Position		  [20, 43, 50, 57]
+	  ZOrder		  49
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
-	  Name			  "normalized intrinsic IRF"
-	  SID			  "31"
-	  Position		  [20, 198, 50, 212]
-	  ZOrder		  74
+	  Name			  "zeta"
+	  SID			  "59"
+	  Position		  [525, 98, 555, 112]
+	  ZOrder		  56
 	  Port			  "2"
 	  IconDisplay		  "Port number"
 	}
 	Block {
 	  BlockType		  Inport
-	  Name			  "Elastic stiffness"
-	  SID			  "32"
-	  Position		  [55, 258, 85, 272]
-	  ZOrder		  75
+	  Name			  "omega"
+	  SID			  "60"
+	  Position		  [525, 153, 555, 167]
+	  ZOrder		  57
 	  Port			  "3"
 	  IconDisplay		  "Port number"
 	}
 	Block {
-	  BlockType		  DotProduct
-	  Name			  "Dot Product"
-	  SID			  "24"
-	  Position		  [480, 102, 510, 133]
-	  ZOrder		  71
-	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
+	  BlockType		  Inport
+	  Name			  "gain"
+	  SID			  "61"
+	  Position		  [525, 208, 555, 222]
+	  ZOrder		  58
+	  Port			  "4"
+	  IconDisplay		  "Port number"
 	}
 	Block {
-	  BlockType		  Gain
-	  Name			  "Gain"
-	  SID			  "34"
-	  Position		  [585, 85, 615, 115]
-	  ZOrder		  77
-	  Gain			  "0.001"
-	  ParamDataTypeStr	  "Inherit: Inherit via internal rule"
-	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
-	  SaturateOnIntegerOverflow off
-	}
-	Block {
-	  BlockType		  Product
-	  Name			  "Product1"
-	  SID			  "25"
-	  Ports			  [2, 1]
-	  Position		  [365, 219, 395, 261]
-	  ZOrder		  72
-	  InputSameDT		  off
-	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
-	  RndMeth		  "Floor"
-	  SaturateOnIntegerOverflow off
+	  BlockType		  Saturate
+	  Name			  "Saturation"
+	  SID			  "44"
+	  Ports			  [1, 1]
+	  Position		  [265, 35, 295, 65]
+	  ZOrder		  39
+	  InputPortMap		  "u0"
+	  UpperLimit		  "Inf"
+	  LowerLimit		  "0"
 	}
 	Block {
 	  BlockType		  Scope
 	  Name			  "Scope"
-	  SID			  "2"
+	  SID			  "15"
 	  Ports			  [1]
-	  Position		  [555, 24, 585, 56]
-	  ZOrder		  2
+	  Position		  [835, 44, 865, 76]
+	  ZOrder		  15
 	  Floating		  off
 	  Location		  [1, 55, 1681, 1001]
 	  Open			  off
@@ -1123,127 +1175,869 @@ Model {
 	  SampleTime		  "0"
 	}
 	Block {
+	  BlockType		  Scope
+	  Name			  "Scope1"
+	  SID			  "75"
+	  Ports			  [1]
+	  Position		  [420, 89, 450, 121]
+	  ZOrder		  59
+	  Floating		  off
+	  Location		  [1, 55, 1681, 1001]
+	  Open			  off
+	  NumInputPorts		  "1"
+	  List {
+	    ListType		    AxesTitles
+	    axes1		    "%<SignalLabel>"
+	  }
+	  List {
+	    ListType		    ScopeGraphics
+	    FigureColor		    "[0.5 0.5 0.5]"
+	    AxesColor		    "[0 0 0]"
+	    AxesTickColor	    "[1 1 1]"
+	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	    LineStyles		    "-|-|-|-|-|-"
+	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+	    MarkerStyles	    "none|none|none|none|none|none"
+	  }
+	  ShowLegends		  off
+	  SaveName		  "ScopeData1"
+	  DataFormat		  "StructureWithTime"
+	  LimitDataPoints	  off
+	  SampleTime		  "0"
+	}
+	Block {
+	  BlockType		  Scope
+	  Name			  "Scope2"
+	  SID			  "76"
+	  Ports			  [1]
+	  Position		  [630, 269, 660, 301]
+	  ZOrder		  60
+	  Floating		  off
+	  Location		  [1, 55, 1681, 1001]
+	  Open			  off
+	  NumInputPorts		  "1"
+	  List {
+	    ListType		    AxesTitles
+	    axes1		    "%<SignalLabel>"
+	  }
+	  List {
+	    ListType		    ScopeGraphics
+	    FigureColor		    "[0.5 0.5 0.5]"
+	    AxesColor		    "[0 0 0]"
+	    AxesTickColor	    "[1 1 1]"
+	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	    LineStyles		    "-|-|-|-|-|-"
+	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+	    MarkerStyles	    "none|none|none|none|none|none"
+	  }
+	  ShowLegends		  off
+	  SaveName		  "ScopeData2"
+	  DataFormat		  "StructureWithTime"
+	  LimitDataPoints	  off
+	  SampleTime		  "0"
+	}
+	Block {
+	  BlockType		  Scope
+	  Name			  "Scope3"
+	  SID			  "77"
+	  Ports			  [1]
+	  Position		  [595, 174, 625, 206]
+	  ZOrder		  61
+	  Floating		  off
+	  Location		  [1, 55, 1681, 1001]
+	  Open			  off
+	  NumInputPorts		  "1"
+	  List {
+	    ListType		    AxesTitles
+	    axes1		    "%<SignalLabel>"
+	  }
+	  List {
+	    ListType		    ScopeGraphics
+	    FigureColor		    "[0.5 0.5 0.5]"
+	    AxesColor		    "[0 0 0]"
+	    AxesTickColor	    "[1 1 1]"
+	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	    LineStyles		    "-|-|-|-|-|-"
+	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+	    MarkerStyles	    "none|none|none|none|none|none"
+	  }
+	  ShowLegends		  off
+	  SaveName		  "ScopeData3"
+	  DataFormat		  "StructureWithTime"
+	  LimitDataPoints	  off
+	  SampleTime		  "0"
+	}
+	Block {
+	  BlockType		  Scope
+	  Name			  "Scope4"
+	  SID			  "78"
+	  Ports			  [1]
+	  Position		  [580, 59, 610, 91]
+	  ZOrder		  62
+	  Floating		  off
+	  Location		  [1, 55, 1681, 1001]
+	  Open			  off
+	  NumInputPorts		  "1"
+	  List {
+	    ListType		    AxesTitles
+	    axes1		    "%<SignalLabel>"
+	  }
+	  List {
+	    ListType		    ScopeGraphics
+	    FigureColor		    "[0.5 0.5 0.5]"
+	    AxesColor		    "[0 0 0]"
+	    AxesTickColor	    "[1 1 1]"
+	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	    LineStyles		    "-|-|-|-|-|-"
+	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+	    MarkerStyles	    "none|none|none|none|none|none"
+	  }
+	  ShowLegends		  off
+	  SaveName		  "ScopeData4"
+	  DataFormat		  "StructureWithTime"
+	  LimitDataPoints	  off
+	  SampleTime		  "0"
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "TV 2-order LPF"
+	  SID			  "38"
+	  Ports			  [4, 1]
+	  Position		  [630, 24, 710, 241]
+	  ZOrder		  38
+	  MinAlgLoopOccurrences	  off
+	  PropExecContextOutsideSubsystem off
+	  RTWSystemCode		  "Auto"
+	  FunctionWithSeparateData off
+	  Opaque		  off
+	  RequestExecContextInheritance	off
+	  MaskHideContents	  off
+	  System {
+	    Name		    "TV 2-order LPF"
+	    Location		    [-9, -9, 1689, 1011]
+	    Open		    off
+	    ModelBrowserVisibility  on
+	    ModelBrowserWidth	    200
+	    ScreenColor		    "white"
+	    PaperOrientation	    "landscape"
+	    PaperPositionMode	    "auto"
+	    PaperType		    "usletter"
+	    PaperUnits		    "inches"
+	    TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
+	    TiledPageScale	    1
+	    ShowPageBoundaries	    off
+	    ZoomFactor		    "100"
+	    Block {
+	      BlockType		      Inport
+	      Name		      "input"
+	      SID		      "39"
+	      Position		      [20, 23, 50, 37]
+	      ZOrder		      38
+	      IconDisplay	      "Port number"
+	    }
+	    Block {
+	      BlockType		      Inport
+	      Name		      "zeta"
+	      SID		      "40"
+	      Position		      [145, 118, 175, 132]
+	      ZOrder		      39
+	      Port		      "2"
+	      IconDisplay	      "Port number"
+	    }
+	    Block {
+	      BlockType		      Inport
+	      Name		      "omega"
+	      SID		      "41"
+	      Position		      [145, 198, 175, 212]
+	      ZOrder		      40
+	      Port		      "3"
+	      IconDisplay	      "Port number"
+	    }
+	    Block {
+	      BlockType		      Inport
+	      Name		      "gain"
+	      SID		      "42"
+	      Position		      [145, 268, 175, 282]
+	      ZOrder		      41
+	      Port		      "4"
+	      IconDisplay	      "Port number"
+	    }
+	    Block {
+	      BlockType		      Constant
+	      Name		      "Constant"
+	      SID		      "17"
+	      Position		      [680, 100, 710, 130]
+	      ZOrder		      17
+	      BlockMirror	      on
+	      NamePlacement	      "alternate"
+	      Value		      "2"
+	    }
+	    Block {
+	      BlockType		      From
+	      Name		      "From1"
+	      SID		      "28"
+	      Position		      [790, 121, 830, 149]
+	      ZOrder		      28
+	      BlockMirror	      on
+	      BackgroundColor	      "green"
+	      NamePlacement	      "alternate"
+	      GotoTag		      "w"
+	    }
+	    Block {
+	      BlockType		      From
+	      Name		      "From2"
+	      SID		      "29"
+	      Position		      [680, 141, 720, 169]
+	      ZOrder		      29
+	      BlockMirror	      on
+	      BackgroundColor	      "red"
+	      NamePlacement	      "alternate"
+	      GotoTag		      "zeta"
+	    }
+	    Block {
+	      BlockType		      From
+	      Name		      "From3"
+	      SID		      "31"
+	      Position		      [655, 191, 695, 219]
+	      ZOrder		      31
+	      BlockMirror	      on
+	      BackgroundColor	      "green"
+	      NamePlacement	      "alternate"
+	      GotoTag		      "w"
+	    }
+	    Block {
+	      BlockType		      From
+	      Name		      "From4"
+	      SID		      "32"
+	      Position		      [700, 211, 740, 239]
+	      ZOrder		      32
+	      BlockMirror	      on
+	      BackgroundColor	      "green"
+	      NamePlacement	      "alternate"
+	      GotoTag		      "w"
+	    }
+	    Block {
+	      BlockType		      From
+	      Name		      "From5"
+	      SID		      "35"
+	      Position		      [310, 301, 350, 329]
+	      ZOrder		      35
+	      BackgroundColor	      "green"
+	      GotoTag		      "w"
+	    }
+	    Block {
+	      BlockType		      From
+	      Name		      "From6"
+	      SID		      "36"
+	      Position		      [375, 321, 415, 349]
+	      ZOrder		      36
+	      BackgroundColor	      "green"
+	      GotoTag		      "w"
+	    }
+	    Block {
+	      BlockType		      From
+	      Name		      "From7"
+	      SID		      "37"
+	      Position		      [310, 341, 350, 369]
+	      ZOrder		      37
+	      BackgroundColor	      "lightBlue"
+	      GotoTag		      "G"
+	    }
+	    Block {
+	      BlockType		      Goto
+	      Name		      "Goto"
+	      SID		      "23"
+	      Position		      [240, 110, 280, 140]
+	      ZOrder		      23
+	      BackgroundColor	      "red"
+	      GotoTag		      "zeta"
+	    }
+	    Block {
+	      BlockType		      Goto
+	      Name		      "Goto1"
+	      SID		      "25"
+	      Position		      [240, 190, 280, 220]
+	      ZOrder		      25
+	      BackgroundColor	      "green"
+	      GotoTag		      "w"
+	    }
+	    Block {
+	      BlockType		      Goto
+	      Name		      "Goto2"
+	      SID		      "27"
+	      Position		      [240, 260, 280, 290]
+	      ZOrder		      27
+	      BackgroundColor	      "lightBlue"
+	      GotoTag		      "G"
+	    }
+	    Block {
+	      BlockType		      Integrator
+	      Name		      "Integrator"
+	      SID		      "7"
+	      Ports		      [1, 1]
+	      Position		      [495, 310, 525, 340]
+	      ZOrder		      7
+	    }
+	    Block {
+	      BlockType		      Integrator
+	      Name		      "Integrator1"
+	      SID		      "11"
+	      Ports		      [1, 1]
+	      Position		      [545, 310, 575, 340]
+	      ZOrder		      11
+	    }
+	    Block {
+	      BlockType		      Integrator
+	      Name		      "Integrator2"
+	      SID		      "12"
+	      Ports		      [1, 1]
+	      Position		      [715, 265, 745, 295]
+	      ZOrder		      12
+	      BlockMirror	      on
+	      NamePlacement	      "alternate"
+	    }
+	    Block {
+	      BlockType		      Integrator
+	      Name		      "Integrator3"
+	      SID		      "13"
+	      Ports		      [1, 1]
+	      Position		      [750, 220, 780, 250]
+	      ZOrder		      13
+	      BlockMirror	      on
+	      NamePlacement	      "alternate"
+	    }
+	    Block {
+	      BlockType		      Integrator
+	      Name		      "Integrator4"
+	      SID		      "14"
+	      Ports		      [1, 1]
+	      Position		      [795, 265, 825, 295]
+	      ZOrder		      14
+	      BlockMirror	      on
+	      NamePlacement	      "alternate"
+	    }
+	    Block {
+	      BlockType		      Product
+	      Name		      "Product"
+	      SID		      "18"
+	      Ports		      [4, 1]
+	      Position		      [600, 87, 635, 163]
+	      ZOrder		      18
+	      BlockMirror	      on
+	      NamePlacement	      "alternate"
+	      Inputs		      "4"
+	      InputSameDT	      off
+	      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+	      RndMeth		      "Floor"
+	      SaturateOnIntegerOverflow	off
+	    }
+	    Block {
+	      BlockType		      Product
+	      Name		      "Product1"
+	      SID		      "30"
+	      Ports		      [3, 1]
+	      Position		      [600, 197, 635, 273]
+	      ZOrder		      30
+	      BlockMirror	      on
+	      NamePlacement	      "alternate"
+	      Inputs		      "3"
+	      InputSameDT	      off
+	      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+	      RndMeth		      "Floor"
+	      SaturateOnIntegerOverflow	off
+	    }
+	    Block {
+	      BlockType		      Product
+	      Name		      "Product2"
+	      SID		      "34"
+	      Ports		      [4, 1]
+	      Position		      [440, 287, 475, 363]
+	      ZOrder		      34
+	      Inputs		      "4"
+	      InputSameDT	      off
+	      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+	      RndMeth		      "Floor"
+	      SaturateOnIntegerOverflow	off
+	    }
+	    Block {
+	      BlockType		      Sum
+	      Name		      "Sum"
+	      SID		      "8"
+	      Ports		      [3, 1]
+	      Position		      [640, 320, 660, 340]
+	      ZOrder		      8
+	      ShowName		      off
+	      IconShape		      "round"
+	      Inputs		      "|+--"
+	      InputSameDT	      off
+	      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+	      SaturateOnIntegerOverflow	off
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "output"
+	      SID		      "43"
+	      Position		      [945, 43, 975, 57]
+	      ZOrder		      42
+	      IconDisplay	      "Port number"
+	    }
+	    Line {
+	      ZOrder		      6
+	      SrcBlock		      "Integrator1"
+	      SrcPort		      1
+	      Points		      [27, 0; 0, -7]
+	      DstBlock		      "Sum"
+	      DstPort		      1
+	    }
+	    Line {
+	      ZOrder		      5
+	      SrcBlock		      "Integrator"
+	      SrcPort		      1
+	      DstBlock		      "Integrator1"
+	      DstPort		      1
+	    }
+	    Line {
+	      ZOrder		      40
+	      SrcBlock		      "Product2"
+	      SrcPort		      1
+	      DstBlock		      "Integrator"
+	      DstPort		      1
+	    }
+	    Line {
+	      ZOrder		      9
+	      SrcBlock		      "Integrator3"
+	      SrcPort		      1
+	      Points		      [-4, 0; 0, -140]
+	      DstBlock		      "Product"
+	      DstPort		      1
+	    }
+	    Line {
+	      ZOrder		      37
+	      SrcBlock		      "Integrator2"
+	      SrcPort		      1
+	      Points		      [-37, 0; 0, -20]
+	      DstBlock		      "Product1"
+	      DstPort		      3
+	    }
+	    Line {
+	      ZOrder		      13
+	      SrcBlock		      "Sum"
+	      SrcPort		      1
+	      Points		      [200, 0; 0, -50]
+	      Branch {
+		ZOrder			17
+		DstBlock		"Integrator4"
+		DstPort			1
+	      }
+	      Branch {
+		ZOrder			15
+		Points			[0, -45]
+		Branch {
+		  ZOrder		  50
+		  Points		  [0, -185]
+		  DstBlock		  "output"
+		  DstPort		  1
+		}
+		Branch {
+		  ZOrder		  19
+		  DstBlock		  "Integrator3"
+		  DstPort		  1
+		}
+	      }
+	    }
+	    Line {
+	      ZOrder		      12
+	      SrcBlock		      "Integrator4"
+	      SrcPort		      1
+	      DstBlock		      "Integrator2"
+	      DstPort		      1
+	    }
+	    Line {
+	      ZOrder		      46
+	      SrcBlock		      "input"
+	      SrcPort		      1
+	      Points		      [305, 0; 0, 265]
+	      DstBlock		      "Product2"
+	      DstPort		      1
+	    }
+	    Line {
+	      ZOrder		      49
+	      SrcBlock		      "gain"
+	      SrcPort		      1
+	      DstBlock		      "Goto2"
+	      DstPort		      1
+	    }
+	    Line {
+	      ZOrder		      39
+	      SrcBlock		      "Product1"
+	      SrcPort		      1
+	      Points		      [-1, 0; 0, 120]
+	      DstBlock		      "Sum"
+	      DstPort		      3
+	    }
+	    Line {
+	      ZOrder		      43
+	      SrcBlock		      "From6"
+	      SrcPort		      1
+	      DstBlock		      "Product2"
+	      DstPort		      3
+	    }
+	    Line {
+	      ZOrder		      42
+	      SrcBlock		      "From5"
+	      SrcPort		      1
+	      DstBlock		      "Product2"
+	      DstPort		      2
+	    }
+	    Line {
+	      ZOrder		      27
+	      SrcBlock		      "Constant"
+	      SrcPort		      1
+	      DstBlock		      "Product"
+	      DstPort		      2
+	    }
+	    Line {
+	      ZOrder		      36
+	      SrcBlock		      "From3"
+	      SrcPort		      1
+	      DstBlock		      "Product1"
+	      DstPort		      1
+	    }
+	    Line {
+	      ZOrder		      35
+	      SrcBlock		      "Product"
+	      SrcPort		      1
+	      Points		      [-7, 0; 0, 217]
+	      DstBlock		      "Sum"
+	      DstPort		      2
+	    }
+	    Line {
+	      ZOrder		      33
+	      SrcBlock		      "From1"
+	      SrcPort		      1
+	      DstBlock		      "Product"
+	      DstPort		      3
+	    }
+	    Line {
+	      ZOrder		      47
+	      SrcBlock		      "zeta"
+	      SrcPort		      1
+	      DstBlock		      "Goto"
+	      DstPort		      1
+	    }
+	    Line {
+	      ZOrder		      34
+	      SrcBlock		      "From2"
+	      SrcPort		      1
+	      DstBlock		      "Product"
+	      DstPort		      4
+	    }
+	    Line {
+	      ZOrder		      38
+	      SrcBlock		      "From4"
+	      SrcPort		      1
+	      Points		      [-45, 0]
+	      DstBlock		      "Product1"
+	      DstPort		      2
+	    }
+	    Line {
+	      ZOrder		      44
+	      SrcBlock		      "From7"
+	      SrcPort		      1
+	      DstBlock		      "Product2"
+	      DstPort		      4
+	    }
+	    Line {
+	      ZOrder		      48
+	      SrcBlock		      "omega"
+	      SrcPort		      1
+	      DstBlock		      "Goto1"
+	      DstPort		      1
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  TransportDelay
+	  Name			  "Transport\nDelay"
+	  SID			  "45"
+	  Ports			  [1, 1]
+	  Position		  [165, 35, 195, 65]
+	  ZOrder		  40
+	  DelayTime		  "0.04"
+	}
+	Block {
 	  BlockType		  Outport
-	  Name			  "intrinsic torque"
-	  SID			  "33"
-	  Position		  [675, 93, 705, 107]
-	  ZOrder		  76
+	  Name			  "reflex torque"
+	  SID			  "58"
+	  Position		  [995, 128, 1025, 142]
+	  ZOrder		  51
 	  IconDisplay		  "Port number"
 	}
 	Line {
-	  ZOrder		  38
-	  SrcBlock		  "delayed position"
+	  ZOrder		  91
+	  SrcBlock		  "zeta"
 	  SrcPort		  1
-	  DstBlock		  "Dot Product"
-	  DstPort		  1
-	}
-	Line {
-	  ZOrder		  35
-	  SrcBlock		  "Dot Product"
-	  SrcPort		  1
-	  Points		  [19, 0; 0, -20]
+	  Points		  [8, 0]
 	  Branch {
-	    ZOrder		    41
-	    DstBlock		    "Gain"
+	    ZOrder		    101
+	    Points		    [0, -30]
+	    DstBlock		    "Scope4"
 	    DstPort		    1
 	  }
 	  Branch {
-	    ZOrder		    37
-	    Points		    [0, -60]
+	    ZOrder		    100
+	    DstBlock		    "TV 2-order LPF"
+	    DstPort		    2
+	  }
+	}
+	Line {
+	  ZOrder		  50
+	  SrcBlock		  "TV 2-order LPF"
+	  SrcPort		  1
+	  Points		  [50, 0]
+	  Branch {
+	    ZOrder		    77
+	    DstBlock		    "reflex torque"
+	    DstPort		    1
+	  }
+	  Branch {
+	    ZOrder		    73
+	    Points		    [0, -75]
 	    DstBlock		    "Scope"
 	    DstPort		    1
 	  }
 	}
 	Line {
-	  ZOrder		  34
-	  SrcBlock		  "Product1"
+	  ZOrder		  93
+	  SrcBlock		  "gain"
 	  SrcPort		  1
-	  Points		  [41, 0; 0, -115]
-	  DstBlock		  "Dot Product"
-	  DstPort		  2
+	  Points		  [28, 0]
+	  Branch {
+	    ZOrder		    97
+	    Points		    [0, 70]
+	    DstBlock		    "Scope2"
+	    DstPort		    1
+	  }
+	  Branch {
+	    ZOrder		    96
+	    DstBlock		    "TV 2-order LPF"
+	    DstPort		    4
+	  }
 	}
 	Line {
-	  ZOrder		  39
-	  SrcBlock		  "normalized intrinsic IRF"
+	  ZOrder		  92
+	  SrcBlock		  "omega"
 	  SrcPort		  1
-	  Points		  [152, 0; 0, 25]
-	  DstBlock		  "Product1"
+	  Points		  [22, 0]
+	  Branch {
+	    ZOrder		    99
+	    Points		    [0, 30]
+	    DstBlock		    "Scope3"
+	    DstPort		    1
+	  }
+	  Branch {
+	    ZOrder		    98
+	    DstBlock		    "TV 2-order LPF"
+	    DstPort		    3
+	  }
+	}
+	Line {
+	  ZOrder		  75
+	  SrcBlock		  "velocity"
+	  SrcPort		  1
+	  DstBlock		  "Transport\nDelay"
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  47
-	  SrcBlock		  "Gain"
+	  ZOrder		  51
+	  SrcBlock		  "Saturation"
 	  SrcPort		  1
-	  DstBlock		  "intrinsic torque"
-	  DstPort		  1
+	  Points		  [90, 0]
+	  Branch {
+	    ZOrder		    95
+	    Points		    [0, 55]
+	    DstBlock		    "Scope1"
+	    DstPort		    1
+	  }
+	  Branch {
+	    ZOrder		    94
+	    DstBlock		    "TV 2-order LPF"
+	    DstPort		    1
+	  }
 	}
 	Line {
-	  ZOrder		  60
-	  SrcBlock		  "Elastic stiffness"
+	  ZOrder		  52
+	  SrcBlock		  "Transport\nDelay"
 	  SrcPort		  1
-	  Points		  [135, 0; 0, -15]
-	  DstBlock		  "Product1"
-	  DstPort		  2
+	  DstBlock		  "Saturation"
+	  DstPort		  1
 	}
       }
     }
     Block {
       BlockType		      Constant
-      Name		      "irfCoeff"
-      SID		      "11"
-      Position		      [150, 205, 235, 235]
-      ZOrder		      58
-      Value		      "randn(101,1)"
+      Name		      "reflexGainPolynomialCoeff"
+      SID		      "71"
+      Position		      [205, 425, 235, 455]
+      ZOrder		      98
+      Value		      "[85.2066      46.2746     -10.9566     -5.30716      1.75446      0.63177]"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "reflexGainSubjectNormalizeGain"
+      SID		      "74"
+      Position		      [510, 372, 555, 408]
+      ZOrder		      101
+      Gain		      "7.3"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "reflexOmegaPolynomialCoeff"
+      SID		      "70"
+      Position		      [205, 345, 235, 375]
+      ZOrder		      97
+      Value		      "[-111.7413     -89.01885     0.5456458      9.335746     0.1063295     0.3402196]"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "reflexOmegaSubjectNormalizeGain"
+      SID		      "73"
+      Position		      [510, 317, 555, 353]
+      ZOrder		      100
+      Gain		      "36"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "reflexZetaPolynomialCoeff"
+      SID		      "69"
+      Position		      [205, 275, 235, 305]
+      ZOrder		      96
+      Value		      "[-157.6742     -86.03254      5.789946      7.059204     0.5821649     0.3376364]"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "reflexZetaSubjectNormalizeGain"
+      SID		      "72"
+      Position		      [510, 262, 555, 298]
+      ZOrder		      99
+      Gain		      "1.8"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
     }
     Line {
-      ZOrder		      38
+      ZOrder		      76
       SrcBlock		      "From\nWorkspace"
       SrcPort		      1
-      DstBlock		      "intrinsicPathway\n"
+      DstBlock		      "reflex pathway"
       DstPort		      1
     }
     Line {
-      ZOrder		      39
-      SrcBlock		      "irfCoeff"
-      SrcPort		      1
-      DstBlock		      "intrinsicPathway\n"
-      DstPort		      2
-    }
-    Line {
-      ZOrder		      46
-      SrcBlock		      "elasticSubjectNormalizeGain"
-      SrcPort		      1
-      DstBlock		      "intrinsicPathway\n"
-      DstPort		      3
-    }
-    Line {
-      ZOrder		      41
-      SrcBlock		      "intrinsicPathway\n"
+      ZOrder		      78
+      SrcBlock		      "reflex pathway"
       SrcPort		      1
       DstBlock		      "To Workspace"
       DstPort		      1
     }
     Line {
-      ZOrder		      47
-      SrcBlock		      "Polynomial\nEvaluation"
+      ZOrder		      85
+      SrcBlock		      "From\nWorkspace1"
       SrcPort		      1
-      DstBlock		      "elasticSubjectNormalizeGain"
-      DstPort		      1
+      Points		      [135, 0]
+      Branch {
+	ZOrder			105
+	Points			[0, 10]
+	Branch {
+	  ZOrder		  101
+	  Points		  [0, 80]
+	  DstBlock		  "Polynomial\nEvaluation3"
+	  DstPort		  1
+	}
+	Branch {
+	  ZOrder		  90
+	  DstBlock		  "Polynomial\nEvaluation2"
+	  DstPort		  1
+	}
+      }
+      Branch {
+	ZOrder			102
+	Points			[0, -60]
+	DstBlock		"Polynomial\nEvaluation1"
+	DstPort			1
+      }
     }
     Line {
-      ZOrder		      48
-      SrcBlock		      "From\nWorkspace2"
+      ZOrder		      92
+      SrcBlock		      "reflexZetaPolynomialCoeff"
       SrcPort		      1
-      DstBlock		      "Polynomial\nEvaluation"
-      DstPort		      1
-    }
-    Line {
-      ZOrder		      49
-      SrcBlock		      "elasticPolynomialCoeff"
-      SrcPort		      1
-      Points		      [20, 0; 0, -45]
-      DstBlock		      "Polynomial\nEvaluation"
+      DstBlock		      "Polynomial\nEvaluation1"
       DstPort		      2
+    }
+    Line {
+      ZOrder		      93
+      SrcBlock		      "reflexOmegaPolynomialCoeff"
+      SrcPort		      1
+      DstBlock		      "Polynomial\nEvaluation2"
+      DstPort		      2
+    }
+    Line {
+      ZOrder		      94
+      SrcBlock		      "reflexGainPolynomialCoeff"
+      SrcPort		      1
+      DstBlock		      "Polynomial\nEvaluation3"
+      DstPort		      2
+    }
+    Line {
+      ZOrder		      95
+      SrcBlock		      "Polynomial\nEvaluation1"
+      SrcPort		      1
+      Points		      [0, 0]
+      DstBlock		      "reflexZetaSubjectNormalizeGain"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      96
+      SrcBlock		      "reflexZetaSubjectNormalizeGain"
+      SrcPort		      1
+      Points		      [50, 0]
+      DstBlock		      "reflex pathway"
+      DstPort		      2
+    }
+    Line {
+      ZOrder		      97
+      SrcBlock		      "Polynomial\nEvaluation2"
+      SrcPort		      1
+      Points		      [30, 0; 0, -15]
+      DstBlock		      "reflexOmegaSubjectNormalizeGain"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      98
+      SrcBlock		      "reflexOmegaSubjectNormalizeGain"
+      SrcPort		      1
+      DstBlock		      "reflex pathway"
+      DstPort		      3
+    }
+    Line {
+      ZOrder		      99
+      SrcBlock		      "reflexGainSubjectNormalizeGain"
+      SrcPort		      1
+      DstBlock		      "reflex pathway"
+      DstPort		      4
+    }
+    Line {
+      ZOrder		      100
+      SrcBlock		      "Polynomial\nEvaluation3"
+      SrcPort		      1
+      Points		      [10, 0; 0, -40]
+      DstBlock		      "reflexGainSubjectNormalizeGain"
+      DstPort		      1
     }
   }
 }

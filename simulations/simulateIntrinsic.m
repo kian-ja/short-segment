@@ -22,6 +22,9 @@ set_param('reflexStiffnessLPVModel/reflexZetaSubjectNormalizeGain','Gain',num2st
 
 pos = position(1,:);
 pos = pos';
+posNldat = nldat(pos,'domainIncr',0.001);
+velocity = ddt(posNldat);
+velocity = get(velocity,'dataSet');
 u_i = zeros(60000,101);
 lags_i = (-50:1:50);
 for i = 1:101
@@ -34,3 +37,5 @@ h = irfModel.dataSet;
 schedulingVariable = (sin(2*pi*time*0.1) - 0.2) *0.3;
 sim intrinsicStiffnessLPVModel
 plot(intrinsicTorque)
+sim reflexStiffnessLPVModel
+plot(reflexTorque)
