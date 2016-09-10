@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.2"
+    ComputedModelVersion    "1.1"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Kian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Sep 09 18:54:13 2016"
-  RTWModifiedTimeStamp	  395348050
-  ModelVersionFormat	  "1.%<AutoIncrement:2>"
+  LastModifiedDate	  "Fri Sep 09 17:12:29 2016"
+  RTWModifiedTimeStamp	  395347918
+  ModelVersionFormat	  "1.%<AutoIncrement:1>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -195,8 +195,8 @@ Model {
 	  SolverMode		  "Auto"
 	  EnableConcurrentExecution off
 	  ConcurrentTasks	  off
-	  Solver		  "FixedStepDiscrete"
-	  SolverName		  "FixedStepDiscrete"
+	  Solver		  "ode3"
+	  SolverName		  "ode3"
 	  SolverJacobianMethodControl "auto"
 	  ShapePreserveControl	  "DisableAll"
 	  ZeroCrossControl	  "UseLocalSettings"
@@ -704,7 +704,7 @@ Model {
       }
       Name		      "Configuration"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition     [ 282, 129, 1398, 863 ] 
+      ConfigPrmDlgPosition     [ 291, 167, 1389, 854 ] 
     }
     PropName		    "ConfigurationSets"
   }
@@ -1130,7 +1130,7 @@ Model {
 	  Position		  [415, 314, 445, 346]
 	  ZOrder		  78
 	  Floating		  off
-	  Location		  [5, 55, 1685, 1001]
+	  Location		  [1, 55, 1681, 1001]
 	  Open			  off
 	  NumInputPorts		  "1"
 	  List {
@@ -1161,7 +1161,7 @@ Model {
 	  Position		  [220, 324, 250, 356]
 	  ZOrder		  79
 	  Floating		  off
-	  Location		  [5, 55, 1685, 1001]
+	  Location		  [1, 55, 1681, 1001]
 	  Open			  off
 	  NumInputPorts		  "1"
 	  List {
