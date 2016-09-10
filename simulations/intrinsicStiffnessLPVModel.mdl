@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.5"
+    ComputedModelVersion    "1.6"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -56,7 +56,7 @@ Model {
 	LoadSaveID		"0"
 	Extents			[1452.0, 818.0]
 	ZoomFactor		[1.25]
-	Offset			[-7.4533360083897833, 66.333333226045056]
+	Offset			[27.546663991610217, 66.333333226045056]
       }
     }
   }
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Kian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Sep 10 10:32:28 2016"
-  RTWModifiedTimeStamp	  395404344
-  ModelVersionFormat	  "1.%<AutoIncrement:5>"
+  LastModifiedDate	  "Sat Sep 10 11:19:04 2016"
+  RTWModifiedTimeStamp	  395406864
+  ModelVersionFormat	  "1.%<AutoIncrement:6>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -947,7 +947,7 @@ Model {
       BlockType		      FromWorkspace
       Name		      "From\nWorkspace"
       SID		      "1"
-      Position		      [210, 143, 345, 177]
+      Position		      [245, 143, 380, 177]
       ZOrder		      1
       VariableName	      "[time inputSignal]"
       SampleTime	      ".001"
@@ -968,7 +968,7 @@ Model {
       Name		      "Polynomial\nEvaluation"
       SID		      "44"
       Ports		      [2, 1]
-      Position		      [200, 261, 305, 299]
+      Position		      [235, 261, 340, 299]
       ZOrder		      86
       LibraryVersion	      "1.25"
       SourceBlock	      "dsppolyfun/Polynomial\nEvaluation"
@@ -981,7 +981,7 @@ Model {
       Name		      "To Workspace"
       SID		      "28"
       Ports		      [1]
-      Position		      [685, 200, 790, 240]
+      Position		      [720, 200, 825, 240]
       ZOrder		      75
       VariableName	      "intrinsicTorque"
       MaxDataPoints	      "inf"
@@ -991,15 +991,15 @@ Model {
       BlockType		      Constant
       Name		      "elasticPolynomialCoeff"
       SID		      "46"
-      Position		      [120, 320, 150, 350]
+      Position		      [155, 320, 185, 350]
       ZOrder		      88
-      Value		      "[85.2066      46.2746     -10.9566     -5.30716      1.75446      0.63177]"
+      Value		      "[-25.8226     -5.60556      7.57348      2.62729      0.73595     0.603385]"
     }
     Block {
       BlockType		      Gain
       Name		      "elasticSubjectNormalizeGain"
       SID		      "39"
-      Position		      [330, 262, 400, 298]
+      Position		      [365, 262, 435, 298]
       ZOrder		      84
       Gain		      "316"
       ParamDataTypeStr	      "Inherit: Inherit via internal rule"
@@ -1011,7 +1011,7 @@ Model {
       Name		      "intrinsicPathway\n"
       SID		      "29"
       Ports		      [3, 1]
-      Position		      [440, 129, 630, 311]
+      Position		      [475, 129, 665, 311]
       ZOrder		      76
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -1191,9 +1191,22 @@ Model {
       BlockType		      Constant
       Name		      "irfCoeff"
       SID		      "11"
-      Position		      [170, 205, 200, 235]
+      Position		      [150, 205, 235, 235]
       ZOrder		      58
-      Value		      "h"
+      Value		      "[434.80703     -118.33071     -616.00573     -726.74999     -369.93923      266.86868      831.286"
+      "29      1063.2251      858.54299      303.39193     -395.09995      -934.9581     -1028.0563     -627.44396     "
+      " 17.925964      523.01803      598.91156        208.294     -419.58995     -905.39588     -918.79759     -343.87"
+      "463      626.75638      1555.0191      1978.8679      1652.5491      667.40088     -601.36903      -1678.766    "
+      " -2191.9417      -2006.875     -1256.3383     -250.45689      667.30763      1249.5736      1406.1013      1182."
+      "3381      700.88554      119.46865     -391.53974     -660.58817     -539.24029      43.527814       1011.836   "
+      "   2100.4776      2894.6715      2969.9482      2086.1061       337.8128     -1826.5258     -3745.4728     -4793"
+      ".5793      -4633.662      -3358.527     -1447.5607      445.91931      1770.3746      2280.3171       2080.383  "
+      "    1510.4492      947.27997      627.94534      576.11229      650.95197       669.9587      524.26998      221"
+      ".57203     -151.50455     -497.05766     -756.43979     -917.04665     -978.90678     -916.49589     -678.51864 "
+      "    -233.70171      363.85507      950.55006       1311.605      1288.8665      872.05782      214.70034     -43"
+      "1.82818     -829.85942      -862.1887     -587.85836     -205.10637      64.933063      109.11871     -24.133996"
+      "     -185.53102     -238.04553     -129.01799      112.59651      385.78194      548.52337       509.7153      2"
+      "90.81556      17.844569     -207.23732     -398.66198      -687.5917]"
     }
     Line {
       ZOrder		      38

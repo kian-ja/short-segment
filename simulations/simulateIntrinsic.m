@@ -2,22 +2,24 @@ clear
 clc
 load intrinsicIRF
 load experimental_input_subject
+h = irfModel.dataSet;
+set_param('intrinsicStiffnessLPVModel/irfCoeff','Value',['[',num2str(h'),']']);
 positionLevels = [-0.48 -0.4 -0.32 -0.24 -0.16 -0.08 0.0 0.08 0.16 0.24];%from Mirbagheri et al 2000
 Gr = [0.0625,0.0938,0.1042,0.1094,0.2813,0.5000,0.6250,0.7000,0.8000,0.8100];%from Mirbagheri et al 2000
 K = [0.38 0.36 0.42 0.48 0.52 0.55 0.6 0.7 0.8 1];%from Mirbagheri et al 2000
-omega = [0.5 0.625 0.69 0.625 0.52 0.38 0.379 0.35 0.56 0.52];%from Mirbagheri et al 2000
-zeta = [0.5 0.25 0.36 0.33 0.36 0.33 0.37 0.39 0.58 0.55];%from Mirbagheri et al 2000
+%omega = [0.5 0.625 0.69 0.625 0.52 0.38 0.379 0.35 0.56 0.52];%from Mirbagheri et al 2000
+%zeta = [0.5 0.25 0.36 0.33 0.36 0.33 0.37 0.39 0.58 0.55];%from Mirbagheri et al 2000
 polyCoeffK = polyfit(positionLevels,K,5);
 set_param('intrinsicStiffnessLPVModel/elasticPolynomialCoeff','Value',['[',num2str(polyCoeffK),']']);
 set_param('intrinsicStiffnessLPVModel/elasticSubjectNormalizeGain','Gain',num2str(316));%from Mirbagheri et al 2000, subject HB
 polyCoeffGr = polyfit(positionLevels,Gr,5);
 set_param('reflexStiffnessLPVModel/reflexGainPolynomialCoeff','Value',['[',num2str(polyCoeffGr),']']);
 set_param('reflexStiffnessLPVModel/reflexGainSubjectNormalizeGain','Gain',num2str(7.3));%from Mirbagheri et al 2000, subject HB
-polyCoeffOmega = polyfit(positionLevels,omega,5);
-set_param('reflexStiffnessLPVModel/reflexOmegaPolynomialCoeff','Value',['[',num2str(polyCoeffOmega),']']);
+%polyCoeffOmega = polyfit(positionLevels,omega,5);
+%set_param('reflexStiffnessLPVModel/reflexOmegaPolynomialCoeff','Value',['[',num2str(polyCoeffOmega),']']);
 set_param('reflexStiffnessLPVModel/reflexOmegaSubjectNormalizeGain','Gain',num2str(36));%from Mirbagheri et al 2000, subject HB
-polyCoeffZeta = polyfit(positionLevels,zeta,5);
-set_param('reflexStiffnessLPVModel/reflexZetaPolynomialCoeff','Value',['[',num2str(polyCoeffZeta),']']);
+%polyCoeffZeta = polyfit(positionLevels,zeta,5);
+%set_param('reflexStiffnessLPVModel/reflexZetaPolynomialCoeff','Value',['[',num2str(polyCoeffZeta),']']);
 set_param('reflexStiffnessLPVModel/reflexZetaSubjectNormalizeGain','Gain',num2str(1.8));%from Mirbagheri et al 2000, subject HB
 
 pos = position(1,:);
@@ -33,9 +35,11 @@ end
 inputSignal = u_i;
 time = 0 : 0.001:59.999;
 time = time';
-h = irfModel.dataSet;
 schedulingVariable = (sin(2*pi*time*0.1) - 0.2) *0.3;
 sim intrinsicStiffnessLPVModel
-plot(intrinsicTorque)
 sim reflexStiffnessLPVModel
+figure
+subplot(2,1,1)
+plot(intrinsicTorque)
+subplot(2,1,2)
 plot(reflexTorque)
