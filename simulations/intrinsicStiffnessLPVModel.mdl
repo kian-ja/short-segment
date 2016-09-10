@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.6"
+    ComputedModelVersion    "1.8"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Kian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Sep 10 11:19:04 2016"
-  RTWModifiedTimeStamp	  395406864
-  ModelVersionFormat	  "1.%<AutoIncrement:6>"
+  LastModifiedDate	  "Sat Sep 10 11:38:22 2016"
+  RTWModifiedTimeStamp	  395408301
+  ModelVersionFormat	  "1.%<AutoIncrement:8>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -177,9 +177,9 @@ Model {
 	  $ObjectID		  8
 	  Version		  "1.13.1"
 	  StartTime		  "0.0"
-	  StopTime		  "59.999"
+	  StopTime		  "simulationTime"
 	  AbsTol		  "auto"
-	  FixedStep		  "0.001"
+	  FixedStep		  "simulationSamplingTime"
 	  InitialStep		  "auto"
 	  MaxNumMinSteps	  "-1"
 	  MaxOrder		  5
@@ -704,7 +704,7 @@ Model {
       }
       Name		      "Configuration"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition     [ 282, 129, 1398, 863 ] 
+      ConfigPrmDlgPosition     [ 273, 91, 1407, 872 ] 
     }
     PropName		    "ConfigurationSets"
   }
@@ -950,7 +950,7 @@ Model {
       Position		      [245, 143, 380, 177]
       ZOrder		      1
       VariableName	      "[time inputSignal]"
-      SampleTime	      ".001"
+      SampleTime	      "simulationSamplingTime"
       ZeroCross		      on
     }
     Block {
@@ -960,7 +960,7 @@ Model {
       Position		      [20, 255, 150, 285]
       ZOrder		      85
       VariableName	      "[time schedulingVariable]"
-      SampleTime	      "0.001"
+      SampleTime	      "simulationSamplingTime"
       ZeroCross		      on
     }
     Block {
@@ -985,7 +985,7 @@ Model {
       ZOrder		      75
       VariableName	      "intrinsicTorque"
       MaxDataPoints	      "inf"
-      SampleTime	      "-1"
+      SampleTime	      "simulationSamplingTime"
     }
     Block {
       BlockType		      Constant

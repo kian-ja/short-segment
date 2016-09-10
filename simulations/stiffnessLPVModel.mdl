@@ -1,5 +1,5 @@
 Model {
-  Name			  "reflexStiffnessLPVModel"
+  Name			  "stiffnessLPVModel"
   Version		  8.2
   MdlSubVersion		  0
   SavedCharacterEncoding  "windows-1252"
@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.13"
+    ComputedModelVersion    "1.4"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -56,19 +56,19 @@ Model {
 	LoadSaveID		"0"
 	Extents			[1452.0, 818.0]
 	ZoomFactor		[1.0]
-	Offset			[1.5500004887580872, 0.0]
+	Offset			[0.0, 0.0]
       }
     }
   }
-  Created		  "Fri Sep 09 16:14:32 2016"
+  Created		  "Sat Sep 10 11:38:56 2016"
   Creator		  "Kian"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Kian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Sep 10 11:38:50 2016"
-  RTWModifiedTimeStamp	  395408324
-  ModelVersionFormat	  "1.%<AutoIncrement:13>"
+  LastModifiedDate	  "Sat Sep 10 11:48:43 2016"
+  RTWModifiedTimeStamp	  395408879
+  ModelVersionFormat	  "1.%<AutoIncrement:4>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -179,7 +179,7 @@ Model {
 	  StartTime		  "0.0"
 	  StopTime		  "simulationTime"
 	  AbsTol		  "auto"
-	  FixedStep		  "0.001"
+	  FixedStep		  "simulationSamplingTime"
 	  InitialStep		  "auto"
 	  MaxNumMinSteps	  "-1"
 	  MaxOrder		  5
@@ -788,6 +788,17 @@ Model {
       PreserveConstantTs      off
     }
     Block {
+      BlockType		      DotProduct
+      SampleTime	      "-1"
+      InputSameDT	      on
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeStr	      "Inherit: Same as first input"
+      LockScale		      off
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
       BlockType		      From
       GotoTag		      "A"
       IconDisplay	      "Tag"
@@ -983,7 +994,7 @@ Model {
     }
   }
   System {
-    Name		    "reflexStiffnessLPVModel"
+    Name		    "stiffnessLPVModel"
     Location		    [-9, 0, 1689, 1020]
     Open		    on
     ModelBrowserVisibility  on
@@ -998,34 +1009,44 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "93"
+    SIDHighWatermark	    "69"
     Block {
       BlockType		      FromWorkspace
       Name		      "From\nWorkspace"
-      SID		      "46"
-      Position		      [500, 213, 565, 237]
-      ZOrder		      41
-      VariableName	      "[time velocity]"
+      SID		      "1"
+      Position		      [370, 103, 505, 137]
+      ZOrder		      89
+      VariableName	      "[time positionInput]"
       SampleTime	      "simulationSamplingTime"
       ZeroCross		      on
     }
     Block {
       BlockType		      FromWorkspace
       Name		      "From\nWorkspace1"
-      SID		      "47"
-      Position		      [20, 315, 150, 345]
-      ZOrder		      42
+      SID		      "17"
+      Position		      [475, 373, 540, 397]
+      ZOrder		      107
+      VariableName	      "[time velocity]"
+      SampleTime	      "simulationSamplingTime"
+      ZeroCross		      on
+    }
+    Block {
+      BlockType		      FromWorkspace
+      Name		      "From\nWorkspace3"
+      SID		      "18"
+      Position		      [70, 370, 200, 400]
+      ZOrder		      108
       VariableName	      "[time schedulingVariable]"
       SampleTime	      "simulationSamplingTime"
       ZeroCross		      on
     }
     Block {
       BlockType		      Reference
-      Name		      "Polynomial\nEvaluation2"
-      SID		      "91"
+      Name		      "Polynomial\nEvaluation"
+      SID		      "3"
       Ports		      [2, 1]
-      Position		      [335, 386, 440, 424]
-      ZOrder		      104
+      Position		      [360, 221, 465, 259]
+      ZOrder		      95
       LibraryVersion	      "1.25"
       SourceBlock	      "dsppolyfun/Polynomial\nEvaluation"
       SourceType	      "Polynomial Evaluation"
@@ -1033,39 +1054,351 @@ Model {
       constCoeffs	      "[5 4 3 2 1]"
     }
     Block {
+      BlockType		      Reference
+      Name		      "Polynomial\nEvaluation2"
+      SID		      "19"
+      Ports		      [2, 1]
+      Position		      [310, 531, 415, 569]
+      ZOrder		      115
+      LibraryVersion	      "1.25"
+      SourceBlock	      "dsppolyfun/Polynomial\nEvaluation"
+      SourceType	      "Polynomial Evaluation"
+      useConstCoeffs	      off
+      constCoeffs	      "[5 4 3 2 1]"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum"
+      SID		      "66"
+      Ports		      [2, 1]
+      Position		      [960, 320, 980, 340]
+      ZOrder		      118
+      ShowName		      off
+      IconShape		      "round"
+      Inputs		      "|++"
+      InputSameDT	      off
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
       BlockType		      ToWorkspace
       Name		      "To Workspace"
-      SID		      "54"
+      SID		      "4"
       Ports		      [1]
-      Position		      [845, 295, 905, 325]
-      ZOrder		      49
+      Position		      [1100, 160, 1205, 200]
+      ZOrder		      91
+      VariableName	      "intrinsicTorque"
+      MaxDataPoints	      "inf"
+      SampleTime	      "simulationSamplingTime"
+    }
+    Block {
+      BlockType		      ToWorkspace
+      Name		      "To Workspace1"
+      SID		      "20"
+      Ports		      [1]
+      Position		      [1100, 452, 1205, 488]
+      ZOrder		      109
       VariableName	      "reflexTorque"
       MaxDataPoints	      "inf"
       SampleTime	      "simulationSamplingTime"
     }
     Block {
+      BlockType		      ToWorkspace
+      Name		      "To Workspace2"
+      SID		      "67"
+      Ports		      [1]
+      Position		      [1100, 312, 1205, 348]
+      ZOrder		      119
+      VariableName	      "totalTorque"
+      MaxDataPoints	      "inf"
+      SampleTime	      "simulationSamplingTime"
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "elasticPolynomialCoeff"
+      SID		      "5"
+      Position		      [280, 280, 310, 310]
+      ZOrder		      96
+      Value		      "[-25.8226     -5.60556      7.57348      2.62729      0.73595     0.603385]"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "elasticSubjectNormalizeGain"
+      SID		      "6"
+      Position		      [490, 222, 560, 258]
+      ZOrder		      93
+      Gain		      "50"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "intrinsicPathway\n"
+      SID		      "7"
+      Ports		      [3, 1]
+      Position		      [600, 89, 790, 271]
+      ZOrder		      92
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      RTWSystemCode	      "Auto"
+      FunctionWithSeparateData off
+      Opaque		      off
+      RequestExecContextInheritance off
+      MaskHideContents	      off
+      System {
+	Name			"intrinsicPathway\n"
+	Location		[-9, 0, 1689, 1020]
+	Open			off
+	ModelBrowserVisibility	on
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	Block {
+	  BlockType		  Inport
+	  Name			  "delayed position"
+	  SID			  "8"
+	  Position		  [55, 103, 85, 117]
+	  ZOrder		  73
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "normalized intrinsic IRF"
+	  SID			  "9"
+	  Position		  [55, 198, 85, 212]
+	  ZOrder		  74
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "Elastic stiffness"
+	  SID			  "10"
+	  Position		  [55, 258, 85, 272]
+	  ZOrder		  75
+	  Port			  "3"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  DotProduct
+	  Name			  "Dot Product"
+	  SID			  "11"
+	  Position		  [480, 102, 510, 133]
+	  ZOrder		  71
+	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "Gain"
+	  SID			  "12"
+	  Position		  [585, 85, 615, 115]
+	  ZOrder		  77
+	  Gain			  "0.001"
+	  ParamDataTypeStr	  "Inherit: Inherit via internal rule"
+	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Product
+	  Name			  "Product1"
+	  SID			  "13"
+	  Ports			  [2, 1]
+	  Position		  [365, 219, 395, 261]
+	  ZOrder		  72
+	  InputSameDT		  off
+	  OutDataTypeStr	  "Inherit: Inherit via internal rule"
+	  RndMeth		  "Floor"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Scope
+	  Name			  "Scope"
+	  SID			  "14"
+	  Ports			  [1]
+	  Position		  [555, 24, 585, 56]
+	  ZOrder		  2
+	  Floating		  off
+	  Location		  [1, 55, 1681, 1001]
+	  Open			  off
+	  NumInputPorts		  "1"
+	  List {
+	    ListType		    AxesTitles
+	    axes1		    "%<SignalLabel>"
+	  }
+	  List {
+	    ListType		    ScopeGraphics
+	    FigureColor		    "[0.5 0.5 0.5]"
+	    AxesColor		    "[0 0 0]"
+	    AxesTickColor	    "[1 1 1]"
+	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	    LineStyles		    "-|-|-|-|-|-"
+	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+	    MarkerStyles	    "none|none|none|none|none|none"
+	  }
+	  ShowLegends		  off
+	  DataFormat		  "StructureWithTime"
+	  LimitDataPoints	  off
+	  SampleTime		  "0"
+	}
+	Block {
+	  BlockType		  Scope
+	  Name			  "Scope1"
+	  SID			  "69"
+	  Ports			  [1]
+	  Position		  [470, 324, 500, 356]
+	  ZOrder		  78
+	  Floating		  off
+	  Location		  [5, 55, 1685, 1001]
+	  Open			  off
+	  NumInputPorts		  "1"
+	  List {
+	    ListType		    AxesTitles
+	    axes1		    "%<SignalLabel>"
+	  }
+	  List {
+	    ListType		    ScopeGraphics
+	    FigureColor		    "[0.5 0.5 0.5]"
+	    AxesColor		    "[0 0 0]"
+	    AxesTickColor	    "[1 1 1]"
+	    LineColors		    "[1 1 0;1 0 1;0 1 1;1 0 0;0 1 0;0 0 1]"
+	    LineStyles		    "-|-|-|-|-|-"
+	    LineWidths		    "[0.5 0.5 0.5 0.5 0.5 0.5]"
+	    MarkerStyles	    "none|none|none|none|none|none"
+	  }
+	  ShowLegends		  off
+	  YMin			  "120"
+	  YMax			  "320"
+	  SaveName		  "ScopeData5"
+	  DataFormat		  "StructureWithTime"
+	  LimitDataPoints	  off
+	  SampleTime		  "0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "intrinsic torque"
+	  SID			  "15"
+	  Position		  [675, 93, 705, 107]
+	  ZOrder		  76
+	  IconDisplay		  "Port number"
+	}
+	Line {
+	  ZOrder		  1
+	  SrcBlock		  "delayed position"
+	  SrcPort		  1
+	  DstBlock		  "Dot Product"
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  2
+	  SrcBlock		  "Dot Product"
+	  SrcPort		  1
+	  Points		  [19, 0; 0, -20]
+	  Branch {
+	    ZOrder		    3
+	    DstBlock		    "Gain"
+	    DstPort		    1
+	  }
+	  Branch {
+	    ZOrder		    4
+	    Points		    [0, -60]
+	    DstBlock		    "Scope"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  ZOrder		  5
+	  SrcBlock		  "Product1"
+	  SrcPort		  1
+	  Points		  [41, 0; 0, -115]
+	  DstBlock		  "Dot Product"
+	  DstPort		  2
+	}
+	Line {
+	  ZOrder		  6
+	  SrcBlock		  "normalized intrinsic IRF"
+	  SrcPort		  1
+	  Points		  [117, 0; 0, 25]
+	  DstBlock		  "Product1"
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  7
+	  SrcBlock		  "Gain"
+	  SrcPort		  1
+	  DstBlock		  "intrinsic torque"
+	  DstPort		  1
+	}
+	Line {
+	  ZOrder		  8
+	  SrcBlock		  "Elastic stiffness"
+	  SrcPort		  1
+	  Points		  [135, 0; 0, -15; 84, 0]
+	  Branch {
+	    ZOrder		    10
+	    Points		    [0, 90]
+	    DstBlock		    "Scope1"
+	    DstPort		    1
+	  }
+	  Branch {
+	    ZOrder		    9
+	    DstBlock		    "Product1"
+	    DstPort		    2
+	  }
+	}
+      }
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "irfCoeff"
+      SID		      "16"
+      Position		      [275, 165, 360, 195]
+      ZOrder		      90
+      Value		      "[434.80703     -118.33071     -616.00573     -726.74999     -369.93923      266.86868      831.286"
+      "29      1063.2251      858.54299      303.39193     -395.09995      -934.9581     -1028.0563     -627.44396     "
+      " 17.925964      523.01803      598.91156        208.294     -419.58995     -905.39588     -918.79759     -343.87"
+      "463      626.75638      1555.0191      1978.8679      1652.5491      667.40088     -601.36903      -1678.766    "
+      " -2191.9417      -2006.875     -1256.3383     -250.45689      667.30763      1249.5736      1406.1013      1182."
+      "3381      700.88554      119.46865     -391.53974     -660.58817     -539.24029      43.527814       1011.836   "
+      "   2100.4776      2894.6715      2969.9482      2086.1061       337.8128     -1826.5258     -3745.4728     -4793"
+      ".5793      -4633.662      -3358.527     -1447.5607      445.91931      1770.3746      2280.3171       2080.383  "
+      "    1510.4492      947.27997      627.94534      576.11229      650.95197       669.9587      524.26998      221"
+      ".57203     -151.50455     -497.05766     -756.43979     -917.04665     -978.90678     -916.49589     -678.51864 "
+      "    -233.70171      363.85507      950.55006       1311.605      1288.8665      872.05782      214.70034     -43"
+      "1.82818     -829.85942      -862.1887     -587.85836     -205.10637      64.933063      109.11871     -24.133996"
+      "     -185.53102     -238.04553     -129.01799      112.59651      385.78194      548.52337       509.7153      2"
+      "90.81556      17.844569     -207.23732     -398.66198      -687.5917]"
+    }
+    Block {
       BlockType		      Constant
       Name		      "omega"
-      SID		      "89"
-      Position		      [410, 330, 440, 360]
-      ZOrder		      102
+      SID		      "21"
+      Position		      [385, 480, 415, 510]
+      ZOrder		      114
       Value		      "0.5"
     }
     Block {
       BlockType		      Constant
       Name		      "omega1"
-      SID		      "93"
-      Position		      [410, 270, 440, 300]
-      ZOrder		      106
+      SID		      "22"
+      Position		      [385, 425, 415, 455]
+      ZOrder		      117
       Value		      "0.5"
     }
     Block {
       BlockType		      SubSystem
       Name		      "reflex pathway"
-      SID		      "55"
+      SID		      "23"
       Ports		      [4, 1]
-      Position		      [625, 199, 765, 431]
-      ZOrder		      50
+      Position		      [600, 354, 795, 581]
+      ZOrder		      110
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
       RTWSystemCode	      "Auto"
@@ -1091,7 +1424,7 @@ Model {
 	Block {
 	  BlockType		  Inport
 	  Name			  "velocity"
-	  SID			  "56"
+	  SID			  "24"
 	  Position		  [20, 43, 50, 57]
 	  ZOrder		  49
 	  IconDisplay		  "Port number"
@@ -1099,7 +1432,7 @@ Model {
 	Block {
 	  BlockType		  Inport
 	  Name			  "zeta"
-	  SID			  "59"
+	  SID			  "25"
 	  Position		  [495, 98, 525, 112]
 	  ZOrder		  99
 	  Port			  "2"
@@ -1108,7 +1441,7 @@ Model {
 	Block {
 	  BlockType		  Inport
 	  Name			  "omega"
-	  SID			  "60"
+	  SID			  "26"
 	  Position		  [510, 153, 540, 167]
 	  ZOrder		  100
 	  Port			  "3"
@@ -1117,7 +1450,7 @@ Model {
 	Block {
 	  BlockType		  Inport
 	  Name			  "gain"
-	  SID			  "61"
+	  SID			  "27"
 	  Position		  [490, 208, 520, 222]
 	  ZOrder		  101
 	  Port			  "4"
@@ -1126,7 +1459,7 @@ Model {
 	Block {
 	  BlockType		  Saturate
 	  Name			  "Saturation"
-	  SID			  "44"
+	  SID			  "28"
 	  Ports			  [1, 1]
 	  Position		  [265, 35, 295, 65]
 	  ZOrder		  39
@@ -1137,7 +1470,7 @@ Model {
 	Block {
 	  BlockType		  Scope
 	  Name			  "Scope"
-	  SID			  "15"
+	  SID			  "29"
 	  Ports			  [1]
 	  Position		  [835, 44, 865, 76]
 	  ZOrder		  15
@@ -1169,7 +1502,7 @@ Model {
 	Block {
 	  BlockType		  Scope
 	  Name			  "Scope1"
-	  SID			  "75"
+	  SID			  "30"
 	  Ports			  [1]
 	  Position		  [420, 89, 450, 121]
 	  ZOrder		  59
@@ -1200,7 +1533,7 @@ Model {
 	Block {
 	  BlockType		  Scope
 	  Name			  "Scope2"
-	  SID			  "76"
+	  SID			  "31"
 	  Ports			  [1]
 	  Position		  [630, 269, 660, 301]
 	  ZOrder		  60
@@ -1231,7 +1564,7 @@ Model {
 	Block {
 	  BlockType		  Scope
 	  Name			  "Scope3"
-	  SID			  "77"
+	  SID			  "32"
 	  Ports			  [1]
 	  Position		  [595, 174, 625, 206]
 	  ZOrder		  61
@@ -1262,7 +1595,7 @@ Model {
 	Block {
 	  BlockType		  Scope
 	  Name			  "Scope4"
-	  SID			  "78"
+	  SID			  "33"
 	  Ports			  [1]
 	  Position		  [580, 59, 610, 91]
 	  ZOrder		  62
@@ -1295,7 +1628,7 @@ Model {
 	Block {
 	  BlockType		  SubSystem
 	  Name			  "TV 2-order LPF"
-	  SID			  "38"
+	  SID			  "34"
 	  Ports			  [4, 1]
 	  Position		  [630, 24, 710, 241]
 	  ZOrder		  38
@@ -1308,7 +1641,7 @@ Model {
 	  MaskHideContents	  off
 	  System {
 	    Name		    "TV 2-order LPF"
-	    Location		    [-9, 0, 1689, 1020]
+	    Location		    [-9, -9, 1689, 1011]
 	    Open		    off
 	    ModelBrowserVisibility  on
 	    ModelBrowserWidth	    200
@@ -1324,7 +1657,7 @@ Model {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "input"
-	      SID		      "39"
+	      SID		      "35"
 	      Position		      [20, 23, 50, 37]
 	      ZOrder		      38
 	      IconDisplay	      "Port number"
@@ -1332,7 +1665,7 @@ Model {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "zeta"
-	      SID		      "40"
+	      SID		      "36"
 	      Position		      [145, 118, 175, 132]
 	      ZOrder		      39
 	      Port		      "2"
@@ -1341,7 +1674,7 @@ Model {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "omega"
-	      SID		      "41"
+	      SID		      "37"
 	      Position		      [145, 198, 175, 212]
 	      ZOrder		      40
 	      Port		      "3"
@@ -1350,7 +1683,7 @@ Model {
 	    Block {
 	      BlockType		      Inport
 	      Name		      "gain"
-	      SID		      "42"
+	      SID		      "38"
 	      Position		      [145, 268, 175, 282]
 	      ZOrder		      41
 	      Port		      "4"
@@ -1359,7 +1692,7 @@ Model {
 	    Block {
 	      BlockType		      Constant
 	      Name		      "Constant"
-	      SID		      "17"
+	      SID		      "39"
 	      Position		      [680, 100, 710, 130]
 	      ZOrder		      17
 	      BlockMirror	      on
@@ -1369,7 +1702,7 @@ Model {
 	    Block {
 	      BlockType		      From
 	      Name		      "From1"
-	      SID		      "28"
+	      SID		      "40"
 	      Position		      [790, 121, 830, 149]
 	      ZOrder		      28
 	      BlockMirror	      on
@@ -1380,7 +1713,7 @@ Model {
 	    Block {
 	      BlockType		      From
 	      Name		      "From2"
-	      SID		      "29"
+	      SID		      "41"
 	      Position		      [680, 141, 720, 169]
 	      ZOrder		      29
 	      BlockMirror	      on
@@ -1391,7 +1724,7 @@ Model {
 	    Block {
 	      BlockType		      From
 	      Name		      "From3"
-	      SID		      "31"
+	      SID		      "42"
 	      Position		      [655, 191, 695, 219]
 	      ZOrder		      31
 	      BlockMirror	      on
@@ -1402,7 +1735,7 @@ Model {
 	    Block {
 	      BlockType		      From
 	      Name		      "From4"
-	      SID		      "32"
+	      SID		      "43"
 	      Position		      [700, 211, 740, 239]
 	      ZOrder		      32
 	      BlockMirror	      on
@@ -1413,7 +1746,7 @@ Model {
 	    Block {
 	      BlockType		      From
 	      Name		      "From5"
-	      SID		      "35"
+	      SID		      "44"
 	      Position		      [310, 301, 350, 329]
 	      ZOrder		      35
 	      BackgroundColor	      "green"
@@ -1422,7 +1755,7 @@ Model {
 	    Block {
 	      BlockType		      From
 	      Name		      "From6"
-	      SID		      "36"
+	      SID		      "45"
 	      Position		      [375, 321, 415, 349]
 	      ZOrder		      36
 	      BackgroundColor	      "green"
@@ -1431,7 +1764,7 @@ Model {
 	    Block {
 	      BlockType		      From
 	      Name		      "From7"
-	      SID		      "37"
+	      SID		      "46"
 	      Position		      [310, 341, 350, 369]
 	      ZOrder		      37
 	      BackgroundColor	      "lightBlue"
@@ -1440,7 +1773,7 @@ Model {
 	    Block {
 	      BlockType		      Goto
 	      Name		      "Goto"
-	      SID		      "23"
+	      SID		      "47"
 	      Position		      [240, 110, 280, 140]
 	      ZOrder		      23
 	      BackgroundColor	      "red"
@@ -1449,7 +1782,7 @@ Model {
 	    Block {
 	      BlockType		      Goto
 	      Name		      "Goto1"
-	      SID		      "25"
+	      SID		      "48"
 	      Position		      [240, 190, 280, 220]
 	      ZOrder		      25
 	      BackgroundColor	      "green"
@@ -1458,7 +1791,7 @@ Model {
 	    Block {
 	      BlockType		      Goto
 	      Name		      "Goto2"
-	      SID		      "27"
+	      SID		      "49"
 	      Position		      [240, 260, 280, 290]
 	      ZOrder		      27
 	      BackgroundColor	      "lightBlue"
@@ -1467,7 +1800,7 @@ Model {
 	    Block {
 	      BlockType		      Integrator
 	      Name		      "Integrator"
-	      SID		      "7"
+	      SID		      "50"
 	      Ports		      [1, 1]
 	      Position		      [495, 310, 525, 340]
 	      ZOrder		      7
@@ -1475,7 +1808,7 @@ Model {
 	    Block {
 	      BlockType		      Integrator
 	      Name		      "Integrator1"
-	      SID		      "11"
+	      SID		      "51"
 	      Ports		      [1, 1]
 	      Position		      [545, 310, 575, 340]
 	      ZOrder		      11
@@ -1483,7 +1816,7 @@ Model {
 	    Block {
 	      BlockType		      Integrator
 	      Name		      "Integrator2"
-	      SID		      "12"
+	      SID		      "52"
 	      Ports		      [1, 1]
 	      Position		      [715, 265, 745, 295]
 	      ZOrder		      12
@@ -1493,7 +1826,7 @@ Model {
 	    Block {
 	      BlockType		      Integrator
 	      Name		      "Integrator3"
-	      SID		      "13"
+	      SID		      "53"
 	      Ports		      [1, 1]
 	      Position		      [750, 220, 780, 250]
 	      ZOrder		      13
@@ -1503,7 +1836,7 @@ Model {
 	    Block {
 	      BlockType		      Integrator
 	      Name		      "Integrator4"
-	      SID		      "14"
+	      SID		      "54"
 	      Ports		      [1, 1]
 	      Position		      [795, 265, 825, 295]
 	      ZOrder		      14
@@ -1513,7 +1846,7 @@ Model {
 	    Block {
 	      BlockType		      Product
 	      Name		      "Product"
-	      SID		      "18"
+	      SID		      "55"
 	      Ports		      [4, 1]
 	      Position		      [600, 87, 635, 163]
 	      ZOrder		      18
@@ -1528,7 +1861,7 @@ Model {
 	    Block {
 	      BlockType		      Product
 	      Name		      "Product1"
-	      SID		      "30"
+	      SID		      "56"
 	      Ports		      [3, 1]
 	      Position		      [600, 197, 635, 273]
 	      ZOrder		      30
@@ -1543,7 +1876,7 @@ Model {
 	    Block {
 	      BlockType		      Product
 	      Name		      "Product2"
-	      SID		      "34"
+	      SID		      "57"
 	      Ports		      [4, 1]
 	      Position		      [440, 287, 475, 363]
 	      ZOrder		      34
@@ -1556,7 +1889,7 @@ Model {
 	    Block {
 	      BlockType		      Sum
 	      Name		      "Sum"
-	      SID		      "8"
+	      SID		      "58"
 	      Ports		      [3, 1]
 	      Position		      [640, 320, 660, 340]
 	      ZOrder		      8
@@ -1570,13 +1903,13 @@ Model {
 	    Block {
 	      BlockType		      Outport
 	      Name		      "output"
-	      SID		      "43"
+	      SID		      "59"
 	      Position		      [945, 43, 975, 57]
 	      ZOrder		      42
 	      IconDisplay	      "Port number"
 	    }
 	    Line {
-	      ZOrder		      6
+	      ZOrder		      1
 	      SrcBlock		      "Integrator1"
 	      SrcPort		      1
 	      Points		      [27, 0; 0, -7]
@@ -1584,21 +1917,21 @@ Model {
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      5
+	      ZOrder		      2
 	      SrcBlock		      "Integrator"
 	      SrcPort		      1
 	      DstBlock		      "Integrator1"
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      40
+	      ZOrder		      3
 	      SrcBlock		      "Product2"
 	      SrcPort		      1
 	      DstBlock		      "Integrator"
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      9
+	      ZOrder		      4
 	      SrcBlock		      "Integrator3"
 	      SrcPort		      1
 	      Points		      [-4, 0; 0, -140]
@@ -1606,7 +1939,7 @@ Model {
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      37
+	      ZOrder		      5
 	      SrcBlock		      "Integrator2"
 	      SrcPort		      1
 	      Points		      [-37, 0; 0, -20]
@@ -1614,40 +1947,40 @@ Model {
 	      DstPort		      3
 	    }
 	    Line {
-	      ZOrder		      13
+	      ZOrder		      6
 	      SrcBlock		      "Sum"
 	      SrcPort		      1
 	      Points		      [200, 0; 0, -50]
 	      Branch {
-		ZOrder			17
+		ZOrder			7
 		DstBlock		"Integrator4"
 		DstPort			1
 	      }
 	      Branch {
-		ZOrder			15
+		ZOrder			8
 		Points			[0, -45]
 		Branch {
-		  ZOrder		  50
+		  ZOrder		  9
 		  Points		  [0, -185]
 		  DstBlock		  "output"
 		  DstPort		  1
 		}
 		Branch {
-		  ZOrder		  19
+		  ZOrder		  10
 		  DstBlock		  "Integrator3"
 		  DstPort		  1
 		}
 	      }
 	    }
 	    Line {
-	      ZOrder		      12
+	      ZOrder		      11
 	      SrcBlock		      "Integrator4"
 	      SrcPort		      1
 	      DstBlock		      "Integrator2"
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      46
+	      ZOrder		      12
 	      SrcBlock		      "input"
 	      SrcPort		      1
 	      Points		      [305, 0; 0, 265]
@@ -1655,14 +1988,14 @@ Model {
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      49
+	      ZOrder		      13
 	      SrcBlock		      "gain"
 	      SrcPort		      1
 	      DstBlock		      "Goto2"
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      39
+	      ZOrder		      14
 	      SrcBlock		      "Product1"
 	      SrcPort		      1
 	      Points		      [-1, 0; 0, 120]
@@ -1670,35 +2003,35 @@ Model {
 	      DstPort		      3
 	    }
 	    Line {
-	      ZOrder		      43
+	      ZOrder		      15
 	      SrcBlock		      "From6"
 	      SrcPort		      1
 	      DstBlock		      "Product2"
 	      DstPort		      3
 	    }
 	    Line {
-	      ZOrder		      42
+	      ZOrder		      16
 	      SrcBlock		      "From5"
 	      SrcPort		      1
 	      DstBlock		      "Product2"
 	      DstPort		      2
 	    }
 	    Line {
-	      ZOrder		      27
+	      ZOrder		      17
 	      SrcBlock		      "Constant"
 	      SrcPort		      1
 	      DstBlock		      "Product"
 	      DstPort		      2
 	    }
 	    Line {
-	      ZOrder		      36
+	      ZOrder		      18
 	      SrcBlock		      "From3"
 	      SrcPort		      1
 	      DstBlock		      "Product1"
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      35
+	      ZOrder		      19
 	      SrcBlock		      "Product"
 	      SrcPort		      1
 	      Points		      [-7, 0; 0, 217]
@@ -1706,28 +2039,28 @@ Model {
 	      DstPort		      2
 	    }
 	    Line {
-	      ZOrder		      33
+	      ZOrder		      20
 	      SrcBlock		      "From1"
 	      SrcPort		      1
 	      DstBlock		      "Product"
 	      DstPort		      3
 	    }
 	    Line {
-	      ZOrder		      47
+	      ZOrder		      21
 	      SrcBlock		      "zeta"
 	      SrcPort		      1
 	      DstBlock		      "Goto"
 	      DstPort		      1
 	    }
 	    Line {
-	      ZOrder		      34
+	      ZOrder		      22
 	      SrcBlock		      "From2"
 	      SrcPort		      1
 	      DstBlock		      "Product"
 	      DstPort		      4
 	    }
 	    Line {
-	      ZOrder		      38
+	      ZOrder		      23
 	      SrcBlock		      "From4"
 	      SrcPort		      1
 	      Points		      [-45, 0]
@@ -1735,14 +2068,14 @@ Model {
 	      DstPort		      2
 	    }
 	    Line {
-	      ZOrder		      44
+	      ZOrder		      24
 	      SrcBlock		      "From7"
 	      SrcPort		      1
 	      DstBlock		      "Product2"
 	      DstPort		      4
 	    }
 	    Line {
-	      ZOrder		      48
+	      ZOrder		      25
 	      SrcBlock		      "omega"
 	      SrcPort		      1
 	      DstBlock		      "Goto1"
@@ -1753,7 +2086,7 @@ Model {
 	Block {
 	  BlockType		  TransportDelay
 	  Name			  "Transport\nDelay"
-	  SID			  "45"
+	  SID			  "60"
 	  Ports			  [1, 1]
 	  Position		  [165, 35, 195, 65]
 	  ZOrder		  40
@@ -1762,107 +2095,107 @@ Model {
 	Block {
 	  BlockType		  Outport
 	  Name			  "reflex torque"
-	  SID			  "58"
+	  SID			  "61"
 	  Position		  [995, 128, 1025, 142]
 	  ZOrder		  51
 	  IconDisplay		  "Port number"
 	}
 	Line {
-	  ZOrder		  50
+	  ZOrder		  1
 	  SrcBlock		  "TV 2-order LPF"
 	  SrcPort		  1
 	  Points		  [50, 0]
 	  Branch {
-	    ZOrder		    77
+	    ZOrder		    2
 	    DstBlock		    "reflex torque"
 	    DstPort		    1
 	  }
 	  Branch {
-	    ZOrder		    73
+	    ZOrder		    3
 	    Points		    [0, -75]
 	    DstBlock		    "Scope"
 	    DstPort		    1
 	  }
 	}
 	Line {
-	  ZOrder		  75
+	  ZOrder		  4
 	  SrcBlock		  "velocity"
 	  SrcPort		  1
 	  DstBlock		  "Transport\nDelay"
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  51
+	  ZOrder		  5
 	  SrcBlock		  "Saturation"
 	  SrcPort		  1
 	  Points		  [90, 0]
 	  Branch {
-	    ZOrder		    95
+	    ZOrder		    6
 	    Points		    [0, 55]
 	    DstBlock		    "Scope1"
 	    DstPort		    1
 	  }
 	  Branch {
-	    ZOrder		    94
+	    ZOrder		    7
 	    DstBlock		    "TV 2-order LPF"
 	    DstPort		    1
 	  }
 	}
 	Line {
-	  ZOrder		  52
+	  ZOrder		  8
 	  SrcBlock		  "Transport\nDelay"
 	  SrcPort		  1
 	  DstBlock		  "Saturation"
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  108
+	  ZOrder		  9
 	  SrcBlock		  "zeta"
 	  SrcPort		  1
 	  Points		  [23, 0]
 	  Branch {
-	    ZOrder		    111
+	    ZOrder		    10
 	    Points		    [0, 8; 62, 0]
 	    DstBlock		    "TV 2-order LPF"
 	    DstPort		    2
 	  }
 	  Branch {
-	    ZOrder		    110
+	    ZOrder		    11
 	    Points		    [0, -30]
 	    DstBlock		    "Scope4"
 	    DstPort		    1
 	  }
 	}
 	Line {
-	  ZOrder		  114
+	  ZOrder		  12
 	  SrcBlock		  "gain"
 	  SrcPort		  1
 	  Points		  [43, 0]
 	  Branch {
-	    ZOrder		    116
+	    ZOrder		    13
 	    Points		    [0, 34; 43, 0; 0, 36]
 	    DstBlock		    "Scope2"
 	    DstPort		    1
 	  }
 	  Branch {
-	    ZOrder		    115
+	    ZOrder		    14
 	    DstBlock		    "TV 2-order LPF"
 	    DstPort		    4
 	  }
 	}
 	Line {
-	  ZOrder		  117
+	  ZOrder		  15
 	  SrcBlock		  "omega"
 	  SrcPort		  1
 	  Points		  [32, 0]
 	  Branch {
-	    ZOrder		    119
+	    ZOrder		    16
 	    Points		    [0, 30]
 	    DstBlock		    "Scope3"
 	    DstPort		    1
 	  }
 	  Branch {
-	    ZOrder		    118
+	    ZOrder		    17
 	    DstBlock		    "TV 2-order LPF"
 	    DstPort		    3
 	  }
@@ -1872,18 +2205,18 @@ Model {
     Block {
       BlockType		      Constant
       Name		      "reflexGainPolynomialCoeff"
-      SID		      "92"
-      Position		      [205, 400, 235, 430]
-      ZOrder		      105
+      SID		      "62"
+      Position		      [180, 545, 210, 575]
+      ZOrder		      116
       Value		      "[85.2066      46.2746     -10.9566     -5.30716      1.75446      0.63177]"
     }
     Block {
       BlockType		      Gain
       Name		      "reflexGainSubjectNormalizeGain"
-      SID		      "74"
-      Position		      [510, 387, 555, 423]
-      ZOrder		      101
-      Gain		      "7.3"
+      SID		      "63"
+      Position		      [485, 532, 530, 568]
+      ZOrder		      113
+      Gain		      "30"
       ParamDataTypeStr	      "Inherit: Inherit via internal rule"
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
       SaturateOnIntegerOverflow	off
@@ -1891,9 +2224,9 @@ Model {
     Block {
       BlockType		      Gain
       Name		      "reflexOmegaSubjectNormalizeGain"
-      SID		      "73"
-      Position		      [510, 327, 555, 363]
-      ZOrder		      100
+      SID		      "64"
+      Position		      [485, 477, 530, 513]
+      ZOrder		      112
       Gain		      "36"
       ParamDataTypeStr	      "Inherit: Inherit via internal rule"
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
@@ -1902,84 +2235,162 @@ Model {
     Block {
       BlockType		      Gain
       Name		      "reflexZetaSubjectNormalizeGain"
-      SID		      "72"
-      Position		      [510, 267, 555, 303]
-      ZOrder		      99
+      SID		      "65"
+      Position		      [485, 422, 530, 458]
+      ZOrder		      111
       Gain		      "1.8"
       ParamDataTypeStr	      "Inherit: Inherit via internal rule"
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
       SaturateOnIntegerOverflow	off
     }
     Line {
-      ZOrder		      76
+      ZOrder		      1
       SrcBlock		      "From\nWorkspace"
+      SrcPort		      1
+      DstBlock		      "intrinsicPathway\n"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      2
+      SrcBlock		      "irfCoeff"
+      SrcPort		      1
+      DstBlock		      "intrinsicPathway\n"
+      DstPort		      2
+    }
+    Line {
+      ZOrder		      3
+      SrcBlock		      "elasticSubjectNormalizeGain"
+      SrcPort		      1
+      DstBlock		      "intrinsicPathway\n"
+      DstPort		      3
+    }
+    Line {
+      ZOrder		      4
+      SrcBlock		      "intrinsicPathway\n"
+      SrcPort		      1
+      Points		      [152, 0]
+      Branch {
+	ZOrder			22
+	Points			[0, 150]
+	DstBlock		"Sum"
+	DstPort			1
+      }
+      Branch {
+	ZOrder			21
+	DstBlock		"To Workspace"
+	DstPort			1
+      }
+    }
+    Line {
+      ZOrder		      5
+      SrcBlock		      "Polynomial\nEvaluation"
+      SrcPort		      1
+      DstBlock		      "elasticSubjectNormalizeGain"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      7
+      SrcBlock		      "elasticPolynomialCoeff"
+      SrcPort		      1
+      Points		      [20, 0; 0, -45]
+      DstBlock		      "Polynomial\nEvaluation"
+      DstPort		      2
+    }
+    Line {
+      ZOrder		      8
+      SrcBlock		      "From\nWorkspace1"
       SrcPort		      1
       DstBlock		      "reflex pathway"
       DstPort		      1
     }
     Line {
-      ZOrder		      78
-      SrcBlock		      "reflex pathway"
+      ZOrder		      10
+      SrcBlock		      "From\nWorkspace3"
       SrcPort		      1
-      Points		      [0, -5]
-      DstBlock		      "To Workspace"
-      DstPort		      1
+      Points		      [28, 0]
+      Branch {
+	ZOrder			20
+	Points			[0, 155]
+	DstBlock		"Polynomial\nEvaluation2"
+	DstPort			1
+      }
+      Branch {
+	ZOrder			19
+	Points			[0, -155]
+	DstBlock		"Polynomial\nEvaluation"
+	DstPort			1
+      }
     }
     Line {
-      ZOrder		      85
-      SrcBlock		      "From\nWorkspace1"
-      SrcPort		      1
-      Points		      [135, 0; 0, 65]
-      DstBlock		      "Polynomial\nEvaluation2"
-      DstPort		      1
-    }
-    Line {
-      ZOrder		      118
+      ZOrder		      11
       SrcBlock		      "omega1"
       SrcPort		      1
       DstBlock		      "reflexZetaSubjectNormalizeGain"
       DstPort		      1
     }
     Line {
-      ZOrder		      109
+      ZOrder		      12
       SrcBlock		      "omega"
       SrcPort		      1
       DstBlock		      "reflexOmegaSubjectNormalizeGain"
       DstPort		      1
     }
     Line {
-      ZOrder		      106
+      ZOrder		      13
       SrcBlock		      "reflexZetaSubjectNormalizeGain"
       SrcPort		      1
       DstBlock		      "reflex pathway"
       DstPort		      2
     }
     Line {
-      ZOrder		      107
+      ZOrder		      14
       SrcBlock		      "reflexOmegaSubjectNormalizeGain"
       SrcPort		      1
       DstBlock		      "reflex pathway"
       DstPort		      3
     }
     Line {
-      ZOrder		      108
+      ZOrder		      15
       SrcBlock		      "reflexGainSubjectNormalizeGain"
       SrcPort		      1
       DstBlock		      "reflex pathway"
       DstPort		      4
     }
     Line {
-      ZOrder		      112
+      ZOrder		      16
       SrcBlock		      "reflexGainPolynomialCoeff"
       SrcPort		      1
       DstBlock		      "Polynomial\nEvaluation2"
       DstPort		      2
     }
     Line {
-      ZOrder		      117
+      ZOrder		      17
       SrcBlock		      "Polynomial\nEvaluation2"
       SrcPort		      1
       DstBlock		      "reflexGainSubjectNormalizeGain"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      9
+      SrcBlock		      "reflex pathway"
+      SrcPort		      1
+      Points		      [170, 0]
+      Branch {
+	ZOrder			27
+	DstBlock		"To Workspace1"
+	DstPort			1
+      }
+      Branch {
+	ZOrder			25
+	DstBlock		"Sum"
+	DstPort			2
+      }
+    }
+    Line {
+      ZOrder		      28
+      SrcBlock		      "Sum"
+      SrcPort		      1
+      DstBlock		      "To Workspace2"
       DstPort		      1
     }
   }
