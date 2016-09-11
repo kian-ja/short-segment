@@ -10,4 +10,5 @@ uniformLPF_Signal = uniformSignal;
 uniformLPF_Signal(sortIndexGaussian) = uniformLPF_Signal(sortIndexUniform);
 uniformLPF_Signal = nldat(uniformLPF_Signal- mean (uniformLPF_Signal),'domainIncr',0.001);
 plot(spect(uniformLPF_Signal))
+xlim([0,10])
 end
