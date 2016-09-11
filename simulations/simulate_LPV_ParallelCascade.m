@@ -41,11 +41,3 @@ time = 0 : simulationSamplingTime :size(pos,1) * simulationSamplingTime - simula
 time = time';
 sim ('stiffnessLPVModel.mdl')
 end
-%%
-% figure
-% subplot(3,1,1)
-% plot(time,intrinsicTorque)
-% subplot(3,1,2)
-% plot(time,reflexTorque)
-% subplot(3,1,3)
-% plot(time,totalTorque)
