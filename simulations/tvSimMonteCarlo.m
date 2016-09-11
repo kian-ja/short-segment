@@ -1,13 +1,15 @@
-clear
-clc
-load results/LPVSimulationData
+%clear
+%clc
+%load results/LPVSimulationData
 samplingTime = 0.001;
 schedulingSegmentNumber = 4:4:20;
 plotFlag = 0;
 order = 2;
+snr = 15;
 for mcIndex = 1 : monteCarloIteration
     position = positionMC(mcIndex,:)';
     torque = totalTorqueMC(mcIndex,:)';
+    noise = noiseMC(mcIndex,:)';
     schedulingVariable = schedulingVariableMC(mcIndex,:)';
     minSchedul = min(schedulingVariable);
     maxSchedul = max(schedulingVariable);
@@ -29,13 +31,17 @@ for mcIndex = 1 : monteCarloIteration
               pause
               close(100)
           end
+          power_noise = sum(noise.^2);
+          power_signal = sum((torque).^2);
+          noiseScaled = noise*sqrt((power_signal/(10^(snr/10)))/power_noise);
+          torqueNoisy = torque + noiseScaled; 
           position = segdat(position,'onsetPointer',segmentStart,...
             'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
             ,'comment','Position','chanNames','Joint angular position (rad)');
-          torque = segdat(torque,'onsetPointer',segmentStart,...
+          torqueNoisy = segdat(torqueNoisy ,'onsetPointer',segmentStart,...
             'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
             ,'comment','Position','chanNames','Joint angular position (rad)');
-          z = cat(2,position,torque);
+          z = cat(2,position,torqueNoisy);
           sysID = pcas_short_segment_exp_new_intrinsic_irf1 (z,...
             'maxordernle',8,'hanklesize',20,'delayinput',0.05...
             ,'orderselectmethod',order);
