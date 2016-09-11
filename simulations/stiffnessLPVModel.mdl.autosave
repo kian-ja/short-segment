@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.4"
+    ComputedModelVersion    "1.12"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Kian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Sep 10 11:48:43 2016"
-  RTWModifiedTimeStamp	  395435854
-  ModelVersionFormat	  "1.%<AutoIncrement:4>"
+  LastModifiedDate	  "Sun Sep 11 10:19:58 2016"
+  RTWModifiedTimeStamp	  395490385
+  ModelVersionFormat	  "1.%<AutoIncrement:12>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1548,33 +1548,33 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "69"
+    SIDHighWatermark	    "79"
     Block {
       BlockType		      FromWorkspace
-      Name		      "From\nWorkspace"
-      SID		      "1"
-      Position		      [370, 103, 505, 137]
-      ZOrder		      89
-      VariableName	      "[time positionInput]"
-      SampleTime	      "simulationSamplingTime"
-      ZeroCross		      on
-    }
-    Block {
-      BlockType		      FromWorkspace
-      Name		      "From\nWorkspace1"
-      SID		      "17"
-      Position		      [475, 373, 540, 397]
-      ZOrder		      107
+      Name		      "From\nWorkspace2"
+      SID		      "78"
+      Position		      [270, 370, 400, 400]
+      ZOrder		      130
       VariableName	      "[time velocity]"
       SampleTime	      "simulationSamplingTime"
       ZeroCross		      on
     }
     Block {
       BlockType		      FromWorkspace
-      Name		      "From\nWorkspace3"
-      SID		      "18"
-      Position		      [70, 370, 200, 400]
-      ZOrder		      108
+      Name		      "From\nWorkspace4"
+      SID		      "77"
+      Position		      [425, 103, 560, 137]
+      ZOrder		      129
+      VariableName	      "[time positionInput]"
+      SampleTime	      "simulationSamplingTime"
+      ZeroCross		      on
+    }
+    Block {
+      BlockType		      FromWorkspace
+      Name		      "From\nWorkspace5"
+      SID		      "79"
+      Position		      [65, 370, 195, 400]
+      ZOrder		      131
       VariableName	      "[time schedulingVariable]"
       SampleTime	      "simulationSamplingTime"
       ZeroCross		      on
@@ -1919,7 +1919,7 @@ Model {
       BlockType		      Constant
       Name		      "omega"
       SID		      "21"
-      Position		      [385, 480, 415, 510]
+      Position		      [410, 480, 440, 510]
       ZOrder		      114
       Value		      "0.5"
     }
@@ -1927,7 +1927,7 @@ Model {
       BlockType		      Constant
       Name		      "omega1"
       SID		      "22"
-      Position		      [385, 425, 415, 455]
+      Position		      [410, 425, 440, 455]
       ZOrder		      117
       Value		      "0.5"
     }
@@ -2157,8 +2157,8 @@ Model {
 	    MarkerStyles	    "none|none|none|none|none|none"
 	  }
 	  ShowLegends		  off
-	  YMin			  "0.9"
-	  YMax			  "0.9"
+	  YMin			  "0.855"
+	  YMax			  "0.945"
 	  SaveName		  "ScopeData4"
 	  DataFormat		  "StructureWithTime"
 	  LimitDataPoints	  off
@@ -2766,7 +2766,7 @@ Model {
       SID		      "64"
       Position		      [485, 477, 530, 513]
       ZOrder		      112
-      Gain		      "36"
+      Gain		      "50"
       ParamDataTypeStr	      "Inherit: Inherit via internal rule"
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
       SaturateOnIntegerOverflow	off
@@ -2783,8 +2783,8 @@ Model {
       SaturateOnIntegerOverflow	off
     }
     Line {
-      ZOrder		      1
-      SrcBlock		      "From\nWorkspace"
+      ZOrder		      71
+      SrcBlock		      "From\nWorkspace4"
       SrcPort		      1
       DstBlock		      "intrinsicPathway\n"
       DstPort		      1
@@ -2836,17 +2836,17 @@ Model {
       DstPort		      2
     }
     Line {
-      ZOrder		      8
-      SrcBlock		      "From\nWorkspace1"
+      ZOrder		      72
+      SrcBlock		      "From\nWorkspace2"
       SrcPort		      1
       DstBlock		      "reflex pathway"
       DstPort		      1
     }
     Line {
-      ZOrder		      10
-      SrcBlock		      "From\nWorkspace3"
+      ZOrder		      73
+      SrcBlock		      "From\nWorkspace5"
       SrcPort		      1
-      Points		      [28, 0]
+      Points		      [33, 0]
       Branch {
 	ZOrder			20
 	Points			[0, 155]

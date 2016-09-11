@@ -1,11 +1,9 @@
-function [intrinsicTorque,reflexTorque,totalTorque] =  simulate_LPV_ParallelCascade(pos,schedulingVariable)
+function [positionInput, velocity] =  prepParamsLPV_Sim(pos)
 pos = pos(:);
-schedulingVariable = schedulingVariable(:);
+%schedulingVariable = schedulingVariable(:);
 load intrinsicIRF
 open('stiffnessLPVModel.mdl')
 %simulationTime = 59.999;
-simulationSamplingTime = 0.001;
-simulationTime = size(pos,1) * simulationSamplingTime - simulationSamplingTime;
 h = irfModel.dataSet;
 set_param('stiffnessLPVModel/irfCoeff','Value',['[',num2str(h'),']']);
 positionLevels = [-0.48 -0.4 -0.32 -0.24 -0.16 -0.08 0.0 0.08 0.16 0.24];%from Mirbagheri et al 2000
@@ -23,7 +21,7 @@ set_param('stiffnessLPVModel/reflexGainSubjectNormalizeGain','Gain',num2str(7.3)
 set_param('stiffnessLPVModel/reflexGainSubjectNormalizeGain','Gain',num2str(30));%from Mirbagheri et al 2000, subject HB
 %polyCoeffOmega = polyfit(positionLevels,omega,5);
 %set_param('reflexStiffnessLPVModel/reflexOmegaPolynomialCoeff','Value',['[',num2str(polyCoeffOmega),']']);
-set_param('stiffnessLPVModel/reflexOmegaSubjectNormalizeGain','Gain',num2str(36));%from Mirbagheri et al 2000, subject HB
+set_param('stiffnessLPVModel/reflexOmegaSubjectNormalizeGain','Gain',num2str(50));%from Mirbagheri et al 2000, subject HB
 %polyCoeffZeta = polyfit(positionLevels,zeta,5);
 %set_param('reflexStiffnessLPVModel/reflexZetaPolynomialCoeff','Value',['[',num2str(polyCoeffZeta),']']);
 set_param('stiffnessLPVModel/reflexZetaSubjectNormalizeGain','Gain',num2str(1.8));%from Mirbagheri et al 2000, subject HB
@@ -36,9 +34,4 @@ for i = 1:101
     u_i(:,i) = del(pos,lags_i(i));
 end
 positionInput = u_i;
-time = 0 : simulationSamplingTime :size(pos,1) * simulationSamplingTime - simulationSamplingTime;
-time = time';
-options = simset('SrcWorkspace','current');
-
-sim ('stiffnessLPVModel.mdl',[],options)
 end

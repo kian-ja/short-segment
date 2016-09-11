@@ -29,5 +29,3 @@ subplot(3,1,2)
 plot(reflexTorque)
 subplot(3,1,3)
 plot(totalTorque)
-position = positionSelected;
-save results/LPVSimulationData position velocity schedulingVariable intrinsicTorque reflexTorque totalTorque
