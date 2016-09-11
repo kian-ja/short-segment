@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.13"
+    ComputedModelVersion    "1.14"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -52,8 +52,8 @@ Model {
 	$ObjectID		5
 	$ClassName		"Simulink.EditorInfo"
 	IsActive		[1]
-	ViewObjType		"SimulinkTopLevel"
-	LoadSaveID		"0"
+	ViewObjType		"SimulinkSubsys"
+	LoadSaveID		"23"
 	Extents			[1452.0, 818.0]
 	ZoomFactor		[1.0]
 	Offset			[0.0, 0.0]
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Kian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sun Sep 11 10:48:59 2016"
-  RTWModifiedTimeStamp	  395490385
-  ModelVersionFormat	  "1.%<AutoIncrement:13>"
+  LastModifiedDate	  "Sun Sep 11 11:56:17 2016"
+  RTWModifiedTimeStamp	  395495775
+  ModelVersionFormat	  "1.%<AutoIncrement:14>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -996,7 +996,7 @@ Model {
   System {
     Name		    "stiffnessLPVModel"
     Location		    [-9, 0, 1689, 1020]
-    Open		    on
+    Open		    off
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -1409,7 +1409,7 @@ Model {
       System {
 	Name			"reflex pathway"
 	Location		[-9, 0, 1689, 1020]
-	Open			off
+	Open			on
 	ModelBrowserVisibility	on
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -2090,7 +2090,7 @@ Model {
 	  Ports			  [1, 1]
 	  Position		  [165, 35, 195, 65]
 	  ZOrder		  40
-	  DelayTime		  "0.04"
+	  DelayTime		  "0.05"
 	}
 	Block {
 	  BlockType		  Outport

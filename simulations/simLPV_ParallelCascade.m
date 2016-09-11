@@ -2,9 +2,11 @@
 clear
 clc
 load experimental_input_subject
+load results/noiseScaled
+
 %%
 plotFlag = 0;
-monteCarloIteration = 2;
+monteCarloIteration = 100;
 simulationSamplingTime = 0.001;
 simulationTime = 300;
 numInputCall = floor((simulationTime)/60);
@@ -18,11 +20,15 @@ schedulingVariableMC = zeros(monteCarloIteration,length(time));
 intrinsicTorqueMC = zeros(monteCarloIteration,length(time));
 reflexTorqueMC = zeros(monteCarloIteration,length(time));
 totalTorqueMC = zeros(monteCarloIteration,length(time));
+noiseMC = zeros(monteCarloIteration,length(time));
 for mcIndex = 1 : monteCarloIteration
     inputTrialRandom = randi([1 213],numInputCall,1);
     positionSelected = (position(inputTrialRandom,:));
     positionSelected =  positionSelected';
     positionSelected = positionSelected(:);
+    noiseSelected = (noise(inputTrialRandom,:));
+    noiseSelected =  noiseSelected';
+    noiseSelected = noiseSelected(:);
     cutOffFreq = 0.2;
     normalizedCutOffFreq = cutOffFreq / 500;
     [b,a] = butter(4,normalizedCutOffFreq);
@@ -48,6 +54,7 @@ for mcIndex = 1 : monteCarloIteration
     intrinsicTorqueMC(mcIndex,:) = intrinsicTorque;
     reflexTorqueMC(mcIndex,:) = reflexTorque;
     totalTorqueMC(mcIndex,:) = totalTorque;
+    noiseMC(mcIndex,:) = noiseSelected;
 end
 save results/LPVSimulationData monteCarloIteration positionMC velocityMC...
-    schedulingVariableMC intrinsicTorqueMC reflexTorqueMC totalTorqueMC
+    schedulingVariableMC intrinsicTorqueMC reflexTorqueMC totalTorqueMC noiseMC

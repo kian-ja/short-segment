@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.13"
+    ComputedModelVersion    "1.14"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -66,9 +66,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Kian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sun Sep 11 10:48:59 2016"
-  RTWModifiedTimeStamp	  395495148
-  ModelVersionFormat	  "1.%<AutoIncrement:13>"
+  LastModifiedDate	  "Sun Sep 11 11:56:17 2016"
+  RTWModifiedTimeStamp	  395497090
+  ModelVersionFormat	  "1.%<AutoIncrement:14>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -2629,7 +2629,7 @@ Model {
 	  Ports			  [1, 1]
 	  Position		  [165, 35, 195, 65]
 	  ZOrder		  40
-	  DelayTime		  "0.04"
+	  DelayTime		  "0.05"
 	}
 	Block {
 	  BlockType		  Outport
