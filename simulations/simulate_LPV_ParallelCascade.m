@@ -1,10 +1,12 @@
-clear
-clc
+function [intrinsicTorque,reflexTorque,totalTorque] =  simulate_LPV_ParallelCascade(pos,schedulingVariable)
+pos = pos(:);
+schedulingVariable = schedulingVariable(:);
 load intrinsicIRF
-load experimental_input_subject
+%load experimental_input_subject
 open('stiffnessLPVModel.mdl')
-simulationTime = 59.999;
+%simulationTime = 59.999;
 simulationSamplingTime = 0.001;
+simulationTime = size(pos,1) * simulationSamplingTime - simulationSamplingTime;
 h = irfModel.dataSet;
 set_param('stiffnessLPVModel/irfCoeff','Value',['[',num2str(h'),']']);
 positionLevels = [-0.48 -0.4 -0.32 -0.24 -0.16 -0.08 0.0 0.08 0.16 0.24];%from Mirbagheri et al 2000
@@ -26,27 +28,24 @@ set_param('stiffnessLPVModel/reflexOmegaSubjectNormalizeGain','Gain',num2str(36)
 %polyCoeffZeta = polyfit(positionLevels,zeta,5);
 %set_param('reflexStiffnessLPVModel/reflexZetaPolynomialCoeff','Value',['[',num2str(polyCoeffZeta),']']);
 set_param('stiffnessLPVModel/reflexZetaSubjectNormalizeGain','Gain',num2str(1.8));%from Mirbagheri et al 2000, subject HB
-
-pos = position(1,:);
-pos = pos';
 posNldat = nldat(pos,'domainIncr',0.001);
 velocity = ddt(posNldat);
 velocity = get(velocity,'dataSet');
-u_i = zeros(60000,101);
+u_i = zeros(size(pos,1),101);
 lags_i = (-50:1:50);
 for i = 1:101
     u_i(:,i) = del(pos,lags_i(i));
 end
 positionInput = u_i;
-time = 0 : 0.001:59.999;
+time = 0 : simulationSamplingTime :size(pos,1) * simulationSamplingTime - simulationSamplingTime;
 time = time';
-schedulingVariable = (sin(2*pi*time*0.1) - 0.2) *0.3;
 sim ('stiffnessLPVModel.mdl')
+end
 %%
-figure
-subplot(3,1,1)
-plot(time,intrinsicTorque)
-subplot(3,1,2)
-plot(time,reflexTorque)
-subplot(3,1,3)
-plot(time,totalTorque)
+% figure
+% subplot(3,1,1)
+% plot(time,intrinsicTorque)
+% subplot(3,1,2)
+% plot(time,reflexTorque)
+% subplot(3,1,3)
+% plot(time,totalTorque)
