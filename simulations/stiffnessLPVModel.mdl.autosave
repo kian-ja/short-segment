@@ -54,7 +54,7 @@ Model {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1452.0, 892.0]
+	Extents			[1452.0, 818.0]
 	ZoomFactor		[1.0]
 	Offset			[0.0, 0.0]
       }
@@ -67,7 +67,7 @@ Model {
   LastModifiedBy	  "Kian"
   ModifiedDateFormat	  "%<Auto>"
   LastModifiedDate	  "Sat Sep 10 11:48:43 2016"
-  RTWModifiedTimeStamp	  395435071
+  RTWModifiedTimeStamp	  395435854
   ModelVersionFormat	  "1.%<AutoIncrement:4>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
@@ -704,7 +704,7 @@ Model {
       }
       Name		      "Configuration"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition     [ 291, 167, 1389, 854 ] 
+      ConfigPrmDlgPosition     [ 282, 129, 1398, 863 ] 
     }
     Simulink.ConfigSet {
       $ObjectID		      18
@@ -1243,7 +1243,7 @@ Model {
       }
       Name		      "Configuration1"
       CurrentDlgPage	      "Solver"
-      ConfigPrmDlgPosition     [ 291, 167, 1389, 854 ] 
+      ConfigPrmDlgPosition     [ 282, 129, 1398, 863 ] 
     }
     PropName		    "ConfigurationSets"
   }

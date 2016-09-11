@@ -38,5 +38,7 @@ end
 positionInput = u_i;
 time = 0 : simulationSamplingTime :size(pos,1) * simulationSamplingTime - simulationSamplingTime;
 time = time';
-sim ('stiffnessLPVModel.mdl')
+options = simset('SrcWorkspace','current');
+
+sim ('stiffnessLPVModel.mdl',[],options)
 end

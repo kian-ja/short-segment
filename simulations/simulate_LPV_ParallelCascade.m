@@ -2,7 +2,6 @@ function [intrinsicTorque,reflexTorque,totalTorque] =  simulate_LPV_ParallelCasc
 pos = pos(:);
 schedulingVariable = schedulingVariable(:);
 load intrinsicIRF
-%load experimental_input_subject
 open('stiffnessLPVModel.mdl')
 %simulationTime = 59.999;
 simulationSamplingTime = 0.001;
@@ -39,5 +38,7 @@ end
 positionInput = u_i;
 time = 0 : simulationSamplingTime :size(pos,1) * simulationSamplingTime - simulationSamplingTime;
 time = time';
-sim ('stiffnessLPVModel.mdl')
+options = simset('SrcWorkspace','current');
+
+sim ('stiffnessLPVModel.mdl',[],options)
 end
