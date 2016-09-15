@@ -12,7 +12,6 @@ load results/quasiStationaryExperimentResults
 %   1)VAF
 %%
 %First collapse all the VAF total to generate a box whisker plot
-%To show that SS-SDSS is significantly better than SDSS
 VAF_SDSS = zeros(3,6,100);
 VAF_SS_SDSS = zeros(3,6,100);
 incr = 1;
@@ -26,6 +25,10 @@ for i = 1 : 3
         end
     end
 end
+figure
+[squeeze(VAF_SS_SDSS(3,1,:)) squeeze(VAF_SS_SDSS(3,2,:))...
+    squeeze(VAF_SS_SDSS(3,3,:)) squeeze(VAF_SS_SDSS(3,2,:))]
+
 vafs = [VAF_SDSS(:) VAF_SS_SDSS(:)];
 pp = pValueSign2Sided(vafs(:,2)',vafs(:,1)');
 figure
@@ -33,21 +36,3 @@ boxplot(vafs,'Labels',{'SDSS','SS-SDSS'})
 ylabel('%VAF_{total}')
 ylim([0,100])
 box off
-%%
-%Check for dependency to the segment length
-%Collapse across segment length
-%To show that the VAF does not change as a function of segment length
-VAF_SS_SDSS_SegLength = zeros(300,6);
-for i = 1 : 6
-    v = VAF_SS_SDSS(:,i,:);
-    v = v(:);
-    VAF_SS_SDSS_SegLength(:,i) = v;
-end
-anovaResults = anova1(VAF_SS_SDSS_SegLength);
-ax = gca;
-
-ax.XTickLabel = {'0.5','0.6','0.7','0.8','0.9','1'};
-title(['P Value : ',num2str(anovaResults(1)*100),'%'])
-box off
-ylabel('%VAF_{total}')
-xlabel('segment length (s)')
