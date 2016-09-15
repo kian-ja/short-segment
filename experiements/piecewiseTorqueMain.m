@@ -87,4 +87,4 @@ for contractionConditionIndex = 1 : 3
 end
 close(h) 
 
-save quasiStationaryExperimentResults SDSS_System SS_SDSS_System
+save results/quasiStationaryExperimentResults SDSS_System SS_SDSS_System
