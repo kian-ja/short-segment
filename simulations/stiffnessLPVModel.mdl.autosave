@@ -54,9 +54,9 @@ Model {
 	IsActive		[1]
 	ViewObjType		"SimulinkTopLevel"
 	LoadSaveID		"0"
-	Extents			[1452.0, 818.0]
+	Extents			[1455.0, 846.0]
 	ZoomFactor		[1.0]
-	Offset			[76.100000000000023, 22.800000000000011]
+	Offset			[0.0, 0.0]
       }
     }
   }
@@ -67,7 +67,7 @@ Model {
   LastModifiedBy	  "Kian"
   ModifiedDateFormat	  "%<Auto>"
   LastModifiedDate	  "Sun Sep 11 11:56:17 2016"
-  RTWModifiedTimeStamp	  395498890
+  RTWModifiedTimeStamp	  395611513
   ModelVersionFormat	  "1.%<AutoIncrement:14>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off

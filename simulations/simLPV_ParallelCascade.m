@@ -1,14 +1,14 @@
 %write a function that simulates the TV system with certain time
 clear
 clc
-load experimental_input_subject
+load results/experimental_input_subject
 load results/noiseScaled
 
 %%
 plotFlag = 0;
 monteCarloIteration = 100;
 simulationSamplingTime = 0.001;
-simulationTime = 300;
+simulationTime = 600;
 numInputCall = floor((simulationTime)/60);
 simulationTime = numInputCall * 60;
 simulationTime = simulationTime - simulationSamplingTime; %in samples
@@ -29,7 +29,7 @@ for mcIndex = 1 : monteCarloIteration
     noiseSelected = (noise(inputTrialRandom,:));
     noiseSelected =  noiseSelected';
     noiseSelected = noiseSelected(:);
-    cutOffFreq = 0.2;
+    cutOffFreq = 0.15;
     normalizedCutOffFreq = cutOffFreq / 500;
     [b,a] = butter(4,normalizedCutOffFreq);
     inputGaussianLPF = randn(size(positionSelected,1),1);
@@ -58,3 +58,4 @@ for mcIndex = 1 : monteCarloIteration
 end
 save results/LPVSimulationData monteCarloIteration positionMC velocityMC...
     schedulingVariableMC intrinsicTorqueMC reflexTorqueMC totalTorqueMC noiseMC
+tvSimMonteCarlo

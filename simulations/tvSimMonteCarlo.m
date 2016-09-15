@@ -12,9 +12,14 @@ order = 2;
 snr = 15;
 systemID = cell(length(schedulingSegmentNumber),monteCarloIteration);
 numSamp = cell(length(schedulingSegmentNumber),monteCarloIteration);
-for mcIndex = 1 : monteCarloIteration
+%%
+warning off
+for mcIndex = 20 : monteCarloIteration
+    disp(['Working on Monte-Carlo Identification number, ',num2str(mcIndex)])
     position = positionMC(mcIndex,:)';
     torque = totalTorqueMC(mcIndex,:)';
+    intrinsicTorque = intrinsicTorqueMC(mcIndex,:)';
+    reflexTorque = reflexTorqueMC(mcIndex,:)';
     noise = noiseMC(mcIndex,:)';
     schedulingVariable = schedulingVariableMC(mcIndex,:)';
     minSchedul = min(schedulingVariable);
@@ -49,14 +54,18 @@ for mcIndex = 1 : monteCarloIteration
           torqueNoisy = segdat(torqueNoisy ,'onsetPointer',segmentStart,...
             'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
             ,'comment','Position','chanNames','Joint angular position (rad)');
+        intrinsicTorque = segdat(intrinsicTorque ,'onsetPointer',segmentStart,...
+            'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
+            ,'comment','Position','chanNames','Joint angular position (rad)');
+        reflexTorque = segdat(reflexTorque ,'onsetPointer',segmentStart,...
+            'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
+            ,'comment','Position','chanNames','Joint angular position (rad)');
           z = cat(2,position,torqueNoisy);
-          sysIDTemp{i} = pcas_short_segment_exp_new_intrinsic_irf1 (z,...
-            'maxordernle',8,'hanklesize',20,'delayinput',0.05...
-            ,'orderselectmethod',order);
+          sysIDTemp{i} = pcas_short_segment_exp_new_intrinsic_irf1 (z,8,20,0.05,order,intrinsicTorque,reflexTorque);
         end
     end
    systemID{segNumIndex,mcIndex} = sysIDTemp;
    numSamp{segNumIndex,mcIndex} = numSampTemp;
 end
-%%
-save timeVaryingID_Results systemID numSamp
+
+save results/timeVaryingID_Results systemID numSamp
