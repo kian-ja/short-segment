@@ -14,7 +14,7 @@ systemID = cell(length(schedulingSegmentNumber),monteCarloIteration);
 numSamp = cell(length(schedulingSegmentNumber),monteCarloIteration);
 %%
 warning off
-for mcIndex = 20 : monteCarloIteration
+for mcIndex = 1 : monteCarloIteration
     disp(['Working on Monte-Carlo Identification number, ',num2str(mcIndex)])
     position = positionMC(mcIndex,:)';
     torque = totalTorqueMC(mcIndex,:)';
