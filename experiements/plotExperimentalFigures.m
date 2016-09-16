@@ -54,10 +54,19 @@ xlabel('segment length (s)')
 %%
 %plot the system for the three contraction directions
 %Now collapse across contraction direction
+[intrinsic,reflex] = extractIntrinsicReflex(SS_SDSS_System);
+
 figure
 subplot(2,3,1)
-[intrinsic,reflex] = extractIntrinsicReflex(SS_SDSS_System);
-[intrinsicFRFIDMean,intrinsicFRFID25,intrinsicFRFID975] = intrinsicFRF_MonteCarlo(intrinsic);
+[intrinsicFRFIDMean,intrinsicFRFID25,intrinsicFRFID975,frequencyAxis] = intrinsicFRF_MonteCarlo(intrinsic{1,:,:});
+ciplot(intrinsicFRFID25,intrinsicFRFID975,log10(frequencyAxis),[190 190 190]/255)
+hold on
+plot(log10(frequencyAxis),intrinsicFRFIDMean,'r','lineWidth',2)
+ax = gca;
+set(ax,'xTick',[log10(0.01),log10(0.1),log10(1),log10(10)])
+set(ax,'XTickLabel',{'0.01','0.1','1','10'})
+xlim([log10(0.01),log10(50)])
+
 title('Intrinsic PF')
 subplot(2,3,2)
 title('Intrinsic REST')

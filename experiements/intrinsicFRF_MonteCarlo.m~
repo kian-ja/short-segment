@@ -1,12 +1,12 @@
-function [intrinsicFRFIDMean,intrinsicFRFID25,intrinsicFRFID975,frequencyAxis] = intrinsicFRF_MonteCarlo(intrinsic,position)
+function [intrinsicFRFIDMean,intrinsicFRFID25,intrinsicFRFID975] = intrinsicFRF_MonteCarlo(intrinsic,position)
 intrinsic = intrinsic(:);
 
 frequencyAxis = linspace(0.01,50,length(intrinsicFRF));
-intrinsicFRFID = zeros(size(intrinsic,1),length(frequencyAxis));
+intrinsicFRFID = zeros(it,length(frequencyAxis));
 for i = 1 : it
     intrinsicIRF = intrinsic{i};
     intrinsicTorque = nlsim(intrinsicIRF,position);
-    z = cat(2,position,intrinsicTorque);
+    z = cat(2,posd,intrinsicTorque);
     intrinsicFRFTemp = fresp(z,'nFFT',600);
     intrinsicFRFTemp = intrinsicFRFTemp.dataSet;
     intrinsicFRFID(i,:) = 20*log10(abs(intrinsicFRFTemp(:,1)));
