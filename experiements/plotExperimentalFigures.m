@@ -1,4 +1,5 @@
 load results/quasiStationaryExperimentResults
+load results/positionSample
 %First dimension is contraction direction:
 %   1) DF
 %   2)REST
@@ -55,23 +56,68 @@ xlabel('segment length (s)')
 %plot the system for the three contraction directions
 %Now collapse across contraction direction
 [intrinsic,reflex] = extractIntrinsicReflex(SS_SDSS_System);
-
+intrinsicDF = cell(600,1);
+incr = 1 ;
+for i = 1 : 6
+    for j = 1 : 100
+        intrinsicDF{incr} = intrinsic{1,i,j};
+        incr = incr + 1;
+    end
+end
 figure
 subplot(2,3,1)
-[intrinsicFRFIDMean,intrinsicFRFID25,intrinsicFRFID975,frequencyAxis] = intrinsicFRF_MonteCarlo(intrinsic{1,:,:});
-ciplot(intrinsicFRFID25,intrinsicFRFID975,log10(frequencyAxis),[190 190 190]/255)
+[intrinsicFRFIDMeanDF,intrinsicFRFID25DF,intrinsicFRFID975DF,frequencyAxis] = intrinsicFRF_MonteCarlo(intrinsicDF,position);
+ciplot(intrinsicFRFID25DF,intrinsicFRFID975DF,log10(frequencyAxis),[190 190 190]/255)
 hold on
-plot(log10(frequencyAxis),intrinsicFRFIDMean,'r','lineWidth',2)
+plot(log10(frequencyAxis),intrinsicFRFIDMeanDF,'r','lineWidth',2)
 ax = gca;
 set(ax,'xTick',[log10(0.01),log10(0.1),log10(1),log10(10)])
 set(ax,'XTickLabel',{'0.01','0.1','1','10'})
 xlim([log10(0.01),log10(50)])
-
 title('Intrinsic PF')
+xlabel('Frequency (Hz)')
+ylabel('Magnitude (dB)')
+ylim([20,60])
 subplot(2,3,2)
+intrinsicREST = cell(600,1);
+incr = 1 ;
+for i = 1 : 6
+    for j = 1 : 100
+        intrinsicREST{incr} = intrinsic{2,i,j};
+        incr = incr + 1;
+    end
+end
+[intrinsicFRFIDMeanREST,intrinsicFRFID25REST,intrinsicFRFID975REST,frequencyAxis] = intrinsicFRF_MonteCarlo(intrinsicREST,position);
+ciplot(intrinsicFRFID25REST,intrinsicFRFID975REST,log10(frequencyAxis),[190 190 190]/255)
+hold on
+plot(log10(frequencyAxis),intrinsicFRFIDMeanREST,'r','lineWidth',2)
+ax = gca;
+set(ax,'xTick',[log10(0.01),log10(0.1),log10(1),log10(10)])
+set(ax,'XTickLabel',{'0.01','0.1','1','10'})
+xlim([log10(0.01),log10(50)])
 title('Intrinsic REST')
+xlabel('Frequency (Hz)')
+ylim([20,60])
 subplot(2,3,3)
-title('Intrinsic DF')
+intrinsicPF = cell(600,1);
+incr = 1 ;
+for i = 1 : 6
+    for j = 1 : 100
+        intrinsicPF{incr} = intrinsic{3,i,j};
+        incr = incr + 1;
+    end
+end
+[intrinsicFRFIDMeanPF,intrinsicFRFID25PF,intrinsicFRFID975PF,frequencyAxis] = intrinsicFRF_MonteCarlo(intrinsicPF,position);
+ciplot(intrinsicFRFID25PF,intrinsicFRFID975PF,log10(frequencyAxis),[190 190 190]/255)
+hold on
+plot(log10(frequencyAxis),intrinsicFRFIDMeanPF,'r','lineWidth',2)
+ax = gca;
+set(ax,'xTick',[log10(0.01),log10(0.1),log10(1),log10(10)])
+set(ax,'XTickLabel',{'0.01','0.1','1','10'})
+xlim([log10(0.01),log10(50)])
+title('Intrinsic PF')
+xlabel('Frequency (Hz)')
+ylim([10,60])
 subplot(2,2,3)
 title('Reflex NL PF')
 subplot(2,2,4)
