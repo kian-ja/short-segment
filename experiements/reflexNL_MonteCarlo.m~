@@ -1,0 +1,19 @@
+function [reflexNLMeanPF,reflexNL25PF,reflexNL975PF,xAxis] = reflexNL_MonteCarlo(reflexNLPF)
+reflexNLPF = reflexNLPF(:);
+xNonlin = -2.5:0.01:2.5;
+
+nonLinOutputAll = zeros(it,length(xNonlin));
+xNonlin = nldat(xNonlin','domainIncr',0.01);
+yNonlin = nlsim(sysSDSS{2}{1},xNonlin);
+for i = 1 : it
+    reflexNonlin = sysSS{i}{2};
+    reflexNonlin = reflexNonlin{1};
+    nonlinOutput = nlsim(reflexNonlin,xNonlin);
+    nonLinOutputAll(i,:) = nonlinOutput.dataSet+3.5;
+end
+nonLinOutput25 = prctile(nonLinOutputAll,2.5);
+nonLinOutput975 = prctile(nonLinOutputAll,97.5);
+xNonlin = xNonlin.dataSet;
+
+
+end

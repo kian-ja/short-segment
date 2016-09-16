@@ -55,7 +55,7 @@ xlabel('segment length (s)')
 %%
 %plot the system for the three contraction directions
 %Now collapse across contraction direction
-[intrinsic,reflex] = extractIntrinsicReflex(SS_SDSS_System);
+[intrinsic,reflexNL,reflexSS] = extractIntrinsicReflex(SS_SDSS_System);
 intrinsicDF = cell(600,1);
 incr = 1 ;
 for i = 1 : 6
@@ -119,6 +119,39 @@ title('Intrinsic PF')
 xlabel('Frequency (Hz)')
 ylim([10,60])
 subplot(2,2,3)
-title('Reflex NL PF')
+
+reflexNLPF = cell(600,1);
+incr = 1 ;
+for i = 1 : 6
+    for j = 1 : 100
+        reflexNLPF{incr} = reflexNL{3,i,j};
+        incr = incr + 1;
+    end
+end
+title('Reflex static nonlinearity PF')
+[reflexNLMeanPF,reflexNL25PF,reflexNL975PF,xAxis] = reflexNL_MonteCarlo(reflexNLPF);
+ciplot(reflexNL25PF,reflexNL975PF,xAxis,[190 190 190]/255)
+hold on
+plot(xAxis,reflexNLMeanPF,'r','lineWidth',2)
 subplot(2,2,4)
+reflexSSPF = cell(600,1);
+incr = 1 ;
+for i = 1 : 6
+    for j = 1 : 100
+        reflexSSPF{incr} = reflexSS{3,i,j};
+        incr = incr + 1;
+    end
+end
+[reflexSSMeanPF,reflexSS25PF,reflexSS975PF] = reflexSS_MonteCarlo(reflexSSPF,frequencyAxis);
+
+ciplot(reflexSS25PF,reflexSS975PF,log10(frequencyAxis),[190 190 190]/255);
+hold on
+plot(log10(frequencyAxis),reflexSSMeanPF,'r','lineWidth',2)
+ax = gca;
+set(ax,'xTick',[log10(0.01),log10(0.1),log10(1),log10(10)])
+set(ax,'XTickLabel',{'0.01','0.1','1','10'})
+xlim([log10(0.01),log10(50)])
+title('Reflex linear dynamics PF')
+xlabel('Frequency (Hz)')
+
 title('Reflex linear PF')
