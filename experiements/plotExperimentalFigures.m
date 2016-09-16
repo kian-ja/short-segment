@@ -119,10 +119,10 @@ title('Intrinsic PF')
 xlabel('Frequency (Hz)')
 ylim([10,60])
 subplot(2,2,3)
-
-reflexNLPF = cell(600,1);
+%%
+reflexNLPF = cell(100,1);
 incr = 1 ;
-for i = 1 : 6
+for i = 6 : 6
     for j = 1 : 100
         reflexNLPF{incr} = reflexNL{3,i,j};
         incr = incr + 1;
@@ -133,10 +133,11 @@ title('Reflex static nonlinearity PF')
 ciplot(reflexNL25PF,reflexNL975PF,xAxis,[190 190 190]/255)
 hold on
 plot(xAxis,reflexNLMeanPF,'r','lineWidth',2)
+%%
 subplot(2,2,4)
-reflexSSPF = cell(600,1);
+reflexSSPF = cell(100,1);
 incr = 1 ;
-for i = 1 : 6
+for i = 1 : 1
     for j = 1 : 100
         reflexSSPF{incr} = reflexSS{3,i,j};
         incr = incr + 1;
