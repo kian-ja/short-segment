@@ -2,8 +2,8 @@
 clear
 clc
 close all
-filePath = '/Users/kian/Documents/publication/Jalaleddini-Kearney-Short-Segment/experiment/torque varying/';
-load '/Users/kian/Documents/publication/Jalaleddini-Kearney-Short-Segment/experiment/torque varying/dataPieceWiseTorque.mat'
+%filePath = '/Users/kian/Documents/publication/Jalaleddini-Kearney-Short-Segment/experiment/torque varying/';
+load 'results/dataPieceWiseTorque.mat'
 %%
 samplingTime = 0.001;
 data = dataPieceWiseTorque{4};
