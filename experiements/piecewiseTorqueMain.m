@@ -66,11 +66,11 @@ for contractionConditionIndex = 1 : 3
             'segLength',ones(length(onsetPointer),1)*segmentLengthMC,'domainIncr',samplingTime...
             ,'comment','Torque','chanNames','Joint torque (Nm)');
             z = cat(2,position,torque);
-            sysID = pcas_short_segment_exp_new_intrinsic_irf1 (z,'maxordernle',8,'hanklesize',20,'delayinput',0.03,'orderselectmethod',order);
+            sysID = pcas_short_segment_exp_new_intrinsic_irf1 (z,'maxordernle',8,'hanklesize',20,'delayinput',0.05,'orderselectmethod',order);
             SS_SDSS_System{contractionConditionIndex,segmentLengthMCIndex,mcIndex,1} = sysID{1};
             SS_SDSS_System{contractionConditionIndex,segmentLengthMCIndex,mcIndex,2} = sysID{2};
             SS_SDSS_System{contractionConditionIndex,segmentLengthMCIndex,mcIndex,3} = sysID{3};
-            [intrinsic, reflex, tqI, tqR, tqT] = SDSS_stiffnessID (nldat(z),'orderselectmethod',order);
+            [intrinsic, reflex, tqI, tqR, tqT] = SDSS_stiffnessID (nldat(z),'orderselectmethod',order,'delay',0.05);
             tqMeasured = decimate(z(:,2),10);
             tqMeasured = tqMeasured.dataSet;
             tqI = tqI.dataSet;

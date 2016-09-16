@@ -51,3 +51,19 @@ title(['P Value : ',num2str(anovaResults(1)*100),'%'])
 box off
 ylabel('%VAF_{total}')
 xlabel('segment length (s)')
+%%
+%plot the system for the three contraction directions
+%Now collapse across contraction direction
+figure
+subplot(2,3,1)
+[intrinsic,reflex] = extractIntrinsicReflex(SS_SDSS_System);
+[intrinsicFRFIDMean,intrinsicFRFID25,intrinsicFRFID975] = intrinsicFRF_MonteCarlo(intrinsic);
+title('Intrinsic PF')
+subplot(2,3,2)
+title('Intrinsic REST')
+subplot(2,3,3)
+title('Intrinsic DF')
+subplot(2,2,3)
+title('Reflex NL PF')
+subplot(2,2,4)
+title('Reflex linear PF')
