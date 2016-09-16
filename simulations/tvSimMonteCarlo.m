@@ -63,9 +63,9 @@ for mcIndex = 1 : monteCarloIteration
           z = cat(2,position,torqueNoisy);
           sysIDTemp{i} = pcas_short_segment_exp_new_intrinsic_irf1 (z,8,20,0.05,order,intrinsicTorque,reflexTorque);
         end
+        systemID{segNumIndex,mcIndex} = sysIDTemp;
+        numSamp{segNumIndex,mcIndex} = numSampTemp;
     end
-   systemID{segNumIndex,mcIndex} = sysIDTemp;
-   numSamp{segNumIndex,mcIndex} = numSampTemp;
 end
 
 save results/timeVaryingID_Results systemID numSamp
