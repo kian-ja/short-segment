@@ -11,7 +11,6 @@ plotFlag = 0;
 order = 2;
 snr = 15;
 systemID = cell(length(schedulingSegmentNumber),monteCarloIteration);
-numSamp = cell(length(schedulingSegmentNumber),monteCarloIteration);
 %%
 warning off
 for mcIndex = 1 : monteCarloIteration
@@ -28,7 +27,6 @@ for mcIndex = 1 : monteCarloIteration
         segNum = schedulingSegmentNumber(segNumIndex);
         svResolution = (maxSchedul - minSchedul) / segNum;
         sysIDTemp = cell(segNum,1);
-        numSampTemp = zeros(segNum,1);
         for i = 1 : segNum
           svRangeMin = minSchedul + (i-1) * svResolution; 
           svRangeMax = minSchedul + i * svResolution;
@@ -64,8 +62,7 @@ for mcIndex = 1 : monteCarloIteration
           sysIDTemp{i} = pcas_short_segment_exp_new_intrinsic_irf1 (z,8,20,0.05,order,intrinsicTorque,reflexTorque);
         end
         systemID{segNumIndex,mcIndex} = sysIDTemp;
-        numSamp{segNumIndex,mcIndex} = numSampTemp;
     end
 end
 
-save results/timeVaryingID_Results systemID numSamp
+save results/timeVaryingID_Results systemID
