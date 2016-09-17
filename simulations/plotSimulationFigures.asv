@@ -82,6 +82,7 @@ for i = 1 : 5
     errorbar(posAxis,mean(stiffness{i}) + (i-1) * 20,std(stiffness{i}))
     hold on
     plot(posLevel,KTrue + (i-1) * 20,'r')
+
 end
 
 %%
@@ -96,8 +97,8 @@ for i = 1 : 5
     reflexGainTemp = reflexGain{i};
     
     posAxis = linspace(-0.48,0.24,size(reflexGainTemp,2));
-    errorbar(posAxis,nanmean(reflexGainTemp) + (i-1) * 10,nanstd(reflexGainTemp))
+    errorbar(posAxis,mean(reflexGainTemp) + (i-1) * 20,std(reflexGainTemp))
     hold on
-    plot(posLevel,GrTrue + (i-1) * 10,'r')
+    plot(posLevel,GrTrue + (i-1) * 20,'r')
 
 end
