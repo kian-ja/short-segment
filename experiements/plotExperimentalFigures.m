@@ -1,5 +1,6 @@
 load results/quasiStationaryExperimentResults
 load results/positionSample
+mCIteration = 100;
 %First dimension is contraction direction:
 %   1) DF
 %   2)REST
@@ -14,12 +15,11 @@ load results/positionSample
 %%
 %First collapse all the VAF total to generate a box whisker plot
 %To show that SS-SDSS is significantly better than SDSS
-VAF_SDSS = zeros(3,6,100);
-VAF_SS_SDSS = zeros(3,6,100);
-incr = 1;
+VAF_SDSS = zeros(3,6,mCIteration);
+VAF_SS_SDSS = zeros(3,6,mCIteration);
 for i = 1 : 3
     for j = 1 : 6
-        for k = 1 : 100
+        for k = 1 : mCIteration
             v = SDSS_System{i,j,k,3};
             VAF_SDSS(i,j,k) = v (1);
             v = SS_SDSS_System{i,j,k,3};
@@ -55,11 +55,12 @@ xlabel('segment length (s)')
 %%
 %plot the system for the three contraction directions
 %Now collapse across contraction direction
+%%
 [intrinsic,reflexNL,reflexSS] = extractIntrinsicReflex(SS_SDSS_System);
-intrinsicDF = cell(600,1);
+intrinsicDF = cell(6*mCIteration,1);
 incr = 1 ;
 for i = 1 : 6
-    for j = 1 : 100
+    for j = 1 : mCIteration
         intrinsicDF{incr} = intrinsic{1,i,j};
         incr = incr + 1;
     end
@@ -82,7 +83,7 @@ subplot(2,3,2)
 intrinsicREST = cell(600,1);
 incr = 1 ;
 for i = 1 : 6
-    for j = 1 : 100
+    for j = 1 : mCIteration
         intrinsicREST{incr} = intrinsic{2,i,j};
         incr = incr + 1;
     end
@@ -99,10 +100,10 @@ title('Intrinsic REST')
 xlabel('Frequency (Hz)')
 ylim([20,60])
 subplot(2,3,3)
-intrinsicPF = cell(600,1);
+intrinsicPF = cell(6*mCIteration,1);
 incr = 1 ;
 for i = 1 : 6
-    for j = 1 : 100
+    for j = 1 : mCIteration
         intrinsicPF{incr} = intrinsic{3,i,j};
         incr = incr + 1;
     end
@@ -120,12 +121,23 @@ xlabel('Frequency (Hz)')
 ylim([10,60])
 subplot(2,2,3)
 %%
-reflexNLPF = cell(100,1);
+reflexNLPF = [];%cell(mCIteration,1);
 incr = 1 ;
-for i = 6 : 6
-    for j = 1 : 100
-        reflexNLPF{incr} = reflexNL{3,i,j};
-        incr = incr + 1;
+for i = 1 : 1
+    for j = 1 : mCIteration
+         nlTemp = reflexNL{3,i,j};
+         if isnan(nlTemp.polyCoef)
+         else
+             figure(100)
+             plot(nlTemp)
+             flip = input('Flip?','s');
+             if flip == 'y'
+                 nlTemp.polyCoef = - nlTemp.polyCoef;
+             end
+             reflexNLPF{incr} = nlTemp;
+             close(100)
+             incr = incr + 1;
+         end
     end
 end
 title('Reflex static nonlinearity PF')
@@ -135,10 +147,10 @@ hold on
 plot(xAxis,reflexNLMeanPF,'r','lineWidth',2)
 %%
 subplot(2,2,4)
-reflexSSPF = cell(100,1);
+reflexSSPF = cell(mCIteration,1);
 incr = 1 ;
 for i = 1 : 1
-    for j = 1 : 100
+    for j = 1 : mCIteration
         reflexSSPF{incr} = reflexSS{3,i,j};
         incr = incr + 1;
     end

@@ -2,11 +2,11 @@
 clear
 clc
 close all
-%filePath = '/Users/kian/Documents/publication/Jalaleddini-Kearney-Short-Segment/experiment/torque varying/';
+%filePath = '/Users/kian/Documents/publication/Jalaleddini-Kearney  Short-Segment/experiment/torque varying/';
 load 'results/dataPieceWiseTorque.mat'
 %%
 samplingTime = 0.001;
-data = dataPieceWiseTorque{4};
+data = dataPieceWiseTorque{3};
 position = data(:,1);
 torque = data(:,2);
 command = data(:,8);
@@ -42,6 +42,7 @@ for contractionConditionIndex = 1 : 3
     segmentOnsetEnd = jumpIndex{contractionConditionIndex};
     segmentLength = 5000;
     segmentOnsetEnd(:,1) = segmentOnsetEnd(:,2) - 5000;
+    segmentOnsetEnd = max(segmentOnsetEnd,1);
     if (contractionConditionIndex == 3)
         order = 2;
     else
@@ -66,11 +67,11 @@ for contractionConditionIndex = 1 : 3
             'segLength',ones(length(onsetPointer),1)*segmentLengthMC,'domainIncr',samplingTime...
             ,'comment','Torque','chanNames','Joint torque (Nm)');
             z = cat(2,position,torque);
-            sysID = pcas_short_segment_exp_new_intrinsic_irf1 (z,'maxordernle',8,'hanklesize',20,'delayinput',0.05,'orderselectmethod',order);
+            sysID = pcas_short_segment_exp_new_intrinsic_irf1 (z,'maxordernle',8,'hanklesize',20,'delayinput',0.03,'orderselectmethod',order,'stationarity_check',0);
             SS_SDSS_System{contractionConditionIndex,segmentLengthMCIndex,mcIndex,1} = sysID{1};
             SS_SDSS_System{contractionConditionIndex,segmentLengthMCIndex,mcIndex,2} = sysID{2};
             SS_SDSS_System{contractionConditionIndex,segmentLengthMCIndex,mcIndex,3} = sysID{3};
-            [intrinsic, reflex, tqI, tqR, tqT] = SDSS_stiffnessID (nldat(z),'orderselectmethod',order,'delay',0.05);
+            [intrinsic, reflex, tqI, tqR, tqT] = SDSS_stiffnessID (nldat(z),'orderselectmethod',order,'delay',0.03);
             tqMeasured = decimate(z(:,2),10);
             tqMeasured = tqMeasured.dataSet;
             tqI = tqI.dataSet;
