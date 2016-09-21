@@ -35,7 +35,8 @@ for mcIndex = 1 : monteCarloIteration
     inputGaussianLPF = randn(size(positionSelected,1),1);
     inputGaussianLPF = filter(b,a,inputGaussianLPF);
     schedulingVariable = uniform_LPF(inputGaussianLPF,-0.48,0.24);
-    [positionInput, velocity] =  prepParamsLPV_Sim(positionSelected);
+    [velocityInput,accelerationInput] =  prepParamsLPV_Sim(positionSelected);
+    positionInput = positionSelected;
     sim ('stiffnessLPVModel.mdl')
     if plotFlag
         figure(100)
@@ -49,7 +50,7 @@ for mcIndex = 1 : monteCarloIteration
         close(100)
     end
     positionMC(mcIndex,:) = positionSelected;
-    velocityMC(mcIndex,:) = velocity;
+    velocityMC(mcIndex,:) = velocityInput;
     schedulingVariableMC(mcIndex,:) = schedulingVariable;
     intrinsicTorqueMC(mcIndex,:) = intrinsicTorque;
     reflexTorqueMC(mcIndex,:) = reflexTorque;

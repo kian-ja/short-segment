@@ -8,8 +8,8 @@ load results/timeVaryingID_Results
 %   4) 16
 %   5) 20
 %%
-schedulingSegmentNumber = 4:4:20;
-monteCarloIteration = size(systemID,2);
+schedulingSegmentNumber = 3:3:12;
+monteCarloIteration = size(systemID_SS_SDSS,2);
 vafIntrinsic = cell(length(schedulingSegmentNumber),1);
 stiffness = cell(length(schedulingSegmentNumber),1);
 reflexGain = cell(length(schedulingSegmentNumber),1);
@@ -24,7 +24,7 @@ for i = 1 : length(schedulingSegmentNumber)
     vafReflexTemp = zeros(monteCarloIteration,schedulingSegmentNumber(i));
     reflexGainTemp = zeros(monteCarloIteration,schedulingSegmentNumber(i));
     for j = 1 : monteCarloIteration
-        system = systemID{i,j};
+        system = systemID_SS_SDSS{i,j};
         for k = 1 : length(system)
             systemTemp = system{k};
             vafs = systemTemp{3};
@@ -73,7 +73,7 @@ end
    
 figure
 positionLevels = [-0.48 -0.4 -0.32 -0.24 -0.16 -0.08 0.0 0.08 0.16 0.24];%from Mirbagheri et al 2000
-K = [0.38 0.36 0.42 0.48 0.52 0.55 0.6 0.7 0.8 1];%from Mirbagheri et al 2000
+K = [0.45 0.47 0.48 0.5 0.52 0.55 0.6 0.7 0.8 1];
 polyCoeffK = 50 * polyfit(positionLevels,K,5);
 posLevel = -0.48:0.01:0.24;
 KTrue = polyval(polyCoeffK,posLevel);
@@ -89,7 +89,10 @@ end
 figure
 positionLevels = [-0.48 -0.4 -0.32 -0.24 -0.16 -0.08 0.0 0.08 0.16 0.24];%from Mirbagheri et al 2000
 Gr = [0.0625,0.0938,0.1042,0.1094,0.2813,0.5000,0.6250,0.7000,0.8000,0.8100];%from Mirbagheri et al 2000
-polyCoeffGr = 30 * polyfit(positionLevels,Gr,5);
+Gr = Gr + 0.19;
+Gr = [0.0625,0.0938,0.1042,0.1094,0.2813,0.5000,0.6250,0.7000,0.8000,0.8100];%from Mirbagheri et al 2000
+Gr = Gr + 0.19;
+polyCoeffGr = 40 * polyfit(positionLevels,Gr,5);
 posLevel = -0.48:0.01:0.24;
 GrTrue = polyval(polyCoeffGr,posLevel);
 for i = 1 : 5
