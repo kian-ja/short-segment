@@ -1,3 +1,6 @@
+clear
+
+load('results/systemIDExperiment.mat')
 numLevelsLen = length(sysID);
 K = cell(numLevelsLen,1);
 vafTot = cell(numLevelsLen,1);
