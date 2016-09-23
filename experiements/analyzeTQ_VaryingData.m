@@ -18,7 +18,7 @@ samplingTime = 0.001;
 desiredTorque = 0;
 order = 2;
 numLevels = 3:7;
-mcItr = 3;
+mcItr = 100;
 minTQ = prctile(voluntaryTorque,5);
 maxTQ = prctile(voluntaryTorque,95);
 sysID = cell(length(numLevels),1);
@@ -35,7 +35,7 @@ for numLVLIndex = 1 : length(numLevels)
             dataLength = 0;
             jumpStartThisIteration =[];
             jumpEndThisIteration =[];
-            while (dataLength<45000)
+            while (dataLength<60000)
                 selectedSegment = randi(length(jumpStart));
                 jumpStartThisIteration = [jumpStartThisIteration;jumpStart(selectedSegment)];
                 jumpEndThisIteration = [jumpEndThisIteration;jumpEnd(selectedSegment)];
