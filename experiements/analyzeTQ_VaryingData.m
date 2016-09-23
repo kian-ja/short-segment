@@ -15,23 +15,26 @@ samplingTime = 0.001;
 %%
 desiredTorque = 0;
 order = 2;
-numLevels = 10;
+numLevels = 5;
 minTQ = prctile(voluntaryTorque,5);
 maxTQ = prctile(voluntaryTorque,95);
 levels = linspace(minTQ,maxTQ,numLevels);
 jumpIndex = cell(numLevels - 1,1);
-sysID = cell(numLevels -1,1);
+sysID = cell(numLevels -1,2);
 for i = 1 : numLevels - 1
     commandLevels = [levels(i) levels(i+1)];
     [jumpsStart,jumpsEnd] = findSegmentDirection(voluntaryTorque,commandLevels,voluntaryTorqueDiff,500);
     for j = 1 : 2
         jumpStart = jumpsStart{j};
         jumpEnd = jumpsEnd{j};
-        plot(torque)
+        plot(voluntaryTorque)
         hold on
         for k = 1 : length(jumpStart)
-            plot(jumpStart(k):jumpEnd(k),torque(jumpStart(k):jumpEnd(k)),'r')
+            plot(jumpStart(k):jumpEnd(k),voluntaryTorque(jumpStart(k):jumpEnd(k)),'r')
+            hold on
         end
+        plot([1;length(voluntaryTorque)],[commandLevels(1);commandLevels(1)],'--','color','k')
+        plot([1;length(voluntaryTorque)],[commandLevels(2);commandLevels(2)],'--','color','k')
         pause
         close all
         positionSeg = segdat(position,'onsetPointer',jumpStart,...
@@ -40,8 +43,12 @@ for i = 1 : numLevels - 1
         torqueSeg = segdat(torque,'onsetPointer',jumpStart,...
                 'segLength',jumpEnd-jumpStart,'domainIncr',samplingTime...
                 ,'comment','Torque','chanNames','Joint torque (Nm)');
-            z = cat(2,positionSeg,torqueSeg);
-        sysID{i} = pcas_short_segment_exp_new_intrinsic_irf1 (z,'maxordernle',8,'hanklesize',20,'delayinput',0.03,'orderselectmethod','manual','stationarity_check',1);
+        figure(100)
+        plot(nldat(torqueSeg))
+        pause
+        close(100)
+        z = cat(2,positionSeg,torqueSeg);
+        sysID{i,j} = pcas_short_segment_exp_new_intrinsic_irf1 (z,'maxordernle',8,'hanklesize',20,'delayinput',0.03,'orderselectmethod','manual','stationarity_check',1);
     end
     
 end

@@ -10,7 +10,7 @@ DFIndexDiff(DFIndexDiff<1000) = 0;
 DFIndexJumps = find((DFIndexDiff > 1000));
 DFIndexJumps = [1;DFIndexJumps;length(DFIndexDiff)];
 jumpStartTemp = DFIndex(DFIndexJumps(1:end-1)+10);
-jumpsEndTemp = DFIndex(DFIndexJumps(2:end)-10);
+jumpsEndTemp = DFIndex(DFIndexJumps(2:end));
 
 f = find( jumpsEndTemp < jumpStartTemp + minSegLen);
 jumpStartTemp(f) = [];
