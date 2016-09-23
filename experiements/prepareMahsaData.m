@@ -1,43 +1,44 @@
-data = flb2mat('results/AV_190315.flb','read_case',5);
-data = data.Data;
-position = data(:,1);
-torque = data(:,2);
-desiredTorque = data(:,10);
-samplingTime = 0.001;
-%%
-%Design a 2 sided filter with break frquency of 0.1 Hz
-%Low pass filter the torque
-%use the LPF torque for segmentation
-%%
-order = 2;
-numLevels = 10;
-minTQ = min(desiredTorque);
-maxTQ = max(desiredTorque);
-levels = linspace(minTQ,maxTQ,numLevels);
-jumpIndex = cell(numLevels - 1,1);
-for i = 5 : numLevels - 1
-    commandLevels = [levels(i) levels(i+1)];
-    [jumpStart,jumpEnd] = findSegment(desiredTorque,commandLevels);
-    %f = find( jumpEnd < jumpStart + 2000);
-    %jumpStart(f) = [];
-    %jumpEnd(f) = [];
-    jumpIndex{i} = [jumpStart jumpEnd];
-    plot(desiredTorque)
-    hold on
-    for j = 1 : length(jumpStart)
-        plot(jumpStart(j):jumpEnd(j),desiredTorque(jumpStart(j):jumpEnd(j)),'r')
-    %plot(jumpEnd,desiredTorque(jumpEnd),'go')
-        
-    end
-    pause
-	close all
-    positionSeg = segdat(position,'onsetPointer',jumpStart,...
-            'segLength',jumpEnd-jumpStart,'domainIncr',samplingTime...
-            ,'comment','Position','chanNames','Joint angular position (rad)');
-	torqueSeg = segdat(torque,'onsetPointer',jumpStart,...
-            'segLength',jumpEnd-jumpStart,'domainIncr',samplingTime...
-            ,'comment','Torque','chanNames','Joint torque (Nm)');
-        z = cat(2,positionSeg,torqueSeg);
-	sysID = pcas_short_segment_exp_new_intrinsic_irf1 (z,'maxordernle',8,'hanklesize',20,'delayinput',0.04,'orderselectmethod',order,'stationarity_check',0);
+position = zeros(1200000,1);
+torque = zeros(1200000,1);
+emg = zeros(1200000,1);
+
+for i = 1 : 10
+    data = flb2mat('results/MG2_220916.flb','read_case',i);
+    data = data.Data;
+    position((i-1)*120000+1:i*120000) = data(:,1);
+    torque((i-1)*120000+1:i*120000) = data(:,2);
+    emg((i-1)*120000+1:i*120000) = abs(data(:,7));
 end
+subject1.position = position;
+subject1.torque = torque;
+subject1.emg = emg;
+save results/experimentalTQVaryingData subject1
+
+
+figure
+time = 0:0.001:10-0.001;
+subplot(3,1,1)
+plot(time, position(16001:26000));
+title('Position')
+ylabel('Position (rad)')
+set(gca,'Xtick',[],'XTickLabel',[])
+
+box off
+subplot(3,1,2)
+plot(time, torque(16001:26000));
+ylim([-25,10])
+box off
+title('Torque')
+ylabel('torque (Nm)')
+set(gca,'Xtick',[],'XTickLabel',[])
+set(gca,'Ytick',[-20,-10,0,10],'YTickLabel',[-20,-10,0,10])
+subplot(3,1,3)
+
+plot(time, emg(16001:26000));
+box off
+title('Gastrocnemius EMG')
+xlabel('Time (s)')
+ylabel('EMG (mv)')
+set(gca,'Xtick',[0:2:10],'XTickLabel',{0,2,4,6,8,10})
+
 
