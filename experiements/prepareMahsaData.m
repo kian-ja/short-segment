@@ -1,19 +1,66 @@
-position = zeros(1200000,1);
-torque = zeros(1200000,1);
-emg = zeros(1200000,1);
-
+clear
+load results/filterTorque
+position = [];
+torque = [];
+emg = [];
+voluntaryTorque = [];
+figure
+time = 0 : 0.001: 120 - 0.001;
+freq = 2 * pi * 0.1;
 for i = 1 : 10
     data = flb2mat('results/MG2_220916.flb','read_case',i);
     data = data.Data;
-    position((i-1)*120000+1:i*120000) = data(:,1);
-    torque((i-1)*120000+1:i*120000) = data(:,2);
-    emg((i-1)*120000+1:i*120000) = abs(data(:,7));
+    positionThisTrial = data(:,1) - mean(data(:,1));
+    emgThisTrial = abs(data(:,7));
+    torqueThisTrial = data(:,2) - mean(data(:,2));
+    voluntaryTorqueThisTrial = nlsim(filterTorque,nldat(torqueThisTrial,'domainIncr',0.001));
+    voluntaryTorqueThisTrial = voluntaryTorqueThisTrial.dataSet;
+    voluntaryTorqueThisTrial = smooth(voluntaryTorqueThisTrial,1500);
+    [amplitude,phase] = fitSinusoid(time', voluntaryTorqueThisTrial);
+    voluntaryTorquePredicted = amplitude * sin (2*pi*0.1*time +phase);
+    if phase < 0
+        samplesTrim = floor(-phase/freq*1000);
+    else
+        samplesTrim = floor((2*pi-phase)/freq*1000);
+    end
+    endOfTrial = 0;
+    freqSample = 10000;
+    k = 1;
+    while (~endOfTrial)
+        if (k*freqSample+samplesTrim > length(torqueThisTrial))
+            endOfTrial = 1;
+        else
+            positionThisPeriod = positionThisTrial((k-1)*freqSample+1+samplesTrim:k*freqSample+samplesTrim);
+            torqueThisPeriod = torqueThisTrial((k-1)*freqSample+1+samplesTrim:k*freqSample+samplesTrim);
+            emgThisPeriod = emgThisTrial((k-1)*freqSample+1+samplesTrim:k*freqSample+samplesTrim);
+            voluntaryTorqueThisPeriod = voluntaryTorqueThisTrial((k-1)*freqSample+1+samplesTrim:k*freqSample+samplesTrim);
+%             subplot(2,1,1)
+%             clf
+%             plot(positionThisPeriod)
+%             subplot(2,1,2)
+            clf
+            plot(torqueThisPeriod)
+            hold on
+            plot(voluntaryTorqueThisPeriod,'lineWidth',2)
+            accept = input('accept(y/n)?','s');
+            if accept == 'y'
+                position = [position;positionThisPeriod];
+                torque = [torque;torqueThisPeriod];
+                emg = [emg;emgThisPeriod];
+                voluntaryTorque = [voluntaryTorque;voluntaryTorqueThisPeriod];
+            end
+            close
+        end
+        k = k + 1;
+    end
 end
+%%
 subject1.position = position;
 subject1.torque = torque;
 subject1.emg = emg;
+subject1.voluntaryTorque = voluntaryTorque;
 save results/experimentalTQVaryingData subject1
-
+%%
 
 figure
 time = 0:0.001:10-0.001;

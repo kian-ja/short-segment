@@ -4,10 +4,11 @@ load results/filterTorque
 position = subject1.position;
 torque = subject1.torque;
 position = position - mean(position);
+voluntaryTorque = subject1.voluntaryTorque;
 torque = torque - mean(torque);
-voluntaryTorque = nlsim(filterTorque,nldat(torque,'domainIncr',0.001));
-voluntaryTorque = voluntaryTorque.dataSet;
-voluntaryTorque = smooth(voluntaryTorque,1500);
+%voluntaryTorque = nlsim(filterTorque,nldat(torque,'domainIncr',0.001));
+%voluntaryTorque = voluntaryTorque.dataSet;
+%voluntaryTorque = smooth(voluntaryTorque,1500);
 voluntaryTorqueDiff = ddt(nldat(voluntaryTorque,'domainIncr',0.001));
 voluntaryTorqueDiff = voluntaryTorqueDiff.dataSet;
 torque = torque - voluntaryTorque;
@@ -23,10 +24,12 @@ jumpIndex = cell(numLevels - 1,1);
 sysID = cell(numLevels -1,2);
 for i = 1 : numLevels - 1
     commandLevels = [levels(i) levels(i+1)];
-    [jumpsStart,jumpsEnd] = findSegmentDirection(voluntaryTorque,commandLevels,voluntaryTorqueDiff,500);
-    for j = 1 : 2
-        jumpStart = jumpsStart{j};
-        jumpEnd = jumpsEnd{j};
+    %[jumpsStart,jumpsEnd] = findSegmentDirection(voluntaryTorque,commandLevels,voluntaryTorqueDiff,500);
+    [jumpStart,jumpEnd] = findSegment(voluntaryTorque,commandLevels,500);
+    j = 1;
+    %for j = 1 : 2
+%        jumpStart = jumpsStart{j};
+%        jumpEnd = jumpsEnd{j};
         plot(voluntaryTorque)
         hold on
         for k = 1 : length(jumpStart)
@@ -49,6 +52,6 @@ for i = 1 : numLevels - 1
         close(100)
         z = cat(2,positionSeg,torqueSeg);
         sysID{i,j} = pcas_short_segment_exp_new_intrinsic_irf1 (z,'maxordernle',8,'hanklesize',20,'delayinput',0.03,'orderselectmethod','manual','stationarity_check',1);
-    end
+    %end
     
 end
