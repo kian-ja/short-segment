@@ -53,3 +53,5 @@ for numLVLIndex = 1 : length(numLevels)
     end
     sysID{numLVLIndex} = sysIDTemp;
 end
+%%
+save systemIDExperiment sysID
