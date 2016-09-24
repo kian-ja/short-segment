@@ -53,12 +53,12 @@ for numLVLIndex = 1 : length(numLevels)
             ,'comment','Torque','chanNames','Joint torque (Nm)');
             z = cat(2,positionSeg,torqueSeg);
             sysIDTemp{lvlIndex,mcIndex} = pcas_short_segment_exp_new_intrinsic_irf1 (z,'maxordernle',8,'hanklesize',20,'delayinput',0.03,'orderselectmethod',order,'stationarity_check',1);
-            z = cat(2,nldat(position),nldat(torque));
-            sysID_SDSS_Temp{lvlIndex,mcInde} = sdss(z,8,20,0.03,order,nldat(intrinsicTorque),nldat(reflexTorque));
+            z = cat(2,nldat(positionSeg),nldat(torqueSeg));
+            sysID_SDSS_Temp{lvlIndex,mcIndex} = sdss(z,8,20,0.03,order);
         end
     end
     sysID{numLVLIndex} = sysIDTemp;
     sysID_SDSS{numLVLIndex} = sysID_SDSS_Temp;
 end
 %%
-save systemIDExperiment sysID sysID_SDSS
+save results/systemIDExperiment sysID sysID_SDSS
