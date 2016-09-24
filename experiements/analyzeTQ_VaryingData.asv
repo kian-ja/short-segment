@@ -22,14 +22,10 @@ mcItr = 100;
 minTQ = prctile(voluntaryTorque,5);
 maxTQ = prctile(voluntaryTorque,95);
 sysID = cell(length(numLevels),1);
-sysID_SDSS = cell(length(numLevels),1);
-
 for numLVLIndex = 1 : length(numLevels)
     disp(['# of levels is : ',num2str(numLevels(numLVLIndex))])
     levels = linspace(minTQ,maxTQ,numLevels(numLVLIndex));
     sysIDTemp = cell(numLevels(numLVLIndex)-1,mcItr);
-    sysID_SDSS_Temp = cell(numLevels(numLVLIndex)-1,mcItr);
-
     for lvlIndex = 1 : numLevels(numLVLIndex) - 1
         disp(['Now checking level : ',num2str(lvlIndex),' out of ',num2str(numLevels(numLVLIndex)-1)])
         commandLevels = [levels(lvlIndex) levels(lvlIndex+1)];
@@ -53,12 +49,11 @@ for numLVLIndex = 1 : length(numLevels)
             ,'comment','Torque','chanNames','Joint torque (Nm)');
             z = cat(2,positionSeg,torqueSeg);
             sysIDTemp{lvlIndex,mcIndex} = pcas_short_segment_exp_new_intrinsic_irf1 (z,'maxordernle',8,'hanklesize',20,'delayinput',0.03,'orderselectmethod',order,'stationarity_check',1);
-            z = cat(2,nldat(position),nldat(torque));
-            sysID_SDSS_Temp{lvlIndex,mcInde} = sdss(z,8,20,0.03,order,nldat(intrinsicTorque),nldat(reflexTorque));
+            z = cat(2,nldat(position),nldat(torqueNoisy));
+            sysID_SDSS_Temp{i} = sdss(z,8,20,0.05,order,nldat(intrinsicTorque),nldat(reflexTorque));
         end
     end
     sysID{numLVLIndex} = sysIDTemp;
-    sysID_SDSS{numLVLIndex} = sysID_SDSS_Temp;
 end
 %%
-save systemIDExperiment sysID sysID_SDSS
+save systemIDExperiment sysID
