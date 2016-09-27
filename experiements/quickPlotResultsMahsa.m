@@ -97,6 +97,7 @@ for i = 1 : numLevelsLen
     vafTot_SDSSThisLevel = vafTotSDSS{i};
     vafTot_SS_SDSSThisLevel = vafTot_SS_SDSSThisLevel(:);
     vafTot_SDSSThisLevel = vafTot_SDSSThisLevel(:);
+    pValue = pValueSign2Sided(vafTot_SS_SDSSThisLevel',vafTot_SDSSThisLevel');
     vafTot_SS_SDSSThisLevelMean = mean(vafTot_SS_SDSSThisLevel);
     vafTot_SS_SDSSThisLevel5 = prctile(vafTot_SS_SDSSThisLevel,5);
     vafTot_SS_SDSSThisLevel95 = prctile(vafTot_SS_SDSSThisLevel,95);
@@ -104,7 +105,24 @@ for i = 1 : numLevelsLen
     vafTot_SDSSThisLevelMean = mean(vafTot_SDSSThisLevel);
     vafTot_SDSSThisLevel5 = prctile(vafTot_SDSSThisLevel,5);
     vafTot_SDSSThisLevel95 = prctile(vafTot_SDSSThisLevel,95);
-    bar(numLevels(i)-0.15,vafTot_SDSSThisLevelMean,0.25)
-    bar(numLevels(i)+0.15,vafTot_SS_SDSSThisLevelMean,0.25)
-
+    bar(numLevels(i)-0.15,vafTot_SDSSThisLevelMean,0.25,'FaceColor',[0.95,0.95,0.95])
+    bar(numLevels(i)+0.15,vafTot_SS_SDSSThisLevelMean,0.25,'FaceColor',[0.45,0.45,0.45])
+    if i == 1 
+        legend('SDSS','SS-SDSS');
+    end
+    errorbar(numLevels(i)-0.15,vafTot_SDSSThisLevelMean,...
+        vafTot_SDSSThisLevelMean-vafTot_SDSSThisLevel5,...
+        vafTot_SDSSThisLevel95-vafTot_SDSSThisLevelMean,'color','k','lineWidth',2)
+    
+    errorbar(numLevels(i)+0.15,vafTot_SS_SDSSThisLevelMean,...
+        vafTot_SS_SDSSThisLevelMean-vafTot_SS_SDSSThisLevel5,...
+        vafTot_SS_SDSSThisLevel95-vafTot_SS_SDSSThisLevelMean,'color','k','lineWidth',2)
+    if pValue < 0.05
+        plot(numLevels(i),90,'*','MarkerEdgeColor','k')
+    end
 end
+set(gca,'Xtick',3:7,'XTickLabel',{'3', '4', '5', '6','7'})
+ylim([0,100])
+xlabel('Number of bins')
+ylabel('%VAF total')
+title('Identification %VAF')
