@@ -1,6 +1,6 @@
 clear
 
-load('systemIDExperiment.mat')
+load('results/systemIDExperiment.mat')
 numLevelsLen = length(sysID);
 K = cell(numLevelsLen,1);
 Gr = cell(numLevelsLen,1);
@@ -51,7 +51,7 @@ for i = 1 : numLevelsLen
     vafReflex{i} = vafReflexTemp;
 end
 %%
-load experimentalTQVaryingData
+load results/experimentalTQVaryingData
 voluntaryTorque = subject1.voluntaryTorque;
 minTQ = prctile(voluntaryTorque,5);
 maxTQ = prctile(voluntaryTorque,95);

@@ -23,13 +23,15 @@ minTQ = prctile(voluntaryTorque,5);
 maxTQ = prctile(voluntaryTorque,95);
 sysID = cell(length(numLevels),1);
 sysID_SDSS = cell(length(numLevels),1);
-
+segmentsLengthMean = cell(length(numLevels),1);
+segmentsLengthStd = cell(length(numLevels),1);
 for numLVLIndex = 1 : length(numLevels)
     disp(['# of levels is : ',num2str(numLevels(numLVLIndex))])
     levels = linspace(minTQ,maxTQ,numLevels(numLVLIndex));
     sysIDTemp = cell(numLevels(numLVLIndex)-1,mcItr);
     sysID_SDSS_Temp = cell(numLevels(numLVLIndex)-1,mcItr);
-
+    segmentsLengthMeanTemp = zeros(numLevels(numLVLIndex)-1,mcItr);
+    segmentsLengthStdTemp = zeros(numLevels(numLVLIndex)-1,mcItr);
     for lvlIndex = 1 : numLevels(numLVLIndex) - 1
         disp(['Now checking level : ',num2str(lvlIndex),' out of ',num2str(numLevels(numLVLIndex)-1)])
         commandLevels = [levels(lvlIndex) levels(lvlIndex+1)];
@@ -55,10 +57,15 @@ for numLVLIndex = 1 : length(numLevels)
             sysIDTemp{lvlIndex,mcIndex} = pcas_short_segment_exp_new_intrinsic_irf1 (z,'maxordernle',8,'hanklesize',20,'delayinput',0.03,'orderselectmethod',order,'stationarity_check',1);
             z = cat(2,nldat(positionSeg),nldat(torqueSeg));
             sysID_SDSS_Temp{lvlIndex,mcIndex} = sdss(z,8,20,0.03,order);
+            segmentsLengthMeanTemp(lvlIndex,mcIndex) = mean(jumpEndThisIteration-jumpStartThisIteration+1);
+            segmentsLengthStdTemp(lvlIndex,mcIndex) =  std(jumpEndThisIteration-jumpStartThisIteration+1);
         end
     end
+    segmentsLengthMean{numLVLIndex} = segmentsLengthMeanTemp;
+    segmentsLengthStd{numLVLIndex} = segmentsLengthStdTemp;
     sysID{numLVLIndex} = sysIDTemp;
     sysID_SDSS{numLVLIndex} = sysID_SDSS_Temp;
 end
 %%
+save results/segmentLengthInfo segmentsLengthMean segmentsLengthStd
 save results/systemIDExperiment sysID sysID_SDSS
