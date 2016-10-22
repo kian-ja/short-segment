@@ -1,4 +1,4 @@
-%load results/timeVaryingID_Results
+load results/timeVaryingID_Results
 %systemID numSamp
 %systemID is a 5x100 variable
 %The first dimension is the number of division in scheduling variable
