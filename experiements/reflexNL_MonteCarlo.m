@@ -1,4 +1,4 @@
-function [reflexNLMean,reflexNL25,reflexNL975,xNonlin] = reflexNL_MonteCarlo(reflexNLPF)
+wfunction [reflexNLMean,reflexNL25,reflexNL975,xNonlin] = reflexNL_MonteCarlo(reflexNLPF)
 reflexNLPF = reflexNLPF(:);
 xNonlin = -2.5:0.01:2.5;
 
