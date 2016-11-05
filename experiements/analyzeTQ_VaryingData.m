@@ -17,7 +17,7 @@ samplingTime = 0.001;
 %%
 desiredTorque = 0;
 order = 2;
-numLevels = 3:7;
+numLevels = [10 13];
 mcItr = 100;
 minTQ = prctile(voluntaryTorque,5);
 maxTQ = prctile(voluntaryTorque,95);
@@ -67,5 +67,5 @@ for numLVLIndex = 1 : length(numLevels)
     sysID_SDSS{numLVLIndex} = sysID_SDSS_Temp;
 end
 %%
-save results/segmentLengthInfo segmentsLengthMean segmentsLengthStd
-save results/systemIDExperiment sysID sysID_SDSS
+save results/segmentLengthInfo_9_12 segmentsLengthMean segmentsLengthStd
+save results/systemIDExperiment_9_12 sysID sysID_SDSS
