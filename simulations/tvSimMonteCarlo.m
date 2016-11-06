@@ -1,12 +1,12 @@
 clear
 clc
-load results/LPVSimulationData
+load results/LPVSimulationData1Trial
 %The foolowings need to be added
 % 1- The main pcas_short_segment_exp_new_intrinsic_irf1 function gives the 
 % VAFs comapred to true intrinsic and reflex torques,NOT only the noisy one
 % 2- The main function gives actual number of samples used at each step (i.e numSamp)
 samplingTime = 0.001;
-schedulingSegmentNumber = 3:3:12;
+schedulingSegmentNumber = [3,6,9];%3:3:12;
 plotFlag = 0;
 order = 2;
 snr = 15;
@@ -53,26 +53,26 @@ for mcIndex = 1 : monteCarloIteration
               pause
               close(100)
           end
-%           power_noise = sum(noise.^2);
-%           power_signal = sum((torque).^2);
-%           noiseScaled = noise*sqrt((power_signal/(10^(snr/10)))/power_noise);
-%           torqueNoisy = torque + noiseScaled; 
-%            position = segdat(position,'onsetPointer',segmentStart,...
-%              'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
-%              ,'comment','Position','chanNames','Joint angular position (rad)');
-%            torqueNoisy = segdat(torqueNoisy ,'onsetPointer',segmentStart,...
-%              'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
-%              ,'comment','Position','chanNames','Joint angular position (rad)');
-%          intrinsicTorque = segdat(intrinsicTorque ,'onsetPointer',segmentStart,...
-%              'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
-%              ,'comment','Position','chanNames','Joint angular position (rad)');
-%          reflexTorque = segdat(reflexTorque ,'onsetPointer',segmentStart,...
-%              'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
-%              ,'comment','Position','chanNames','Joint angular position (rad)');
-%            z = cat(2,position,torqueNoisy);
-%            sysIDTemp{i} = pcas_short_segment_exp_new_intrinsic_irf1 (z,8,20,0.05,order,intrinsicTorque,reflexTorque);
-%            z = cat(2,nldat(position),nldat(torqueNoisy));
-%            sysID_SDSS_Temp{i} = sdss(z,8,20,0.05,order,nldat(intrinsicTorque),nldat(reflexTorque));
+          power_noise = sum(noise.^2);
+          power_signal = sum((torque).^2);
+          noiseScaled = noise*sqrt((power_signal/(10^(snr/10)))/power_noise);
+          torqueNoisy = torque + noiseScaled; 
+           position = segdat(position,'onsetPointer',segmentStart,...
+             'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
+             ,'comment','Position','chanNames','Joint angular position (rad)');
+           torqueNoisy = segdat(torqueNoisy ,'onsetPointer',segmentStart,...
+             'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
+             ,'comment','Position','chanNames','Joint angular position (rad)');
+         intrinsicTorque = segdat(intrinsicTorque ,'onsetPointer',segmentStart,...
+             'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
+             ,'comment','Position','chanNames','Joint angular position (rad)');
+         reflexTorque = segdat(reflexTorque ,'onsetPointer',segmentStart,...
+             'segLength',segmentEnd - segmentStart + 1,'domainIncr',samplingTime...
+             ,'comment','Position','chanNames','Joint angular position (rad)');
+           z = cat(2,position,torqueNoisy);
+           sysIDTemp{i} = pcas_short_segment_exp_new_intrinsic_irf1 (z,8,20,0.05,order,intrinsicTorque,reflexTorque);
+           z = cat(2,nldat(position),nldat(torqueNoisy));
+           sysID_SDSS_Temp{i} = sdss(z,8,20,0.05,order,nldat(intrinsicTorque),nldat(reflexTorque));
           segmentLengthMeanTemp(i) = mean(segmentEnd - segmentStart + 1);
           segmentLengthStdTemp(i) = std(segmentEnd - segmentStart + 1);
           numSegTemp(i) = length(segmentEnd);
@@ -85,4 +85,4 @@ for mcIndex = 1 : monteCarloIteration
     end
 end
 save results/segmentLenghtStatistics segmentLengthMean segmentLengthStd numSeg
-%save results/timeVaryingID_Results systemID_SS_SDSS systemID_SDSS
+save results/timeVaryingID_Results systemID_SS_SDSS systemID_SDSS

@@ -6,7 +6,7 @@ load results/noiseScaled
 
 %%
 plotFlag = 0;
-monteCarloIteration = 100;
+monteCarloIteration = 1;
 simulationSamplingTime = 0.001;
 simulationTime = 600;
 numInputCall = floor((simulationTime)/60);
@@ -35,6 +35,7 @@ for mcIndex = 1 : monteCarloIteration
     inputGaussianLPF = randn(size(positionSelected,1),1);
     inputGaussianLPF = filter(b,a,inputGaussianLPF);
     schedulingVariable = uniform_LPF(inputGaussianLPF,-0.48,0.24);
+    %schedulingVariable = -0.12+0.72/2*sin(2*pi*time);
     [velocityInput,accelerationInput] =  prepParamsLPV_Sim(positionSelected);
     positionInput = positionSelected;
     sim ('stiffnessLPVModel.mdl')
@@ -57,6 +58,7 @@ for mcIndex = 1 : monteCarloIteration
     totalTorqueMC(mcIndex,:) = totalTorque;
     noiseMC(mcIndex,:) = noiseSelected;
 end
-save results/LPVSimulationData monteCarloIteration positionMC velocityMC...
+save results/LPVSimulationData1Trial monteCarloIteration positionMC velocityMC...
     schedulingVariableMC intrinsicTorqueMC reflexTorqueMC totalTorqueMC noiseMC
-tvSimMonteCarlo
+%tvSimMonteCarlo
+analyzeBootStrap

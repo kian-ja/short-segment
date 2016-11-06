@@ -1,4 +1,5 @@
-load results/timeVaryingID_Results
+%load results/timeVaryingID_Results
+%load results/systemIDExperiment
 %systemID numSamp
 %systemID is a 5x100 variable
 %The first dimension is the number of division in scheduling variable
@@ -8,20 +9,21 @@ load results/timeVaryingID_Results
 %   4) 16
 %   5) 20
 %%
-schedulingSegmentNumber = 3:3:12;
-monteCarloIteration = size(systemID_SS_SDSS,2);
-vafIntrinsic = cell(length(schedulingSegmentNumber),1);
-vafReflex = cell(length(schedulingSegmentNumber),1);
-vafIntrinsic_SDSS = cell(length(schedulingSegmentNumber),1);
-vafReflex_SDSS = cell(length(schedulingSegmentNumber),1);
+schedulingSegmentNumber = [3 6 9];%3:3:12
+numberOfBinnings = length(schedulingSegmentNumber);
+monteCarloIteration = size(sysID{1},2);%size(systemID_SS_SDSS,2);
+vafIntrinsic = cell(numberOfBinnings,1);
+vafReflex = cell(numberOfBinnings,1);
+vafIntrinsic_SDSS = cell(numberOfBinnings,1);
+vafReflex_SDSS = cell(numberOfBinnings,1);
 
-stiffness = cell(length(schedulingSegmentNumber),1);
-reflexGain = cell(length(schedulingSegmentNumber),1);
+stiffness = cell(numberOfBinnings,1);
+reflexGain = cell(numberOfBinnings,1);
 
 x = -2:0.001:2;
 x = nldat(x','domainIncr',0.001);
 
-for i = 1 : length(schedulingSegmentNumber)
+for i = 1 : numberOfBinnings
     disp(['Preparing data: ',num2str(i),' out of ',num2str(length(schedulingSegmentNumber))]);
     vafIntrinsicTemp = zeros(monteCarloIteration,schedulingSegmentNumber(i));
     vafReflexTemp = zeros(monteCarloIteration,schedulingSegmentNumber(i));
@@ -29,29 +31,31 @@ for i = 1 : length(schedulingSegmentNumber)
     vafReflexTemp_SDSS = zeros(monteCarloIteration,schedulingSegmentNumber(i));
     stiffnessTemp = zeros(monteCarloIteration,schedulingSegmentNumber(i));
     reflexGainTemp = zeros(monteCarloIteration,schedulingSegmentNumber(i));
-    for j = 1 : monteCarloIteration
-        system = systemID_SS_SDSS{i,j};
-        system_SDSS = systemID_SDSS{i,j};
-        for k = 1 : length(system)
-            systemTemp = system{k};
-            systemTemp_SDSS = system_SDSS{k};
+    systemSS_SDSSThisBinNumber = sysID{i};
+    systemSDSSThisBinNumber = sysID_SDSS{i};
+    for j = 1 : schedulingSegmentNumber(i)%monteCarloIteration
+        systemSS_SDSSThisLevel = systemSS_SDSSThisBinNumber(j,:);
+        systemSDSSThisLevel = systemSDSSThisBinNumber(j,:);
+        for k = 1 : monteCarloIteration%length(system)
+            systemTemp = systemSS_SDSSThisLevel{k};
+            systemTemp_SDSS = systemSDSSThisLevel{k};
             vafs = systemTemp{3};
             vafs_SDSS = systemTemp_SDSS{3};
             intrinsic = systemTemp{1};
             reflex = systemTemp{2};
             nonlin = reflex{1};
             intrinsic = intrinsic.dataSet;
-            stiffnessTemp(j,k) = sum(intrinsic)/100;
-            vafIntrinsicTemp(j,k) = vafs(2);
-            vafReflexTemp(j,k) = vafs(3);
-            vafIntrinsicTemp_SDSS(j,k) = vafs_SDSS(2);
-            vafReflexTemp_SDSS(j,k) = vafs_SDSS(3);
+            stiffnessTemp(k,j) = sum(intrinsic)/100;
+            vafIntrinsicTemp(k,j) = vafs(2);
+            vafReflexTemp(k,j) = vafs(3);
+            vafIntrinsicTemp_SDSS(k,j) = vafs_SDSS(2);
+            vafReflexTemp_SDSS(k,j) = vafs_SDSS(3);
             if isnan(nonlin.polyCoef)
-                reflexGainTemp(j,k) = NaN;
+                reflexGainTemp(k,j) = NaN;
             else
                 y = nlsim(nonlin,x);
                 [~,slope]=slope_fitNoPlot(x.dataSet,y.dataSet,0);
-                reflexGainTemp(j,k) = abs(slope);
+                reflexGainTemp(k,j) = abs(slope);
             end
         end
 
@@ -64,13 +68,13 @@ for i = 1 : length(schedulingSegmentNumber)
     reflexGain{i} = reflexGainTemp;
 end
 %%
-xAxis = [1 2 3 4];
+xAxis = [1 2 3];
 figure(1)
 subplot(1,2,1)
 hold on
 subplot(1,2,2)
 hold on
-for i = 1 : length(schedulingSegmentNumber)
+for i = 1 : numberOfBinnings
     vafIntrinsic_SS_SDSS_Temp = vafIntrinsic{i};
     vafIntrinsic_SS_SDSS_Temp = max(vafIntrinsic_SS_SDSS_Temp,0);
     vafIntrinsic_SDSS_Temp = vafIntrinsic_SDSS{i};
@@ -123,7 +127,7 @@ set(gca,'Xtick',1:4,'XTickLabel',{'3', '6', '9', '12'})
 set(gca,'Ytick',0:25:100,'YTickLabel',{'0', '25', '50', '75','100'})
 xlabel('Number of bins')
 ylabel('%VAF Intrinsic')
-plot(xAxis,[105,105,105,105],'*','MarkerEdgeColor','k')
+plot(xAxis,[105,105,105],'*','MarkerEdgeColor','k')
 ylim([0,110])
 title('Intrinsic Pathway Identification')
 subplot(1,2,2)
@@ -131,7 +135,7 @@ set(gca,'Xtick',1:4,'XTickLabel',{'3', '6', '9', '12'})
 set(gca,'Ytick',[],'YTickLabel',[])
 xlabel('Number of bins')
 ylabel('%VAF Reflex')
-plot(xAxis,[105,105,105,105],'*','MarkerEdgeColor','k')
+plot(xAxis,[105,105,105],'*','MarkerEdgeColor','k')
 ylim([0,110])
 title('Reflex Pathway Identification')
 %%
@@ -163,7 +167,9 @@ posLevel = -0.48:0.01:0.24;
 KTrue = polyval(polyCoeffK,posLevel);
 for i = 1 : length(schedulingSegmentNumber)
     posAxis = linspace(-0.48,0.24,size(stiffness{i},2));
-    errorbar(posAxis,mean(stiffness{i}) + (i-1) * 20,std(stiffness{i})...
+    levels = linspace(-0.48,0.24,schedulingSegmentNumber(i)+1);
+    xAxis = (levels(1:end-1)+levels(2:end))/2;
+    errorbar(xAxis,mean(stiffness{i}) + (i-1) * 20,std(stiffness{i})...
         ,'lineWidth',2,'color','r','lineStyle','--')
     hold on
     plot(posLevel,KTrue + (i-1) * 20,'lineWidth',2,'color','k')
@@ -182,9 +188,10 @@ posLevel = -0.48:0.01:0.24;
 GrTrue = polyval(polyCoeffGr,posLevel);
 for i = 1 : length(schedulingSegmentNumber)
     reflexGainTemp = reflexGain{i};
-    
+    levels = linspace(-0.48,0.24,schedulingSegmentNumber(i)+1);
+    xAxis = (levels(1:end-1)+levels(2:end))/2;
     posAxis = linspace(-0.48,0.24,size(reflexGainTemp,2));
-    errorbar(posAxis,nanmean(reflexGainTemp) + (i-1) * 10,...
+    errorbar(xAxis,nanmean(reflexGainTemp) + (i-1) * 10,...
         nanstd(reflexGainTemp),'lineWidth',2,'color','r','lineStyle','--')
     hold on
     plot(posLevel,GrTrue + (i-1) * 10,'lineWidth',2,'color','k')
@@ -195,6 +202,6 @@ for i = 1 : length(schedulingSegmentNumber)
 end
 xlabel('Position (rad)')
 ylabel('Reflex gain (Nms/rad)')
-set(gca,'Ytick',0:10:35,'YTickLabel',{'0', '10', '20', '30'})
+set(gca,'Ytick',0:5:35,'YTickLabel',{'0','5', '10','5', '20','25', '30','35'})
 title('Reflex Gain')
 box off
