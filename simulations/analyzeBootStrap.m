@@ -1,20 +1,27 @@
 clear
 load results/LPVSimulationData1Trial
+load results/filterTorque
+samplingTime = 0.001;
 plotFlag = 0;
 position = positionMC';
-torque = totalTorqueMC';
+torque = totalTorqueNoisyMC';
 intrinsicTorque = intrinsicTorqueMC';
 reflexTorque = reflexTorqueMC';
 position = position - mean(position);
-voluntaryTorque = schedulingVariableMC';
-torque = torque - mean(torque);
-samplingTime = 0.001;
+schedulingVariable = schedulingVariableMC';
+
+
+torqueSV = nlsim(filterTorque,nldat(torque,'domainIncr',0.001));
+torqueSV = torqueSV.dataSet;
+torqueSV = smooth(torqueSV,1500);
+torque = torque - torqueSV;
+torque = torque - mean(torque);    
 %%
 order = 2;
 numLevels = [4 7 10];
 mcItr = 100;
-minTQ = prctile(voluntaryTorque,5);
-maxTQ = prctile(voluntaryTorque,95);
+minTQ = prctile(schedulingVariable,5);
+maxTQ = prctile(schedulingVariable,95);
 sysID = cell(length(numLevels),1);
 sysID_SDSS = cell(length(numLevels),1);
 segmentsLengthMean = cell(length(numLevels),1);
@@ -29,7 +36,7 @@ for numLVLIndex = 1 : length(numLevels)
     for lvlIndex = 1 : numLevels(numLVLIndex) - 1
         disp(['Now checking level : ',num2str(lvlIndex),' out of ',num2str(numLevels(numLVLIndex)-1)])
         commandLevels = [levels(lvlIndex) levels(lvlIndex+1)];
-        [jumpStart,jumpEnd] = findSegmentTQVaryingExperiment(voluntaryTorque,commandLevels,500);
+        [jumpStart,jumpEnd] = findSegmentTQVaryingSimulation(schedulingVariable,commandLevels,500);
         for mcIndex = 1 : mcItr
             disp(['Now checking MC trial: ',num2str(mcIndex),' out of',num2str(mcItr)])
             dataLength = 0;
@@ -69,3 +76,4 @@ end
 %%
 save results/segmentLengthInfo segmentsLengthMean segmentsLengthStd
 save results/systemIDExperiment sysID sysID_SDSS
+plotSimulationFigures

@@ -5,10 +5,11 @@ load results/experimental_input_subject
 load results/noiseScaled
 
 %%
+snr = 15;
 plotFlag = 0;
 monteCarloIteration = 1;
 simulationSamplingTime = 0.001;
-simulationTime = 600;
+simulationTime = 1200;
 numInputCall = floor((simulationTime)/60);
 simulationTime = numInputCall * 60;
 simulationTime = simulationTime - simulationSamplingTime; %in samples
@@ -20,6 +21,7 @@ schedulingVariableMC = zeros(monteCarloIteration,length(time));
 intrinsicTorqueMC = zeros(monteCarloIteration,length(time));
 reflexTorqueMC = zeros(monteCarloIteration,length(time));
 totalTorqueMC = zeros(monteCarloIteration,length(time));
+totalTorqueNoisyMC = zeros(monteCarloIteration,length(time));
 noiseMC = zeros(monteCarloIteration,length(time));
 for mcIndex = 1 : monteCarloIteration
     inputTrialRandom = randi([1 213],numInputCall,1);
@@ -35,9 +37,11 @@ for mcIndex = 1 : monteCarloIteration
     inputGaussianLPF = randn(size(positionSelected,1),1);
     inputGaussianLPF = filter(b,a,inputGaussianLPF);
     schedulingVariable = uniform_LPF(inputGaussianLPF,-0.48,0.24);
+    
     %schedulingVariable = -0.12+0.72/2*sin(2*pi*time);
-    [velocityInput,accelerationInput] =  prepParamsLPV_Sim(positionSelected);
-    positionInput = positionSelected;
+    [positionPertInput,velocityInput,accelerationInput] =  prepParamsLPV_Sim(positionSelected);
+    positionInput = positionPertInput + schedulingVariable;
+    %positionInput = positionSelected;
     sim ('stiffnessLPVModel.mdl')
     if plotFlag
         figure(100)
@@ -50,15 +54,21 @@ for mcIndex = 1 : monteCarloIteration
         pause
         close(100)
     end
+    noiseSNR = noiseScaleSNR(totalTorquePert,noiseSelected,snr);
+	totalTorqueNoisy = totalTorque + 0 * noiseSNR;
+    
+          
     positionMC(mcIndex,:) = positionSelected;
     velocityMC(mcIndex,:) = velocityInput;
     schedulingVariableMC(mcIndex,:) = schedulingVariable;
     intrinsicTorqueMC(mcIndex,:) = intrinsicTorque;
     reflexTorqueMC(mcIndex,:) = reflexTorque;
     totalTorqueMC(mcIndex,:) = totalTorque;
-    noiseMC(mcIndex,:) = noiseSelected;
+    totalTorqueNoisyMC(mcIndex,:) = totalTorqueNoisy;
+    noiseMC(mcIndex,:) = noiseSNR;
 end
 save results/LPVSimulationData1Trial monteCarloIteration positionMC velocityMC...
-    schedulingVariableMC intrinsicTorqueMC reflexTorqueMC totalTorqueMC noiseMC
+    schedulingVariableMC intrinsicTorqueMC reflexTorqueMC totalTorqueMC noiseMC...
+totalTorqueNoisyMC
 %tvSimMonteCarlo
 analyzeBootStrap

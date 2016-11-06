@@ -1,4 +1,5 @@
-function [velocity, acceleration] =  prepParamsLPV_Sim(pos)
+function [position,velocity, acceleration] =  prepParamsLPV_Sim(pos)
+%load results/filterActuator
 pos = pos(:);
 %schedulingVariable = schedulingVariable(:);
 %load intrinsicIRF
@@ -26,9 +27,11 @@ set_param('stiffnessLPVModel/reflexOmegaSubjectNormalizeGain','Gain',num2str(50)
 %polyCoeffZeta = polyfit(positionLevels,zeta,5);
 %set_param('reflexStiffnessLPVModel/reflexZetaPolynomialCoeff','Value',['[',num2str(polyCoeffZeta),']']);
 set_param('stiffnessLPVModel/reflexZetaSubjectNormalizeGain','Gain',num2str(1.8));%from Mirbagheri et al 2000, subject HB
-posNldat = nldat(pos,'domainIncr',0.001);
-velocity = ddt(posNldat);
+position = nldat(pos,'domainIncr',0.001);
+%position = nlsim(filterActuator,position);
+velocity = ddt(position);
 acceleration = ddt(velocity);
+position = get(position,'dataSet');
 velocity = get(velocity,'dataSet');
 acceleration = get(acceleration,'dataSet');
 
