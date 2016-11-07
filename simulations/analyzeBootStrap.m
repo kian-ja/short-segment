@@ -2,7 +2,7 @@
 warning off
 clear
 load results/LPVSimulationData1Trial
-load results/filterTorque
+%load results/filterTorque
 samplingTime = 0.001;
 plotFlag = 0;
 position = positionMC';
@@ -12,16 +12,16 @@ reflexTorque = reflexTorqueMC';
 position = position - mean(position);
 schedulingVariable = schedulingVariableMC';
 
-torqueSV = nlsim(filterTorque,nldat(torque,'domainIncr',0.001));
-torqueSV = torqueSV.dataSet;
-torqueSV = smooth(torqueSV,1500);
-torquePert = torque - torqueSV;
-torquePert = torquePert - mean(torquePert);    
+%torqueSV = nlsim(filterTorque,nldat(torque,'domainIncr',0.001));
+%torqueSV = torqueSV.dataSet;
+%torqueSV = smooth(torqueSV,1500);
+%torquePert = torque - torqueSV;
+%torquePert = torquePert - mean(torquePert);    
 %plot(torquePert)
 %hold on
 totalTorquePert = totalTorquePert - mean(totalTorquePert);
 %plot(totalTorquePert)
-torquePert = totalTorqueNoisy;
+torquePert = totalTorqueNoisyMC;
 torquePert = torquePert - mean(torquePert);    
 %%
 order = 2;
