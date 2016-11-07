@@ -21,7 +21,8 @@ torquePert = torquePert - mean(torquePert);
 %hold on
 totalTorquePert = totalTorquePert - mean(totalTorquePert);
 %plot(totalTorquePert)
-torquePert = totalTorquePert;
+torquePert = totalTorqueNoisy;
+torquePert = torquePert - mean(torquePert);    
 %%
 order = 2;
 numLevels = [4 7 10];
