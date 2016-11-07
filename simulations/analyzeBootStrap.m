@@ -1,3 +1,5 @@
+%parpool(2)
+warning off
 clear
 load results/LPVSimulationData1Trial
 load results/filterTorque
@@ -10,12 +12,16 @@ reflexTorque = reflexTorqueMC';
 position = position - mean(position);
 schedulingVariable = schedulingVariableMC';
 
-
 torqueSV = nlsim(filterTorque,nldat(torque,'domainIncr',0.001));
 torqueSV = torqueSV.dataSet;
 torqueSV = smooth(torqueSV,1500);
-torque = torque - torqueSV;
-torque = torque - mean(torque);    
+torquePert = torque - torqueSV;
+torquePert = torquePert - mean(torquePert);    
+%plot(torquePert)
+%hold on
+totalTorquePert = totalTorquePert - mean(totalTorquePert);
+%plot(totalTorquePert)
+torquePert = totalTorquePert;
 %%
 order = 2;
 numLevels = [4 7 10];
@@ -51,7 +57,7 @@ for numLVLIndex = 1 : length(numLevels)
             positionSeg = segdat(position,'onsetPointer',jumpStartThisIteration,...
             'segLength',jumpEndThisIteration-jumpStartThisIteration+1,'domainIncr',samplingTime...
             ,'comment','Position','chanNames','Joint angular position (rad)');
-            torqueSeg = segdat(torque,'onsetPointer',jumpStartThisIteration,...
+            torqueSeg = segdat(torquePert,'onsetPointer',jumpStartThisIteration,...
             'segLength',jumpEndThisIteration-jumpStartThisIteration+1,'domainIncr',samplingTime...
             ,'comment','Torque','chanNames','Joint torque (Nm)');
             intrinsicTorqueSeg = segdat(intrinsicTorque,'onsetPointer',jumpStartThisIteration,...

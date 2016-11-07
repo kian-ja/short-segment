@@ -55,9 +55,8 @@ for mcIndex = 1 : monteCarloIteration
         close(100)
     end
     noiseSNR = noiseScaleSNR(totalTorquePert,noiseSelected,snr);
-	totalTorqueNoisy = totalTorque + 0 * noiseSNR;
-    
-          
+	%totalTorqueNoisy = totalTorque + 1 * noiseSNR;
+    totalTorqueNoisy = totalTorquePert + 1 * noiseSNR;
     positionMC(mcIndex,:) = positionSelected;
     velocityMC(mcIndex,:) = velocityInput;
     schedulingVariableMC(mcIndex,:) = schedulingVariable;
@@ -69,6 +68,6 @@ for mcIndex = 1 : monteCarloIteration
 end
 save results/LPVSimulationData1Trial monteCarloIteration positionMC velocityMC...
     schedulingVariableMC intrinsicTorqueMC reflexTorqueMC totalTorqueMC noiseMC...
-totalTorqueNoisyMC
+totalTorqueNoisyMC totalTorquePert
 %tvSimMonteCarlo
 analyzeBootStrap
