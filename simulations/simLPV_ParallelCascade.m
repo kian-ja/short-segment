@@ -3,10 +3,10 @@ clear
 clc
 load results/experimental_input_subject
 load results/noiseScaled
-
 %%
+sv = 'torque';
 snr = 15;
-plotFlag = 0;
+plotFlag = 1;
 monteCarloIteration = 1;
 simulationSamplingTime = 0.001;
 simulationTime = 1200;
@@ -33,24 +33,37 @@ for mcIndex = 1 : monteCarloIteration
     noiseSelected = noiseSelected(:);
     cutOffFreq = 0.15;
     normalizedCutOffFreq = cutOffFreq / 500;
-    [b,a] = butter(4,normalizedCutOffFreq);
-    inputGaussianLPF = randn(size(positionSelected,1),1);
-    inputGaussianLPF = filter(b,a,inputGaussianLPF);
-    schedulingVariable = uniform_LPF(inputGaussianLPF,-0.48,0.24);
-    
+    %[b,a] = butter(4,normalizedCutOffFreq);
+    %inputGaussianLPF = randn(size(positionSelected,1),1);
+    %inputGaussianLPF = filter(b,a,inputGaussianLPF);
+    %schedulingVariable = uniform_LPF(inputGaussianLPF,-0.48,0.24);
+    schedulingVariable = 10 * (sin(2*pi*0.1*time)/2 - 0.5);
     %schedulingVariable = -0.12+0.72/2*sin(2*pi*time);
     [positionPertInput,velocityInput,accelerationInput] =  prepParamsLPV_Sim(positionSelected);
-    positionInput = positionPertInput + schedulingVariable;
+    if strcmp(sv , 'pos')
+        positionInput = positionPertInput + schedulingVariable;
+    else
+        positionInput = positionPertInput;
+    end
+    
     %positionInput = positionSelected;
     sim ('stiffnessLPVModel.mdl')
+    if strcmp(sv , 'torque')
+        totalTorque = -totalTorque + schedulingVariable;
+    end
     if plotFlag
         figure(100)
-        subplot(3,1,1)
+        subplot(4,1,1)
+        plot(schedulingVariable)
+        subplot(4,1,2)
         plot(intrinsicTorque)
-        subplot(3,1,2)
+        subplot(4,1,3)
         plot(reflexTorque)
-        subplot(3,1,3)
+        subplot(4,1,4)
         plot(totalTorque)
+        ylim([-25,20])
+        xAxisPanZoom
+        
         pause
         close(100)
     end

@@ -25,7 +25,7 @@ torquePert = totalTorqueNoisyMC;
 torquePert = torquePert - mean(torquePert);    
 %%
 order = 2;
-numLevels = [4 7 10];
+numLevels = [11];
 mcItr = 100;
 minTQ = prctile(schedulingVariable,5);
 maxTQ = prctile(schedulingVariable,95);

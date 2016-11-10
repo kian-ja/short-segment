@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.20"
+    ComputedModelVersion    "1.21"
     NumModelReferences	    0
     NumTestPointedSignals   0
     NumProvidedFunctions    0
@@ -58,7 +58,7 @@ Model {
 	LoadSaveID		"0"
 	Extents			[1056.0, 600.0]
 	ZoomFactor		[1.0]
-	Offset			[358.28901379327726, -169.14060835002235]
+	Offset			[51.289013793277263, -169.14060835002235]
       }
     }
   }
@@ -68,9 +68,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "kian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sun Nov 06 08:49:19 2016"
-  RTWModifiedTimeStamp	  400322957
-  ModelVersionFormat	  "1.%<AutoIncrement:20>"
+  LastModifiedDate	  "Thu Nov 10 15:56:25 2016"
+  RTWModifiedTimeStamp	  400693826
+  ModelVersionFormat	  "1.%<AutoIncrement:21>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -1180,7 +1180,7 @@ Model {
       SID		      "5"
       Position		      [280, 280, 310, 310]
       ZOrder		      96
-      Value		      "[-11.7375    -0.995912      6.38522      2.33556     0.758712     0.605315]"
+      Value		      "[-3.6932e-07 -2.2537e-05  -0.0005248  -0.0067572   -0.083013     0.18344]"
     }
     Block {
       BlockType		      Gain
@@ -2292,7 +2292,7 @@ Model {
       SID		      "62"
       Position		      [180, 545, 210, 575]
       ZOrder		      116
-      Value		      "[85.2066      46.2746     -10.9566     -5.30716      1.75446      0.73177]"
+      Value		      "[1.3849e-06   6.439e-05  0.00031647   -0.019678    -0.23212     0.19685]"
     }
     Block {
       BlockType		      Gain
