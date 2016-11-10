@@ -75,7 +75,7 @@ end
 close(h) 
 
 %%
-save results/segmentLengthInfo_9_12 segmentsLengthMean segmentsLengthStd
-save results/systemIDExperiment_9_12 sysID sysID_SDSS
+save results/segmentLengthInfo segmentsLengthMean segmentsLengthStd
+save results/systemIDExperiment sysID sysID_SDSS
 
 plotResultsTQ_Varying
