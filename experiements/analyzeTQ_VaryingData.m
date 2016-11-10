@@ -1,6 +1,7 @@
 clear
 load results/experimentalTQVaryingData
 load results/filterTorque
+warning off
 plotFlag = 0;
 position = subject1.position;
 torque = subject1.torque;
@@ -17,7 +18,7 @@ samplingTime = 0.001;
 %%
 desiredTorque = 0;
 order = 2;
-numLevels = [10 13];
+numLevels = [11];
 mcItr = 100;
 minTQ = prctile(voluntaryTorque,5);
 maxTQ = prctile(voluntaryTorque,95);
@@ -25,6 +26,9 @@ sysID = cell(length(numLevels),1);
 sysID_SDSS = cell(length(numLevels),1);
 segmentsLengthMean = cell(length(numLevels),1);
 segmentsLengthStd = cell(length(numLevels),1);
+h = waitbar(0,'Running the boot-strap identification');
+steps = length(numLevels) * sum(numLevels-1) * mcItr;
+step = 0;
 for numLVLIndex = 1 : length(numLevels)
     disp(['# of levels is : ',num2str(numLevels(numLVLIndex))])
     levels = linspace(minTQ,maxTQ,numLevels(numLVLIndex));
@@ -37,6 +41,8 @@ for numLVLIndex = 1 : length(numLevels)
         commandLevels = [levels(lvlIndex) levels(lvlIndex+1)];
         [jumpStart,jumpEnd] = findSegmentTQVaryingExperiment(voluntaryTorque,commandLevels,500);
         for mcIndex = 1 : mcItr
+            step = step + 1;
+            waitbar(step / steps);
             disp(['Now checking MC trial: ',num2str(mcIndex),' out of',num2str(mcItr)])
             dataLength = 0;
             jumpStartThisIteration =[];
@@ -66,6 +72,10 @@ for numLVLIndex = 1 : length(numLevels)
     sysID{numLVLIndex} = sysIDTemp;
     sysID_SDSS{numLVLIndex} = sysID_SDSS_Temp;
 end
+close(h) 
+
 %%
 save results/segmentLengthInfo_9_12 segmentsLengthMean segmentsLengthStd
 save results/systemIDExperiment_9_12 sysID sysID_SDSS
+
+plotResultsTQ_Varying

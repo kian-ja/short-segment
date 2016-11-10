@@ -1,21 +1,5 @@
 clear
-
-load('results/systemIDExperiment_9_12.mat')
-sysID9 = sysID{1};
-sysID_SDSS9 = sysID_SDSS{1};
-
 load('results/systemIDExperiment.mat')
-%sysID{6} = sysID9;
-%sysID_SDSS{6} = sysID_SDSS9;
-sysIDTemp = cell(3,1);
-sysIDTemp{1} = sysID{2};%nBins = 3
-sysIDTemp{2} = sysID{5};%nBins = 6
-sysIDTemp{3} = sysID9;%nBins = 9
-sysID_SDSSTemp{1} = sysID_SDSS{2};%nBins = 3
-sysID_SDSSTemp{2} = sysID_SDSS{5};%nBins = 6
-sysID_SDSSTemp{3} = sysID_SDSS9;%nBins = 9
-sysID_SDSS = sysID_SDSSTemp;
-sysID = sysIDTemp;
 numLevelsLen = length(sysID);
 %%
 K = cell(numLevelsLen,1);
