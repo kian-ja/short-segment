@@ -1,7 +1,9 @@
 clear
-
+load('results/LPVSimulationData1Trial.mat')
 load('results/systemIDExperiment.mat')
+
 numLevelsLen = length(sysID);
+schedulingSegmentNumber = numLevels;%3:3:12
 %%
 K = cell(numLevelsLen,1);
 Gr = cell(numLevelsLen,1);
@@ -67,7 +69,6 @@ end
 figure
 hold on
 xAxisTicks = [2;4;6];
-schedulingSegmentNumber = [3 6 9];%3:3:12
 for i = 1 : numLevelsLen
     subplot(1,2,1)
     hold on
@@ -129,65 +130,86 @@ for i = 1 : numLevelsLen
     end
 end
 subplot(1,2,1)
-set(gca,'Xtick',xAxisTicks,'XTickLabel',{'3', '6', '9'})
+set(gca,'Xtick',[xAxisTicks(i)-0.3,xAxisTicks(i)+0.3],'XTickLabel',{'SDSS', 'SS-SDSS'})
 ylim([0,110])
-xlabel('Number of bins')
-ylabel('%VAF total')
+%xlabel('Number of bins')
+ylabel('%VAF Intrinsic')
 title('Intrinsic Identification %VAF')
 axis square
 subplot(1,2,2)
-set(gca,'Xtick',xAxisTicks,'XTickLabel',{'3', '6', '9'})
+set(gca,'Xtick',[xAxisTicks(i)-0.3,xAxisTicks(i)+0.3],'XTickLabel',{'SDSS', 'SS-SDSS'})
 ylim([0,110])
-xlabel('Number of bins')
-ylabel('%VAF total')
+%xlabel('Number of bins')
+ylabel('%VAF Reflex')
 title('Reflex Identification %VAF')
 axis square
+
 %%
+schedulingVariableType = 'torque';
+if strcmp(schedulingVariable , 'pos')
+    levels = [-0.48 -0.4 -0.32 -0.24 -0.16 -0.08 0.0 0.08 0.16 0.24];%from Mirbagheri et al 2000
+    reflexGain = [0.0625,0.0938,0.1042,0.1094,0.2813,0.5000,0.6250,0.7000,0.8000,0.8100];%from Mirbagheri et al 2000
+    reflexGain = reflexGain + 0.1;
+    elasticParameter = [0.32 0.36 0.42 0.48 0.52 0.55 0.6 0.7 0.8 1];%from Mirbagheri et al 2000
+end
+if strcmp(schedulingVariableType , 'torque')
+    levels = [0 -3 -6 -9 -12 -15 -18 -21 -24];%from Mirbagheri et al 2000
+    reflexGain = [0.2 0.7 0.9 0.8 0.6 0.35 0.35 0.3 0.4];
+    elasticParameter = [0.18 0.4 0.5 0.65 0.75 0.81 0.875 0.94 1];%from Mirbagheri et al 2000
+end
+minTQ = prctile(schedulingVariableMC,5);
+maxTQ = prctile(schedulingVariableMC,95);
+
 figure
 subplot(1,2,1)
-positionLevels = [-0.48 -0.4 -0.32 -0.24 -0.16 -0.08 0.0 0.08 0.16 0.24];%from Mirbagheri et al 2000
-KPositionLevels = [0.45 0.47 0.48 0.5 0.52 0.55 0.6 0.7 0.8 1];
-polyCoeffK = 50 * polyfit(positionLevels,KPositionLevels,5);
-posLevel = -0.48:0.01:0.24;
-KTrue = polyval(polyCoeffK,posLevel);
+polyCoeffK = 50 * polyfit(levels,elasticParameter,5);
+svTrueXAxis = minTQ:0.05:maxTQ;
+elasticParamTrue = polyval(polyCoeffK,svTrueXAxis);
 for i = 1 : length(schedulingSegmentNumber)
-    posAxis = linspace(-0.48,0.24,size(K{i},2));
-    levels = linspace(-0.48,0.24,schedulingSegmentNumber(i)+1);
-    xAxis = (levels(1:end-1)+levels(2:end))/2;
+    newLevels = linspace(minTQ,maxTQ,schedulingSegmentNumber(i));
+    xAxis = (newLevels(1:end-1)+newLevels(2:end))/2;
     errorbar(xAxis,mean(K{i}') + (i-1) * 20,std(K{i}')...
         ,'lineWidth',2,'color','r','lineStyle','--')
     hold on
-    plot(posLevel,KTrue + (i-1) * 20,'lineWidth',2,'color','k')
+    plot(svTrueXAxis,elasticParamTrue + (i-1) * 20,'lineWidth',2,'color','k')
 end
-xlabel('Position (rad)')
+if strcmp(schedulingVariableType, 'torque')
+    xlabel('Torque (Nm)')
+elseif strcmp(schedulingVariableType, 'pos')
+    xlabel('Position (rad)')
+end
+
 ylabel('Elastic parameter (Nm/k)')
-set(gca,'Ytick',0:10:40,'YTickLabel',{'0', '10', '20', '30','40'})
+%set(gca,'Ytick',0:10:40,'YTickLabel',{'0', '10', '20', '30','40'})
 title('Elastic Parameter')
 box off
+axis square
 
 subplot(1,2,2)
-positionLevels = [-0.48 -0.4 -0.32 -0.24 -0.16 -0.08 0.0 0.08 0.16 0.24];%from Mirbagheri et al 2000
-GrPositionLevels = [0.0625,0.0938,0.1042,0.1094,0.2813,0.5000,0.6250,0.7000,0.8000,0.8100];%from Mirbagheri et al 2000
-GrPositionLevels = GrPositionLevels + 0.1;
-polyCoeffGr = 40 * polyfit(positionLevels,GrPositionLevels,5);
-posLevel = -0.48:0.01:0.24;
-GrTrue = polyval(polyCoeffGr,posLevel);
-for i = 1 : length(schedulingSegmentNumber)
+polyCoeffGr = 40 * polyfit(levels,reflexGain,5);
+reflexGainTrue = polyval(polyCoeffGr,svTrueXAxis);
+for i = 1 : length(schedulingSegmentNumber)    
     reflexGainTemp = Gr{i};
-    levels = linspace(-0.48,0.24,schedulingSegmentNumber(i)+1);
-    xAxis = (levels(1:end-1)+levels(2:end))/2;
+    newLevels = linspace(minTQ,maxTQ,schedulingSegmentNumber(i));
+    xAxis = (newLevels(1:end-1)+newLevels(2:end))/2;
     posAxis = linspace(-0.48,0.24,size(reflexGainTemp,2));
     errorbar(xAxis,nanmean(reflexGainTemp') + (i-1) * 10,...
         nanstd(reflexGainTemp'),'lineWidth',2,'color','r','lineStyle','--')
     hold on
-    plot(posLevel,GrTrue + (i-1) * 10,'lineWidth',2,'color','k')
+    plot(svTrueXAxis,reflexGainTrue + (i-1) * 10,'lineWidth',2,'color','k')
     if i == 1 
         legend('Estimate','True')
     end
 
 end
-xlabel('Position (rad)')
+if strcmp(schedulingVariableType, 'torque')
+    xlabel('Torque (Nm)')
+elseif strcmp(schedulingVariableType, 'pos')
+    xlabel('Position (rad)')
+end
+
 ylabel('Reflex gain (Nms/rad)')
-set(gca,'Ytick',0:5:35,'YTickLabel',{'0','5', '10','5', '20','25', '30','35'})
+%set(gca,'Ytick',0:5:35,'YTickLabel',{'0','5', '10','5', '20','25', '30','35'})
 title('Reflex Gain')
 box off
+axis square

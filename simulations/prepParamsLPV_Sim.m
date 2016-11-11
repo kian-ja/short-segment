@@ -11,7 +11,6 @@ if strcmp(schedulingVariable , 'torque')
     Gr = [0.2 0.9 0.68 0.5 0.38 0.35 0.35 0.3 0.4];
     Gr = [0.2 0.7 0.9 0.8 0.6 0.35 0.35 0.3 0.4];
     K = [0.18 0.4 0.5 0.65 0.75 0.81 0.875 0.94 1];%from Mirbagheri et al 2000
-
 end
 %load results/filterActuator
 pos = pos(:);

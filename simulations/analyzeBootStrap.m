@@ -25,14 +25,16 @@ torquePert = totalTorqueNoisyMC;
 torquePert = torquePert - mean(torquePert);    
 %%
 order = 2;
-numLevels = [11];
+numLevels = [9];
 mcItr = 100;
+hankleSize = 10;
 minTQ = prctile(schedulingVariable,5);
 maxTQ = prctile(schedulingVariable,95);
 sysID = cell(length(numLevels),1);
 sysID_SDSS = cell(length(numLevels),1);
 segmentsLengthMean = cell(length(numLevels),1);
 segmentsLengthStd = cell(length(numLevels),1);
+minSegmentLength = 10 * 2 * hankleSize;
 for numLVLIndex = 1 : length(numLevels)
     disp(['# of levels is : ',num2str(numLevels(numLVLIndex))])
     levels = linspace(minTQ,maxTQ,numLevels(numLVLIndex));
@@ -43,13 +45,13 @@ for numLVLIndex = 1 : length(numLevels)
     for lvlIndex = 1 : numLevels(numLVLIndex) - 1
         disp(['Now checking level : ',num2str(lvlIndex),' out of ',num2str(numLevels(numLVLIndex)-1)])
         commandLevels = [levels(lvlIndex) levels(lvlIndex+1)];
-        [jumpStart,jumpEnd] = findSegmentTQVaryingSimulation(schedulingVariable,commandLevels,201);
+        [jumpStart,jumpEnd] = findSegmentTQVaryingSimulation(schedulingVariable,commandLevels,minSegmentLength);
         for mcIndex = 1 : mcItr
             disp(['Now checking MC trial: ',num2str(mcIndex),' out of',num2str(mcItr)])
             dataLength = 0;
             jumpStartThisIteration =[];
             jumpEndThisIteration =[];
-            while (dataLength<60000)
+            while (dataLength<45000)
                 selectedSegment = randi(length(jumpStart));
                 jumpStartThisIteration = [jumpStartThisIteration;jumpStart(selectedSegment)];
                 jumpEndThisIteration = [jumpEndThisIteration;jumpEnd(selectedSegment)];
@@ -68,7 +70,7 @@ for numLVLIndex = 1 : length(numLevels)
             'segLength',jumpEndThisIteration-jumpStartThisIteration+1,'domainIncr',samplingTime...
             ,'comment','Torque','chanNames','Joint torque (Nm)');
             z = cat(2,positionSeg,torqueSeg);
-            sysIDTemp{lvlIndex,mcIndex} = pcas_short_segment_exp_new_intrinsic_irf1 (z,8,10,0.05,order,intrinsicTorqueSeg,reflexTorqueSeg);
+            sysIDTemp{lvlIndex,mcIndex} = pcas_short_segment_exp_new_intrinsic_irf1 (z,8,hankleSize,0.05,order,intrinsicTorqueSeg,reflexTorqueSeg);
             z = cat(2,nldat(positionSeg),nldat(torqueSeg));
             sysID_SDSS_Temp{lvlIndex,mcIndex} = sdss(z,8,20,0.03,order);
             segmentsLengthMeanTemp(lvlIndex,mcIndex) = mean(jumpEndThisIteration-jumpStartThisIteration+1);
@@ -81,6 +83,6 @@ for numLVLIndex = 1 : length(numLevels)
     sysID_SDSS{numLVLIndex} = sysID_SDSS_Temp;
 end
 %%
-save results/segmentLengthInfo segmentsLengthMean segmentsLengthStd
-save results/systemIDExperiment sysID sysID_SDSS
+save results/segmentLengthInfo segmentsLengthMean segmentsLengthStd 
+save results/systemIDExperiment sysID sysID_SDSS numLevels
 plotSimulationFigures
