@@ -1,4 +1,4 @@
-function [offset,slope]=slope_fitNoPlot(x,y,threshold)
+function [threshold,slope]=slope_fitNoPlot(x,y,threshold)
 %CREATEFIT Create plot of data sets and fits
 %   CREATEFIT(X,Y)
 %   Creates a plot, similar to the plot in the main Curve Fitting Tool,
@@ -19,8 +19,6 @@ function [offset,slope]=slope_fitNoPlot(x,y,threshold)
 
 % Set up figure to receive data sets and fits
 % Line handles and text for the legend.
-legh_ = [];
-legt_ = {};
 % Limits of the x-axis.
 xlim_ = [Inf -Inf];
 % Axes for the plot.
@@ -28,24 +26,22 @@ xlim_ = [Inf -Inf];
 % --- Plot data that was originally in data set "y vs. x"
 x = x(:);
 y = y(:);
-xlim_(1) = min(xlim_(1),min(x));
-xlim_(2) = max(xlim_(2),max(x));
 
 % Nudge axis limits beyond data limits
 
 % --- Create fit "fit 1"
-fo_ = fitoptions('method','NonlinearLeastSquares','Lower',[-Inf -Inf],'Upper',[Inf Inf]);
+fo_ = fitoptions('method','NonlinearLeastSquares','Lower',[-Inf -Inf 0],'Upper',[Inf Inf 3]);
 ok_ = isfinite(x) & isfinite(y);
 if ~all( ok_ )
     warning( 'GenerateMFile:IgnoringNansAndInfs',...
         'Ignoring NaNs and Infs in data.' );
 end
-st_ = [0.8611212241664904  0.046315700554321659 ];
+st_ = [0 , 1, 0];
 set(fo_,'Startpoint',st_);
 
- ft_ = fittype(['offset+slope*(x-',num2str(eval('threshold')),'+(x-',num2str(eval('threshold')),').*sign(x-',num2str(eval('threshold')),'))/2'],...
+ ft_ = fittype(['offset+slope*(x-threshold+(x-threshold).*sign(x-threshold))/2'],...
      'dependent',{'y'},'independent',{'x'},...
-     'coefficients',{'offset', 'slope'});
+     'coefficients',{'offset', 'slope','threshold'});
 
 %  ft_ = fittype('offset+slope*(x-threshold+(x-threshold).*sign(x-threshold))/2',...
 %      'dependent',{'y'},'independent',{'x'},...
@@ -56,7 +52,7 @@ set(fo_,'Startpoint',st_);
 % Fit this model using new data
 cf_ = fit(x(ok_),y(ok_),ft_,fo_);
 slope=cf_.slope;
-offset=cf_.offset;
+threshold=cf_.threshold;
 % Alternatively uncomment the following lines to use coefficients from the
 % original fit. You can use this choice to plot the original fit against new
 % data.
