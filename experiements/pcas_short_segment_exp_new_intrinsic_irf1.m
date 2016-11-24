@@ -367,13 +367,17 @@ if condition>0
         v = v.dataSet;
         %disp(['VAF between intrinsic residual and reflex torque: ',num2str(v)])
         if plot_mode == 1
-            for i =1 : p
-                figure(floor((i-1)/4)+10)
+            tqT_noisyPlot = nldat(tqT_noisy);
+            tqTPlot = nldat(tqT);
+            for i =1 : min(p,16)
+                if mod(i-1,4) == 0
+                    figure
+                end
                 subplot(4,1,mod(i-1,4)+1)
-                measured_data = tqT_noisy(switch_time(i):switch_time(i+1)-1);
+                measured_data = tqT_noisyPlot(switch_time(i):switch_time(i+1)-1);
                 measured_data = measured_data.dataSet;
                 measured_data = measured_data - mean(measured_data);
-                predicted_data = tqT(switch_time(i):switch_time(i+1)-1);
+                predicted_data = tqTPlot(switch_time(i):switch_time(i+1)-1);
                 predicted_data = predicted_data.dataSet;
                 predicted_data = predicted_data - mean(predicted_data);
                 predicted_data = nldat(predicted_data,'domainIncr',ts);
@@ -382,7 +386,7 @@ if condition>0
                 set(predicted_data,'chanNames','Predicted torque');
                 plot(cat(2,measured_data,predicted_data),'plotmode','super');
                 hold on
-                plot(measured_data-predicted_data,'line_color','r')
+                %plot(measured_data-predicted_data,'line_color','r')
             end
         end
     end
