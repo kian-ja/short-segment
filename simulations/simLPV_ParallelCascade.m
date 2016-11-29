@@ -3,6 +3,7 @@ clear
 clc
 load results/experimental_input_subject
 load results/noiseScaled
+load results/intrinsicIRFModelNormal
 %%
 sv = 'torque';
 snr = 15;
@@ -67,6 +68,11 @@ for mcIndex = 1 : monteCarloIteration
         pause
         close(100)
     end
+    pos = nldat(positionSelected,'domainIncr',0.001);
+    %intrinsicTorque = nlsim(irfModel,pos);
+    intrinsicTorque = lpvIrfSim(irfModel,positionSelected,schedulingVariable);
+    totalTorquePert = intrinsicTorque + reflexTorque;
+    
     noiseSNR = noiseScaleSNR(totalTorquePert,noiseSelected,snr);
 	%totalTorqueNoisy = totalTorque + 1 * noiseSNR;
     totalTorqueNoisy = totalTorquePert + 1 * noiseSNR;
@@ -79,7 +85,7 @@ for mcIndex = 1 : monteCarloIteration
     totalTorqueNoisyMC(mcIndex,:) = totalTorqueNoisy;
     noiseMC(mcIndex,:) = noiseSNR;
 end
-save results/LPVSimulationData1Trial monteCarloIteration positionMC velocityMC...
+save results/LPVSimulationData1Trial2 monteCarloIteration positionMC velocityMC...
     schedulingVariableMC intrinsicTorqueMC reflexTorqueMC totalTorqueMC noiseMC...
 totalTorqueNoisyMC totalTorquePert
 %tvSimMonteCarlo

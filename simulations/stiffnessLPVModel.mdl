@@ -7,7 +7,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.22"
+    ComputedModelVersion    "1.27"
     NumModelReferences	    0
     NumTestPointedSignals   0
     NumProvidedFunctions    0
@@ -58,7 +58,7 @@ Model {
 	LoadSaveID		"0"
 	Extents			[1056.0, 600.0]
 	ZoomFactor		[0.8]
-	Offset			[-79.75, -229.39060835002235]
+	Offset			[47.5, -117.0]
       }
     }
   }
@@ -68,9 +68,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "kian"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Nov 10 17:06:03 2016"
-  RTWModifiedTimeStamp	  400696842
-  ModelVersionFormat	  "1.%<AutoIncrement:22>"
+  LastModifiedDate	  "Thu Nov 24 06:33:05 2016"
+  RTWModifiedTimeStamp	  401837919
+  ModelVersionFormat	  "1.%<AutoIncrement:27>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -989,6 +989,9 @@ Model {
       SampleTime	      "-1"
     }
     Block {
+      BlockType		      Terminator
+    }
+    Block {
       BlockType		      ToWorkspace
       VariableName	      "simulink_output"
       MaxDataPoints	      "1000"
@@ -1025,7 +1028,15 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "80"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "103"
+    SIDHighWatermark	    "107"
+    Block {
+      BlockType		      Constant
+      Name		      "Constant"
+      SID		      "104"
+      Position		      [435, 310, 465, 340]
+      ZOrder		      139
+      Value		      "0.6"
+    }
     Block {
       BlockType		      FromWorkspace
       Name		      "From\nWorkspace1"
@@ -1081,7 +1092,7 @@ Model {
       Name		      "Polynomial\nEvaluation"
       SID		      "3"
       Ports		      [2, 1]
-      Position		      [360, 221, 465, 259]
+      Position		      [320, 221, 425, 259]
       ZOrder		      95
       LibraryVersion	      "1.25"
       SourceBlock	      "dsppolyfun/Polynomial\nEvaluation"
@@ -1129,6 +1140,13 @@ Model {
       InputSameDT	      off
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
       SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Terminator
+      Name		      "Terminator"
+      SID		      "105"
+      Position		      [440, 230, 460, 250]
+      ZOrder		      140
     }
     Block {
       BlockType		      ToWorkspace
@@ -2328,17 +2346,10 @@ Model {
       SaturateOnIntegerOverflow	off
     }
     Line {
-      ZOrder		      5
-      SrcBlock		      "Polynomial\nEvaluation"
-      SrcPort		      1
-      DstBlock		      "elasticSubjectNormalizeGain"
-      DstPort		      1
-    }
-    Line {
       ZOrder		      7
       SrcBlock		      "elasticPolynomialCoeff"
       SrcPort		      1
-      Points		      [20, 0; 0, -45]
+      Points		      [0, -45]
       DstBlock		      "Polynomial\nEvaluation"
       DstPort		      2
     }
@@ -2401,13 +2412,6 @@ Model {
       SrcPort		      1
       DstBlock		      "Polynomial\nEvaluation2"
       DstPort		      2
-    }
-    Line {
-      ZOrder		      17
-      SrcBlock		      "Polynomial\nEvaluation2"
-      SrcPort		      1
-      DstBlock		      "reflexGainSubjectNormalizeGain"
-      DstPort		      1
     }
     Line {
       ZOrder		      9
@@ -2549,6 +2553,28 @@ Model {
       SrcPort		      1
       Points		      [45, 0; 0, -40]
       DstBlock		      "To Workspace4"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      142
+      SrcBlock		      "Polynomial\nEvaluation"
+      SrcPort		      1
+      DstBlock		      "Terminator"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      143
+      SrcBlock		      "Constant"
+      SrcPort		      1
+      Points		      [-1, 0; 0, -85]
+      DstBlock		      "elasticSubjectNormalizeGain"
+      DstPort		      1
+    }
+    Line {
+      ZOrder		      146
+      SrcBlock		      "Polynomial\nEvaluation2"
+      SrcPort		      1
+      DstBlock		      "reflexGainSubjectNormalizeGain"
       DstPort		      1
     }
   }

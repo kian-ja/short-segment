@@ -1,7 +1,7 @@
 %parpool(2)
 warning off
 clear
-load results/LPVSimulationData1Trial
+load results/LPVSimulationData1Trial2
 %load results/filterTorque
 samplingTime = 0.001;
 plotFlag = 0;
@@ -26,8 +26,8 @@ torquePert = torquePert - mean(torquePert);
 %%
 order = 2;
 numLevels = [9];
-mcItr = 100;
-hankleSize = 10;
+mcItr = 200;
+hankleSize = 15;
 minTQ = prctile(schedulingVariable,5);
 maxTQ = prctile(schedulingVariable,95);
 sysID = cell(length(numLevels),1);
@@ -83,6 +83,6 @@ for numLVLIndex = 1 : length(numLevels)
     sysID_SDSS{numLVLIndex} = sysID_SDSS_Temp;
 end
 %%
-save results/segmentLengthInfo segmentsLengthMean segmentsLengthStd 
-save results/systemIDExperiment sysID sysID_SDSS numLevels
+save results/segmentLengthInfo2 segmentsLengthMean segmentsLengthStd 
+save results/systemIDExperiment2 sysID sysID_SDSS numLevels
 plotSimulationFigures
